@@ -16,7 +16,6 @@ I've gotten tired of using proprietary technologies like Soundiiz.com, tunemymus
 
 This aims to be an open-source alternative to these tools. If this project gains traction, happy to pay heed to the community's considerations, but for now, it's a personal project (Also, I'll have to consider how I'm gonna manage the server / serverless function costs - might end up creating an OF)
 
---
 
 ## Current Platforms supported
 
@@ -24,7 +23,6 @@ This aims to be an open-source alternative to these tools. If this project gains
 * Tidal
 * Youtube (with the music videos)
 
---
 
 ## Technologies
 
@@ -46,7 +44,6 @@ Next.js for this one - mostly cause I wanted to experiment with using a full sta
 ### CSS
 Tailwind - similar motivation - it's a new technology and apparently improves efficiency.
 
---
 
 ## ToDo
 * Framework for the web app
