@@ -8,7 +8,6 @@ export const encryptUsingEnvKey = (plaintext: string): {
     if (!encryptionKey) {
         throw new Error("ENCRYPTION_KEY not set")
     }
-    console.log(encryptionKey)
     const iv = crypto.randomBytes(16)
 
     const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encryptionKey, 'base64'), iv);
