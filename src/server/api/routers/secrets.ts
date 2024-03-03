@@ -1,7 +1,29 @@
 import { decryptUsingEnvKey, encryptUsingEnvKey } from "~/server/utils/crypto";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { type createTRPCContext, createTRPCRouter, protectedProcedure } from "../trpc";
 
 import { z } from "zod";
+import { getSpotifyAccessToken } from "~/server/utils/spotify";
+
+const _getSpotifySecret = async (ctx: Awaited<ReturnType<typeof createTRPCContext>>) => {
+    if (!ctx.session) {
+        throw new Error('No session found')
+    }
+    const userId = ctx.session.user.id
+    const spotifyApiKey = await ctx.db.spotifyApiKey.findUnique({
+        where: {
+            userId
+        }
+    })
+    if (!spotifyApiKey) {
+        throw new Error('No Spotify API key found')
+    }
+    const { clientId, iv, encryptedClientSecret } = spotifyApiKey
+    const clientSecret = decryptUsingEnvKey(encryptedClientSecret, iv)
+    return {
+        clientId,
+        clientSecret
+    }
+}
 
 export const secretsRouter = createTRPCRouter({
     setSpotifySecret: protectedProcedure.input(z.object({ clientId: z.string(), clientSecret: z.string() }))
@@ -28,20 +50,12 @@ export const secretsRouter = createTRPCRouter({
             })
         }),
     getSpotifySecret: protectedProcedure.query(async ({ ctx }) => {
-        const userId = ctx.session.user.id
-        const spotifyApiKey = await ctx.db.spotifyApiKey.findUnique({
-            where: {
-                userId
-            }
-        })
-        if (!spotifyApiKey) {
-            return null
-        }
-        const { clientId, iv, encryptedClientSecret } = spotifyApiKey
-        const clientSecret = decryptUsingEnvKey(encryptedClientSecret, iv)
-        return {
-            clientId,
-            clientSecret
-        }
-    })
+        return _getSpotifySecret(ctx)
+    }),
+    fetchSpotifyAccessToken: protectedProcedure.mutation(async ({ ctx }) => {
+        // TODO: Cache and use exisiting access token if it exists + timestamp is valid
+        // for now, always fetch a new one
+        const { clientId, clientSecret } = await _getSpotifySecret(ctx)
+        return await getSpotifyAccessToken(clientId, clientSecret)
+    }),
 })
