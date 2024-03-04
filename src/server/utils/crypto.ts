@@ -39,3 +39,11 @@ export const decryptUsingEnvKey = (hexEncryptedText: string, hexIv: string): str
 
     return decrypted.toString();
 }
+
+export const getRandomString = (length: number): string => {
+    const validCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let array = new Uint8Array(length);
+    crypto.getRandomValues(array);
+    array = array.map(x => validCharacters.charCodeAt(x % validCharacters.length));
+    return String.fromCharCode(...array);
+}

@@ -1,8 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { CreateSpotifyKey } from "~/app/_components/Spotify/create-spotify-key";
 import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
 
 export default async function Home() {
   const session = await getServerAuthSession();
@@ -18,28 +16,7 @@ export default async function Home() {
           Myncer
         </h1>
         <div>🔄 The OSS music syncer 🔄</div>
-
-        <CrudShowcase />
       </div>
     </main>
-  );
-}
-
-async function CrudShowcase() {
-  const session = await getServerAuthSession();
-  if (!session?.user) return null;
-
-  const spotifyApiKey = await api.secrets.getSpotifySecret.query();
-
-  return (
-    <div className="w-full max-w-xs">
-      {spotifyApiKey ? (
-        <p className="truncate">Client ID: {spotifyApiKey.clientId} | Client Secret: {spotifyApiKey.clientSecret} </p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
-
-      <CreateSpotifyKey />
-    </div>
   );
 }

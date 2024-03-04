@@ -13,6 +13,9 @@ export default async function Navbar() {
         <Link href="/secrets" className="underline">
           Secrets
         </Link>
+        <Link href="/spotify" className="underline">
+          Spotify
+        </Link>
       </div>
       {!session && (
         <Link href="/api/auth/signin" className="underline">Sign In</Link>

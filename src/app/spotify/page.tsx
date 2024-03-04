@@ -1,17 +1,27 @@
 "use client"
 
+import { useMemo } from "react"
 import { api } from "~/trpc/react"
 
 export default function SpotifyPage() {
-    const createNewAccessToken = api.secrets.fetchSpotifyAccessToken.useMutation()
+  const { data, isLoading } = api.spotify.getCurrentUserPlaylists.useQuery()
 
-    return (
-        <>
-            <h1>Access Token data</h1>
-            <button onClick={() => createNewAccessToken.mutate()}>Fetch new access Token</button>
-            {createNewAccessToken.isLoading && <p>Loading...</p>}
-            {createNewAccessToken.data && (
-                <div>Access Token: <pre>{createNewAccessToken.data} </pre> </div>)}
-        </>
-    )
+  const playlists = useMemo(() => {
+    return data?.items.map((playlist) => {
+      return playlist.name
+    })
+  }, [data])
+
+  if (isLoading) {
+    return <div>Loading....</div>
+  }
+
+  return (
+    <>
+      <h1>Current Playlists</h1>
+      <div>
+        {JSON.stringify(playlists, null, 2)}
+      </div>
+    </>
+  )
 }

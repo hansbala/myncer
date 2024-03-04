@@ -31,6 +31,9 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
     ENCRYPTION_KEY: z.string(),
+    MYNCER_CLIENT_ID: z.string(),
+    MYNCER_REDIRECT_URL: z.string(),
+    MYNCER_CLIENT_SECRET: z.string(),
   },
 
   /**
@@ -54,6 +57,9 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
+    MYNCER_CLIENT_ID: process.env.MYNCER_CLIENT_ID,
+    MYNCER_REDIRECT_URL: process.env.MYNCER_REDIRECT_URL,
+    MYNCER_CLIENT_SECRET: process.env.MYNCER_CLIENT_SECRET,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

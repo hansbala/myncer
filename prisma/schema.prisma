@@ -12,12 +12,12 @@ datasource db {
 }
 
 model SpotifyApiKey {
-    id                    String @id @default(cuid())
-    clientId              String
-    encryptedClientSecret String
-    iv                    String
-    userId                String @unique
-    user                  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id           String @id @default(cuid())
+    authCode     String @db.VarChar(1000)
+    accessToken  String @db.VarChar(500)
+    refreshToken String @db.VarChar(500)
+    userId       String @unique
+    user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // Necessary for Next auth
