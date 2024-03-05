@@ -35,7 +35,8 @@ export const env = createEnv({
     MYNCER_REDIRECT_URL: z.string(),
     MYNCER_CLIENT_SECRET: z.string(),
     GOOGLE_MYNCER_CLIENT_ID: z.string(),
-    GOOGLE_MYNCER_CLIENT_SECRET: z.string()
+    GOOGLE_MYNCER_CLIENT_SECRET: z.string(),
+    GOOGLE_MYNCER_REDIRECT_URL: z.string(),
   },
 
   /**
@@ -63,7 +64,8 @@ export const env = createEnv({
     MYNCER_REDIRECT_URL: process.env.MYNCER_REDIRECT_URL,
     MYNCER_CLIENT_SECRET: process.env.MYNCER_CLIENT_SECRET,
     GOOGLE_MYNCER_CLIENT_ID: process.env.GOOGLE_MYNCER_CLIENT_ID,
-    GOOGLE_MYNCER_CLIENT_SECRET: process.env.GOOGLE_MYNCER_CLIENT_SECRET
+    GOOGLE_MYNCER_CLIENT_SECRET: process.env.GOOGLE_MYNCER_CLIENT_SECRET,
+    GOOGLE_MYNCER_REDIRECT_URL: process.env.GOOGLE_MYNCER_REDIRECT_URL
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
