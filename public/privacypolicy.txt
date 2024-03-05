@@ -1,0 +1,46 @@
+Privacy Policy for Myncer
+
+Last updated: 4th March 2024
+
+Introduction
+
+Welcome to Myncer ("we", "us", "our"). We are committed to protecting the privacy of all users ("user", "you") of our app [Your App Name]. This Privacy Policy outlines the types of personal information we collect, how we use it, the measures we take to ensure your data is kept secure, and your rights regarding your personal information.
+
+Information Collection and Use
+
+We collect information that you provide directly to us when you create an account, use our app, or communicate with us. This information may include:
+
+Your name and contact details (such as email address)
+User-generated content, including playlists, favorites, and music preferences
+Usage data, which includes information on how you use the app, such as the tracks you listen to
+We use this information to:
+
+Provide, maintain, and improve our services
+Personalize your experience
+Communicate with you, including to send you updates and support messages
+Conduct research and analysis to better understand our users and provide features that meet your needs
+Data Sharing and Disclosure
+
+We do not sell or rent your personal data to third parties. We may share your information with third-party service providers who perform services on our behalf, such as hosting, analytics, and customer service. These service providers are bound by contractual obligations to keep personal information confidential and use it only for the purposes for which we disclose it to them.
+
+We may also disclose your personal information if required by law or if we believe that such action is necessary to comply with legal obligations, protect and defend our rights or property, or in urgent circumstances to protect the personal safety of users of the app or the public.
+
+Data Security
+
+We take reasonable measures to protect your personal information from loss, theft, misuse, unauthorized access, disclosure, alteration, and destruction. However, no method of transmission over the internet or method of electronic storage is 100% secure; therefore, we cannot guarantee its absolute security.
+
+Your Rights
+
+You have the right to access, update, or delete your personal information at any time. If you wish to exercise these rights, please contact us using the information provided below.
+
+Changes to This Privacy Policy
+
+We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes.
+
+Contact Us
+
+If you have any questions about this Privacy Policy, please contact us at:
+
+[Your Contact Information]
+
+By using Myncer, you agree to the collection and use of information in accordance with this policy.
