@@ -24,3 +24,24 @@ export const getGoogleAuthorizationUrl = () => {
     scope: youtubePlaylistManagementScopes
   })
 }
+
+
+export const authUserForGoogleFirstTime = async (authCode: string): Promise<{ accessToken: string, refreshToken: string }> => {
+  const oauth2Client = new google.auth.OAuth2({
+    clientId: env.GOOGLE_MYNCER_CLIENT_ID,
+    clientSecret: env.GOOGLE_MYNCER_CLIENT_SECRET,
+    redirectUri: env.GOOGLE_MYNCER_REDIRECT_URL
+  })
+
+  const { tokens: { refresh_token: refreshToken, access_token: accessToken } } = await oauth2Client.getToken(authCode)
+  console.log('access token', accessToken)
+  console.log('refresh token', refreshToken)
+  if (!refreshToken || !accessToken) {
+    throw new Error('Failed to get either access token or refresh token for first time user auth')
+  }
+
+  return {
+    refreshToken,
+    accessToken
+  }
+}

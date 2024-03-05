@@ -4,41 +4,41 @@ import { api } from "~/trpc/react"
 import Button from "../_components/Button/Button"
 import { useCallback, useEffect, useState } from "react"
 
-export default function SpotifyCallbackPage() {
+export default function GoogleCallbackPage() {
   const router = useRouter()
-  const [authCode, setAuthCode] = useState<string | null>()
-  const updateAuthorizationCode = api.spotify.setAuthorizationCode.useMutation()
+  const [authorizationCode, setAuthorizationCode] = useState<string | null>()
+  const updateAuthorizationCode = api.google.setAuthorizationCode.useMutation()
 
   useEffect(() => {
     const queryParamAuthCode = new URLSearchParams(window.location.search).get('code')
-    setAuthCode(queryParamAuthCode)
+    setAuthorizationCode(queryParamAuthCode)
   }, [])
 
   const updateAuthCode = useCallback(() => {
-    if (!authCode) {
+    if (!authorizationCode) {
       return
     }
-    updateAuthorizationCode.mutate({ authCode }, {
+    updateAuthorizationCode.mutate({ authorizationCode }, {
       onSuccess: () => {
         void router.replace('/secrets')
       }
     })
-  }, [authCode, router, updateAuthorizationCode])
+  }, [authorizationCode, router, updateAuthorizationCode])
 
   return <>
     {
-      !authCode && (
+      !authorizationCode && (
         <div className="flex justify-center items-center h-screen">
           {
-            <h1>Authorizing Spotify. Please do not close this page...</h1>
+            <h1>Authorizing Google. Please do not close this page...</h1>
           }
         </div>
       )
     }
 
-    {authCode && (
+    {authorizationCode && (
       <div className="text-center p-10">
-        <Button onClick={() => updateAuthCode()} className="">Authorized Spotify. Store auth token to finish setup.</Button>
+        <Button onClick={() => updateAuthCode()} className="">Authorized Google. Store auth token to finish setup.</Button>
       </div>)}
   </>
 }

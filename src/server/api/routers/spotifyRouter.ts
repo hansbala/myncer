@@ -25,9 +25,6 @@ export const spotifyRouter = createTRPCRouter({
     return createSpotifyAuthUrl()
   }),
   setAuthorizationCode: protectedProcedure.input(z.object({ authCode: z.string() })).mutation(async ({ ctx, input }) => {
-    if (!ctx.session) {
-      throw new Error('No user session found')
-    }
     const { accessToken, refreshToken } = await authUserForSpotifyFirstTime(input.authCode)
     await ctx.db.spotifyApiKey.create({
       data: {
@@ -47,4 +44,12 @@ export const spotifyRouter = createTRPCRouter({
     }
     return await getCurrentUserPlaylists(ctx.session.user.id)
   }),
+  isAuthenticated: protectedProcedure.query(async ({ ctx }) => {
+    const foundKey = await ctx.db.spotifyApiKey.findUnique({
+      where: {
+        userId: ctx.session.user.id
+      }
+    })
+    return foundKey ? true : false
+  })
 })
