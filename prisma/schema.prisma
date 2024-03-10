@@ -11,6 +11,22 @@ datasource db {
     relationMode = "prisma"
 }
 
+model Sync {
+    id                            String    @id @default(cuid())
+    userId                        String
+    sourcePlaylistDatasource      String
+    sourcePlaylistId              String
+    destinationPlaylistDatasource String
+    destinationPlaylistId         String
+    syncFrequency                 String
+    lastSync                      DateTime?
+    useWebhooks                   Boolean
+    user                          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([sourcePlaylistDatasource, sourcePlaylistId, destinationPlaylistDatasource, destinationPlaylistId])
+    @@index([userId])
+}
+
 model SpotifyApiKey {
     id           String @id @default(cuid())
     authCode     String @db.VarChar(1000)
@@ -69,6 +85,7 @@ model User {
     sessions      Session[]
     spotifyApiKey SpotifyApiKey?
     googleKey     GoogleKey?
+    syncs         Sync[]
 }
 
 model VerificationToken {

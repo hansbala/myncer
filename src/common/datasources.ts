@@ -1,0 +1,4 @@
+export enum DATASOURCE {
+  SPOTIFY = 'SPOTIFY',
+  YOUTUBE = 'YOUTUBE',
+}

@@ -1,0 +1,6 @@
+export enum SYNC_FREQUENCY {
+  DAILY = 'DAILY',
+  WEEKLY = 'WEEKLY',
+  MONTHLY = 'MONTHLY',
+  ONE_TIME = 'ONE_TIME',
+}
