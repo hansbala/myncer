@@ -1,4 +1,4 @@
-import { authUserForGoogleFirstTime, getGoogleAuthorizationUrl } from "~/server/utils/google";
+import { authUserForGoogleFirstTime, getCurrentUserPlaylists, getGoogleAuthorizationUrl } from "~/server/utils/google";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
@@ -24,5 +24,8 @@ export const googleRouter = createTRPCRouter({
       }
     })
     return foundKey ? true : false
-  })
+  }),
+  getCurrentUserPlaylists: protectedProcedure.query(async ({ ctx }) => {
+    return await getCurrentUserPlaylists(ctx.session.user.id)
+  }),
 })
