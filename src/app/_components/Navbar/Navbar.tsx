@@ -28,6 +28,9 @@ export default async function Navbar() {
             <li>
               <Link href="/youtube">Youtube</Link>
             </li>
+            <li>
+              <Link href="/newsync">New Sync</Link>
+            </li>
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">Myncer</a>
@@ -45,6 +48,9 @@ export default async function Navbar() {
           </li>
           <li>
             <Link href="/youtube">Youtube</Link>
+          </li>
+          <li>
+            <Link href="/newsync">New Sync</Link>
           </li>
         </ul>
       </div>

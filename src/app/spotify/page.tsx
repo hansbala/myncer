@@ -23,7 +23,7 @@ export default function SpotifyPage() {
   return (
     <>
       <h1>Current Playlists</h1>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 overflow-y-visible">
         {playlists?.map((playlist) => (
           <div key={playlist.url} className="flex flex-row items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
