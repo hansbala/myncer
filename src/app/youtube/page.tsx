@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { useMemo } from "react"
-import { api } from "~/trpc/react"
+import { useMemo } from 'react'
+import { api } from '~/trpc/react'
 
 export default function YoutubePage() {
   const { data, isLoading } = api.google.getCurrentUserPlaylists.useQuery()
@@ -10,10 +10,9 @@ export default function YoutubePage() {
     return data?.map((playlist) => ({
       name: playlist?.snippet?.title,
       url: `https://www.youtube.com/playlist?list=${playlist.id}`,
-      image: playlist?.snippet?.thumbnails?.medium
+      image: playlist?.snippet?.thumbnails?.medium,
     }))
   }, [data])
-
 
   if (isLoading) {
     return <div>Loading....</div>
@@ -23,16 +22,19 @@ export default function YoutubePage() {
     <>
       <h1>Current Playlists</h1>
       <div className="flex flex-col gap-5">
-        {
-          playlists?.map((playlist) => (
-            <div key={playlist.url} className="flex flex-row gap-3 items-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img alt="Playlist image" src={playlist.image?.url ?? '/test.img'} width={100} height={100} />
-              <h1>{playlist.name}</h1>
-              <p>{playlist.url}</p>
-            </div>
-          ))
-        }
+        {playlists?.map((playlist) => (
+          <div key={playlist.url} className="flex flex-row items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              alt="Playlist image"
+              src={playlist.image?.url ?? '/test.img'}
+              width={100}
+              height={100}
+            />
+            <h1>{playlist.name}</h1>
+            <p>{playlist.url}</p>
+          </div>
+        ))}
       </div>
     </>
   )

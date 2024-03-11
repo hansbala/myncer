@@ -7,7 +7,8 @@ const MYNCER_CLIENT_ID = env.MYNCER_CLIENT_ID
 const MYNCER_REDIRECT_URL = env.MYNCER_REDIRECT_URL
 const MYNCER_CLIENT_SECRET = env.MYNCER_CLIENT_SECRET
 
-const MYNCER_REQUIRED_SCOPES = ['user-read-playback-state',
+const MYNCER_REQUIRED_SCOPES = [
+  'user-read-playback-state',
   'user-modify-playback-state',
   'user-read-currently-playing',
   'app-remote-control',
@@ -24,22 +25,29 @@ const MYNCER_REQUIRED_SCOPES = ['user-read-playback-state',
   'user-library-modify',
   'user-library-read',
   'user-read-email',
-  'user-read-private']
+  'user-read-private',
+]
 
-export const authUserForSpotifyFirstTime = async (authCode: string): Promise<{ accessToken: string, refreshToken: string }> => {
+export const authUserForSpotifyFirstTime = async (
+  authCode: string
+): Promise<{ accessToken: string; refreshToken: string }> => {
   const spotifyApi = new SpotifyWebApi({
     redirectUri: MYNCER_REDIRECT_URL,
     clientId: MYNCER_CLIENT_ID,
     clientSecret: MYNCER_CLIENT_SECRET,
   })
-  const { body: { access_token: accessToken, refresh_token: refreshToken } } = await spotifyApi.authorizationCodeGrant(authCode)
+  const {
+    body: { access_token: accessToken, refresh_token: refreshToken },
+  } = await spotifyApi.authorizationCodeGrant(authCode)
   return {
     accessToken,
-    refreshToken
+    refreshToken,
   }
 }
 
-const getAccessAndRefreshTokens = async (myncerUserId: string): Promise<{ accessToken: string, refreshToken: string }> => {
+const getAccessAndRefreshTokens = async (
+  myncerUserId: string
+): Promise<{ accessToken: string; refreshToken: string }> => {
   const spotifyApi = new SpotifyWebApi({
     redirectUri: MYNCER_REDIRECT_URL,
     clientId: MYNCER_CLIENT_ID,
@@ -53,8 +61,8 @@ const getAccessAndRefreshTokens = async (myncerUserId: string): Promise<{ access
     },
     select: {
       accessToken: true,
-      refreshToken: true
-    }
+      refreshToken: true,
+    },
   })
 
   if (findUserResult == null) {
@@ -69,22 +77,23 @@ const getAccessAndRefreshTokens = async (myncerUserId: string): Promise<{ access
   // push tokens to database
   const { accessToken, refreshToken } = await db.spotifyApiKey.update({
     where: {
-      userId: myncerUserId
+      userId: myncerUserId,
     },
     data: {
       accessToken: res.body.access_token,
-      refreshToken: res.body.refresh_token
-    }
+      refreshToken: res.body.refresh_token,
+    },
   })
 
   return {
     accessToken,
-    refreshToken
+    refreshToken,
   }
 }
 
 export const getCurrentUserPlaylists = async (myncerUserId: string) => {
-  const { accessToken, refreshToken } = await getAccessAndRefreshTokens(myncerUserId)
+  const { accessToken, refreshToken } =
+    await getAccessAndRefreshTokens(myncerUserId)
   const spotifyApi = new SpotifyWebApi({
     redirectUri: MYNCER_REDIRECT_URL,
     clientId: MYNCER_CLIENT_ID,

@@ -1,8 +1,8 @@
-"use client"
-import { useRouter } from "next/navigation"
-import { api } from "~/trpc/react"
-import Button from "../_components/Button/Button"
-import { useCallback, useEffect, useState } from "react"
+'use client'
+import { useRouter } from 'next/navigation'
+import { api } from '~/trpc/react'
+import Button from '../_components/Button/Button'
+import { useCallback, useEffect, useState } from 'react'
 
 export default function GoogleCallbackPage() {
   const router = useRouter()
@@ -10,7 +10,9 @@ export default function GoogleCallbackPage() {
   const updateAuthorizationCode = api.google.setAuthorizationCode.useMutation()
 
   useEffect(() => {
-    const queryParamAuthCode = new URLSearchParams(window.location.search).get('code')
+    const queryParamAuthCode = new URLSearchParams(window.location.search).get(
+      'code'
+    )
     setAuthorizationCode(queryParamAuthCode)
   }, [])
 
@@ -18,27 +20,31 @@ export default function GoogleCallbackPage() {
     if (!authorizationCode) {
       return
     }
-    updateAuthorizationCode.mutate({ authorizationCode }, {
-      onSuccess: () => {
-        void router.replace('/secrets')
+    updateAuthorizationCode.mutate(
+      { authorizationCode },
+      {
+        onSuccess: () => {
+          void router.replace('/secrets')
+        },
       }
-    })
+    )
   }, [authorizationCode, router, updateAuthorizationCode])
 
-  return <>
-    {
-      !authorizationCode && (
-        <div className="flex justify-center items-center h-screen">
-          {
-            <h1>Authorizing Google. Please do not close this page...</h1>
-          }
+  return (
+    <>
+      {!authorizationCode && (
+        <div className="flex h-screen items-center justify-center">
+          {<h1>Authorizing Google. Please do not close this page...</h1>}
         </div>
-      )
-    }
+      )}
 
-    {authorizationCode && (
-      <div className="text-center p-10">
-        <Button onClick={() => updateAuthCode()} className="">Authorized Google. Store auth token to finish setup.</Button>
-      </div>)}
-  </>
+      {authorizationCode && (
+        <div className="p-10 text-center">
+          <Button onClick={() => updateAuthCode()} className="">
+            Authorized Google. Store auth token to finish setup.
+          </Button>
+        </div>
+      )}
+    </>
+  )
 }

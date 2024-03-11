@@ -1,9 +1,9 @@
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation'
 
-import { getServerAuthSession } from "~/server/auth";
+import { getServerAuthSession } from '~/server/auth'
 
 export default async function Home() {
-  const session = await getServerAuthSession();
+  const session = await getServerAuthSession()
 
   if (session) {
     redirect('/home')
@@ -18,5 +18,5 @@ export default async function Home() {
         <div>🔄 The OSS music syncer 🔄</div>
       </div>
     </main>
-  );
+  )
 }

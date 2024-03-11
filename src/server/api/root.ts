@@ -1,7 +1,7 @@
-import { createTRPCRouter } from "~/server/api/trpc";
-import { spotifyRouter } from "./routers/spotifyRouter";
-import { googleRouter } from "./routers/googleRouter";
-import { syncsRouter } from "./routers/syncsRouter";
+import { createTRPCRouter } from '~/server/api/trpc'
+import { spotifyRouter } from './routers/spotifyRouter'
+import { googleRouter } from './routers/googleRouter'
+import { syncsRouter } from './routers/syncsRouter'
 
 /**
  * This is the primary router for your server.
@@ -11,8 +11,8 @@ import { syncsRouter } from "./routers/syncsRouter";
 export const appRouter = createTRPCRouter({
   spotify: spotifyRouter,
   google: googleRouter,
-  syncs: syncsRouter
-});
+  syncs: syncsRouter,
+})
 
 // export type definition of API
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof appRouter
