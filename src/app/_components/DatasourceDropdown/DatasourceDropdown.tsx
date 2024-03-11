@@ -15,8 +15,8 @@ export default function DatasourceDropdown({
 }: DatasourceDropdownProps) {
   return (
     <div className={classNameProps}>
-      <details className="dropdown">
-        <summary className="btn m-1">
+      <details className="dropdown w-full">
+        <summary className="btn m-1 w-full">
           {propsDatasource ?? 'Choose a datasource'}{' '}
         </summary>
 

@@ -6,6 +6,7 @@ import DatasourceDropdown from '../_components/DatasourceDropdown/DatasourceDrop
 import PlaylistDropdown, {
   type Playlist,
 } from '../_components/PlaylistDropdown/PlaylistDropdown'
+import { MdOutlineSyncAlt } from 'react-icons/md'
 
 export default function NewSyncPage() {
   const [sourceDatasource, setSourceDatasource] = useState<DATASOURCE>()
@@ -22,44 +23,40 @@ export default function NewSyncPage() {
   }
 
   return (
-    <div className="flex flex-col">
-      <h2>Create a new sync here</h2>
-      <div className="flex flex-row items-center">
-        <div className="pr-10">Source:</div>
-        <DatasourceDropdown
-          datasource={sourceDatasource}
-          setDatasource={setSourceDatasource}
-        />
+    <div className="flex w-1/4 flex-col gap-10 pt-10">
+      <div className="flex flex-row items-center justify-between">
+        <div>
+          <DatasourceDropdown
+            datasource={sourceDatasource}
+            setDatasource={setSourceDatasource}
+          />
+          <PlaylistDropdown
+            playlists={[]}
+            setPlaylist={setSourcePlaylist}
+            playlist={sourcePlaylist}
+            disabled={!sourceDatasource}
+          />
+        </div>
+        <MdOutlineSyncAlt size={52} />
+        <div>
+          <DatasourceDropdown
+            datasource={destinationDatasource}
+            setDatasource={setDestinationDatasource}
+          />
+          <PlaylistDropdown
+            playlists={[]}
+            setPlaylist={setDestinationPlaylist}
+            playlist={destinationPlaylist}
+            disabled={!destinationDatasource}
+          />
+        </div>
       </div>
-      <div className="flex flex-row items-center">
-        <div className="pr-10">Destination:</div>
-        <DatasourceDropdown
-          datasource={destinationDatasource}
-          setDatasource={setDestinationDatasource}
-        />
-      </div>
-      <div className="flex flex-row items-center">
-        <div className="pr-10">Source:</div>
-        <PlaylistDropdown
-          playlists={[]}
-          setPlaylist={setSourcePlaylist}
-          playlist={sourcePlaylist}
-        />
-      </div>
-      <div className="flex flex-row items-center">
-        <div className="pr-10">Destination:</div>
-        <PlaylistDropdown
-          playlists={[]}
-          setPlaylist={setDestinationPlaylist}
-          playlist={destinationPlaylist}
-        />
-      </div>
-
+      <div className="divider"></div>
       <div className="flex flex-row items-center justify-center gap-4">
-        <button className="btn btn-primary">Create Sync</button>
-        <button className="btn btn-ghost" onClick={() => resetState()}>
+        <button className="btn btn-secondary" onClick={() => resetState()}>
           Reset
         </button>
+        <button className="btn btn-primary">Create Sync</button>
       </div>
     </div>
   )

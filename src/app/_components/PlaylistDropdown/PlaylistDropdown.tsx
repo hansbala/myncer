@@ -8,17 +8,21 @@ interface PlaylistDropdownProps {
   setPlaylist: (playlist: Playlist) => void
   playlist?: Playlist
   className?: string
+  disabled: boolean
 }
 export default function PlaylistDropdown({
   playlists: playlistsProps,
   setPlaylist: setPlaylistProps,
   className: classNameProps,
   playlist: playlistProps,
+  disabled: disabledProps,
 }: PlaylistDropdownProps) {
   return (
     <div className={classNameProps}>
-      <details className="dropdown">
-        <summary className="btn m-1">
+      <details className="dropdown w-full">
+        <summary
+          className={`btn m-1 w-full ${disabledProps && 'btn-disabled'}`}
+        >
           {playlistProps?.name ?? 'Choose a playlist'}
         </summary>
 
