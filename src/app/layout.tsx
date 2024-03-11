@@ -27,7 +27,7 @@ export default function RootLayout({
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider cookies={cookies().toString()}>
           <Navbar />
-          <main>{children}</main>
+          <main className="h-full w-full">{children}</main>
         </TRPCReactProvider>
       </body>
     </html>

@@ -1,16 +1,16 @@
 import Link from 'next/link'
+import { RxHamburgerMenu } from 'react-icons/rx'
 import { getServerAuthSession } from '~/server/auth'
-import { Bars3Icon } from '@heroicons/react/24/solid'
 
 export default async function Navbar() {
   const session = await getServerAuthSession()
 
   return (
-    <div className="navbar border-b bg-white text-black">
+    <div className="navbar sticky top-0 border-b bg-white text-black">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <Bars3Icon className="h-5 w-5" />
+            <RxHamburgerMenu className="h-5 w-5" />
           </div>
           <ul
             tabIndex={0}
