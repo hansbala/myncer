@@ -10,17 +10,13 @@ export default async function SecretsPage() {
   }
 
   return (
-    <div className="p-8">
-      <h1 className="mb-10 text-center text-xl">
+    <div className="container p-8">
+      <h1 className="mb-10 text-xl">
         Authenticate with apps below to start syncs
       </h1>
-      <div className="flex flex-col gap-10">
-        <div className="w-1/2 rounded-lg border p-3">
-          <AuthorizeSpotify />
-        </div>
-        <div className="w-1/2 rounded-lg border p-3">
-          <AuthorizeGoogle />
-        </div>
+      <div className="grid grid-cols-3 gap-4">
+        <AuthorizeSpotify />
+        <AuthorizeGoogle />
       </div>
     </div>
   )

@@ -1,26 +1,21 @@
 'use client'
 import { api } from '~/trpc/react'
+import DatasourceConnection from '../DatasourceConnections/DatasourceConnection'
+import { DATASOURCE_SCHEMAS } from '~/app/_core/clientSideDatasourceSchema'
 
 export default function AuthorizeSpotify() {
-  const { isLoading, data: authUrl } =
+  const { isLoading: isAuthenticationUrlLoading, data: authUrl } =
     api.spotify.getAuthorizationUrl.useQuery()
   const { isLoading: isAuthenticatedLoading, data: isAuthenticated } =
     api.spotify.isAuthenticated.useQuery()
 
-  if (isLoading || isAuthenticatedLoading) {
-    return <div>Please wait...</div>
-  }
-
-  if (isAuthenticated) {
-    return <div>✅ You have already authenticated Myncer for Spotify</div>
-  }
-
   return (
-    <button
-      className="hover:underline"
-      onClick={() => window.open(authUrl, '_blank')}
-    >
-      Authorize Myncer For Spotify
-    </button>
+    <DatasourceConnection
+      datasourceSchema={DATASOURCE_SCHEMAS.SPOTIFY}
+      isAuthenticatedLoading={isAuthenticatedLoading}
+      isAuthenticationUrlLoading={isAuthenticationUrlLoading}
+      authenticationUrl={authUrl}
+      isAuthenticated={isAuthenticated}
+    />
   )
 }

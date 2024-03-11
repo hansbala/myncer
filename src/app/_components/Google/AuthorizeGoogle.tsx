@@ -1,25 +1,21 @@
 'use client'
+import { DATASOURCE_SCHEMAS } from '~/app/_core/clientSideDatasourceSchema'
 import { api } from '~/trpc/react'
+import DatasourceConnection from '../DatasourceConnections/DatasourceConnection'
 
 export default function AuthorizeGoogle() {
-  const { isLoading, data: authUrl } = api.google.getAuthorizationUrl.useQuery()
+  const { isLoading: isAuthenticationUrlLoading, data: authUrl } =
+    api.google.getAuthorizationUrl.useQuery()
   const { isLoading: isAuthenticatedLoading, data: isAuthenticated } =
     api.google.isAuthenticated.useQuery()
 
-  if (isLoading || isAuthenticatedLoading) {
-    return <div>Please wait...</div>
-  }
-
-  if (isAuthenticated) {
-    return <div>✅ You have already authenticated Myncer for Google</div>
-  }
-
   return (
-    <button
-      className="hover:underline"
-      onClick={() => window.open(authUrl, '_blank')}
-    >
-      Authorize Myncer For Google
-    </button>
+    <DatasourceConnection
+      datasourceSchema={DATASOURCE_SCHEMAS.YOUTUBE}
+      isAuthenticatedLoading={isAuthenticatedLoading}
+      isAuthenticationUrlLoading={isAuthenticationUrlLoading}
+      authenticationUrl={authUrl}
+      isAuthenticated={isAuthenticated}
+    />
   )
 }

@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
-import { DATASOURCE } from '~/common/datasources'
-import { SYNC_FREQUENCY } from '~/common/syncFrequency'
+import { DATASOURCE } from '~/core/datasources'
+import { SYNC_FREQUENCY } from '~/core/syncFrequency'
 
 export const syncsRouter = createTRPCRouter({
   createNewSync: protectedProcedure
