@@ -25,29 +25,37 @@ export default function NewSyncPage() {
   return (
     <div className="flex w-1/4 flex-col gap-10 pt-10">
       <div className="flex flex-row items-center justify-between">
-        <div>
+        <div className="flex flex-col items-center justify-center">
+          <h3 className="mb-5 text-xl font-bold">Source</h3>
           <DatasourceDropdown
             datasource={sourceDatasource}
             setDatasource={setSourceDatasource}
+            className="mb-2 w-full"
           />
           <PlaylistDropdown
             playlists={[]}
             setPlaylist={setSourcePlaylist}
             playlist={sourcePlaylist}
             disabled={!sourceDatasource}
+            className="w-full"
           />
         </div>
-        <MdOutlineSyncAlt size={52} />
-        <div>
+        <div className="divider divider-horizontal">
+          <MdOutlineSyncAlt size={128} />
+        </div>
+        <div className="flex flex-col items-center justify-center">
+          <h3 className="mb-5 text-xl font-bold">Destination</h3>
           <DatasourceDropdown
             datasource={destinationDatasource}
             setDatasource={setDestinationDatasource}
+            className="mb-2 w-full"
           />
           <PlaylistDropdown
             playlists={[]}
             setPlaylist={setDestinationPlaylist}
             playlist={destinationPlaylist}
             disabled={!destinationDatasource}
+            className="w-full"
           />
         </div>
       </div>
