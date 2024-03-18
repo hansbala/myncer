@@ -4,6 +4,13 @@ import { DATASOURCE } from '~/core/datasources'
 import { SYNC_FREQUENCY } from '~/core/syncFrequency'
 
 export const syncsRouter = createTRPCRouter({
+  getSyncs: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.sync.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    })
+  }),
   createNewSync: protectedProcedure
     .input(
       z.object({
@@ -20,6 +27,16 @@ export const syncsRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      throw new Error('Not implemented')
+      await ctx.db.sync.create({
+        data: {
+          sourcePlaylistDatasource: input.sourcePlaylist.datasource,
+          destinationPlaylistDatasource: input.destinationPlaylist.datasource,
+          sourcePlaylistId: input.sourcePlaylist.playlistId,
+          destinationPlaylistId: input.destinationPlaylist.playlistId,
+          syncFrequency: input.syncFrequency,
+          useWebhooks: input.useWebhooks,
+          userId: ctx.session.user.id,
+        },
+      })
     }),
 })
