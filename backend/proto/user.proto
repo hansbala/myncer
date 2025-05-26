@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package myncer;
+
+option go_package = "github.com/hansbala/myncer/backend/proto;myncer_pb";
+
+message User {
+  // UUID.
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+
+  // Authentication
+  enum AuthType {
+    AUTH_TYPE_UNSPECIFIED = 0;
+    EMAIL_PASSWORD = 1;
+  }
+}

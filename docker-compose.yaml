@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  db:
+    build:
+      context: ./database
+      dockerfile: database.Dockerfile
+    container_name: postgres-db-container
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
