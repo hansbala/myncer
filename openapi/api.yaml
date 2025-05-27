@@ -1,0 +1,53 @@
+openapi: 3.0.3
+info:
+  title: Myncer API
+  version: 1.0.0
+servers:
+  - url: https://myncer.hansbala.com/api/v1
+    description: Production server
+  - url: http://localhost:8080/api/v1
+    description: Local dev server
+paths:
+  /users/create:
+    post:
+      summary: Create a user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserResponse"
+        '400':
+          description: Invalid input
+        '403':
+          description: Unauthorized or forbidden
+components:
+  schemas:
+    CreateUserRequest:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+    CreateUserResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
