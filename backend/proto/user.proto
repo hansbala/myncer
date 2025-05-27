@@ -12,17 +12,3 @@ message User {
   string email = 4;
 }
 
-message CreateUserRequest {
-  string first_name = 1;
-  string last_name = 2;
-  string email = 3;
-  string plaintext_password = 4;
-}
-
-message CreateUserResponse {
-  string generated_id = 1;
-}
-
-service UserService {
-  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
-}

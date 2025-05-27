@@ -2,39 +2,43 @@ package main
 
 import (
 	"context"
-	"log"
 	"net/http"
 
-	"github.com/improbable-eng/grpc-web/go/grpcweb"
-	"google.golang.org/grpc"
-
 	"github.com/hansbala/myncer/core"
-	"github.com/hansbala/myncer/grpcserver"
+	"github.com/hansbala/myncer/handlers"
 	myncer_pb "github.com/hansbala/myncer/proto"
-	"github.com/hansbala/myncer/services"
 )
 
 func main() {
 	ctx := context.Background()
-	ctx = core.WithMyncerCtx(ctx, core.MustGetMyncerCtx(ctx))
+	myncerCtx := core.MustGetMyncerCtx(ctx)
 
-	wrappedServer := grpcweb.WrapServer(getGrpcServer(ctx))
-	log.Println("gRPC-Web listening on http://localhost:8080")
-	http.ListenAndServe(":8080", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if wrappedServer.IsGrpcWebRequest(r) || wrappedServer.IsAcceptableGrpcCorsRequest(r) {
-			wrappedServer.ServeHTTP(w, r)
-			return
-		}
-		http.NotFound(w, r)
-	}))
+	http.HandleFunc(
+		"/users/create",
+		ServerHandler(
+			handlers.NewCreateUserHandler(),
+			myncerCtx,
+		),
+	)
+	core.Printf("Myncer listening on port 8080")
+	if err := http.ListenAndServe(":8080", nil /*handler*/); err != nil {
+		core.Errorf("failed: ", err)
+	}
 }
 
-func getGrpcServer(ctx context.Context) *grpc.Server {
-	s := grpc.NewServer()
-	internalUserService := services.NewUserService(core.ToMyncerCtx(ctx).DB)
-	myncer_pb.RegisterUserServiceServer(
-		s,
-		grpcserver.NewUserServiceServer(internalUserService),
-	)
-	return s
+func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Create custom ctx passing myncer ctx down with it.
+		ctx := core.WithMyncerCtx(r.Context(), myncerCtx)
+		// TODO: Get the user with JWT auth here.
+		user := &myncer_pb.User{Id: "some-id", FirstName: "devuser"}
+
+		if err := h.CheckUserPermissions(ctx, user); err != nil {
+			core.Errorf(core.WrappedError(err, "check user perms failed"))
+		}
+
+		if err := h.ProcessRequest(ctx, r, w); err != nil {
+			core.Errorf(core.WrappedError(err, "process request failed"))
+		}
+	}
 }
