@@ -12,13 +12,13 @@ down:
 	docker-compose down --volumes --remove-orphans
 
 # Proto constants.
-PROTO_DIR := backend/proto
+PROTO_DIR := server/proto
 
 # Openapi constants.
 OPENAPI_JAR := thirdparty/openapi-generator-cli.jar
 OPENAPI_CMD := java -jar $(OPENAPI_JAR)
 OPENAPI_FILE := openapi/api.yaml
-OPENAPI_GO_OUT := backend/api/
+OPENAPI_GO_OUT := server/api/
 OPENAPI_GO_PKG_NAME := api
 
 ##############################################
@@ -65,19 +65,19 @@ openapi-go-clean:
 	rm -rf $(OPENAPI_GO_OUT)
 
 ##############################################
-# Backend targets.
+# Server targets.
 ##############################################
-.PHONY: backend
-backend-run:
-	@cd backend && go run .
+.PHONY: server-run
+server-run:
+	@cd server && go run .
 
-.PHONY: backend-build
-backend-build:
-	@cd backend && go build ./...
+.PHONY: server-build
+server-build:
+	@cd server && go build ./...
 
 .PHONY: tidy
 tidy:
-	@cd backend && go mod tidy
+	@cd server && go mod tidy
 
 ##############################################
 # Database targets.

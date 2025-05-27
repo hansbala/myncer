@@ -32,7 +32,7 @@ Simple React app written in Typescript. Uses the following technologies:
 - TailwindCSS
 - shadcn/ui component libraries.
 
-### Backend
+### Server
 
 Written fully in Golang.
 
@@ -57,8 +57,8 @@ After setting up the nix environment, you would also need to setup the env varia
 ```console
 # Spins up a test database.
 make database
-# Starts the backend.
-make backend-run
+# Starts the server.
+make server-run
 # Starts the frontend web app.
 make frontend
 ```

@@ -13,12 +13,12 @@ services:
     restart: unless-stopped
   server:
     build:
-      context: ./backend
+      context: ./server
       dockerfile: server.Dockerfile
     ports:
       - "8080:8080"
     restart: unless-stopped
     env_file:
-      - ./backend/.env
+      - ./server/.env
 volumes:
   pgdata:

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package myncer;
 
-option go_package = "github.com/hansbala/myncer/backend/proto;myncer_pb";
+option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
 
 message User {
   // google/uuid generated UUID.

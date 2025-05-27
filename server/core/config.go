@@ -11,8 +11,9 @@ type Config struct {
 }
 
 func MustGetConfig() *Config {
+	// Production will cause godotenv to fail so just log as warning.
 	if err := godotenv.Load(); err != nil {
-		panic(WrappedError(err, "failed to load config"))
+		Errorf(WrappedError(err, "failed to load config"))
 	}
 	return &Config{
 		DatabaseUrl: os.Getenv("DB_URL"),
