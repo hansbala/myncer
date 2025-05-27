@@ -1,2 +1,4 @@
 **/.env
 .env
+# Nix downloads thirdparty stuff into here.
+thirdparty/
