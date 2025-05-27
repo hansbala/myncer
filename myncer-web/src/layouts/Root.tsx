@@ -4,16 +4,11 @@ export const Root = () => {
   return (
     <div>
       <header style={{ padding: "1rem", borderBottom: "1px solid #ccc" }}>
-        <h1>🏠 Myncer App</h1>
+        <h1>Myncer Syncing App</h1>
       </header>
-
-      <main style={{ padding: "2rem" }}>
+      <main>
         <Outlet />
       </main>
-
-      <footer style={{ padding: "1rem", borderTop: "1px solid #ccc" }}>
-        <small>© {new Date().getFullYear()} Myncer Inc.</small>
-      </footer>
     </div>
   )
 }
