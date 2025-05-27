@@ -19,7 +19,8 @@ var _ MappedNullable = &CreateUserResponse{}
 
 // CreateUserResponse struct for CreateUserResponse
 type CreateUserResponse struct {
-	Status *string `json:"status,omitempty"`
+	// Id of the created user.
+	Id *string `json:"id,omitempty"`
 }
 
 // NewCreateUserResponse instantiates a new CreateUserResponse object
@@ -39,36 +40,36 @@ func NewCreateUserResponseWithDefaults() *CreateUserResponse {
 	return &this
 }
 
-// GetStatus returns the Status field value if set, zero value otherwise.
-func (o *CreateUserResponse) GetStatus() string {
-	if o == nil || IsNil(o.Status) {
+// GetId returns the Id field value if set, zero value otherwise.
+func (o *CreateUserResponse) GetId() string {
+	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
 	}
-	return *o.Status
+	return *o.Id
 }
 
-// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
+// GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateUserResponse) GetStatusOk() (*string, bool) {
-	if o == nil || IsNil(o.Status) {
+func (o *CreateUserResponse) GetIdOk() (*string, bool) {
+	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
-	return o.Status, true
+	return o.Id, true
 }
 
-// HasStatus returns a boolean if a field has been set.
-func (o *CreateUserResponse) HasStatus() bool {
-	if o != nil && !IsNil(o.Status) {
+// HasId returns a boolean if a field has been set.
+func (o *CreateUserResponse) HasId() bool {
+	if o != nil && !IsNil(o.Id) {
 		return true
 	}
 
 	return false
 }
 
-// SetStatus gets a reference to the given string and assigns it to the Status field.
-func (o *CreateUserResponse) SetStatus(v string) {
-	o.Status = &v
+// SetId gets a reference to the given string and assigns it to the Id field.
+func (o *CreateUserResponse) SetId(v string) {
+	o.Id = &v
 }
 
 func (o CreateUserResponse) MarshalJSON() ([]byte, error) {
@@ -81,8 +82,8 @@ func (o CreateUserResponse) MarshalJSON() ([]byte, error) {
 
 func (o CreateUserResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Status) {
-		toSerialize["status"] = o.Status
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
 	}
 	return toSerialize, nil
 }

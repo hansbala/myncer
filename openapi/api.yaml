@@ -29,18 +29,29 @@ paths:
           description: Invalid input
         '403':
           description: Unauthorized or forbidden
+  /users/list:
+    get:
+      summary: List all users.
+      operationId: listUsers
+      responses:
+        200:
+          description: The list of all users.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListUsersResponse"
 components:
   schemas:
     CreateUserRequest:
       type: object
       required:
-        - id
-        - name
+        - firstName
+        - lastName
         - email
       properties:
-        id:
+        firstName:
           type: string
-        name:
+        lastName:
           type: string
         email:
           type: string
@@ -48,6 +59,31 @@ components:
     CreateUserResponse:
       type: object
       properties:
-        status:
+        id:
+          description: Id of the created user.
           type: string
-          example: ok
+          example: abcd-1234
+    ListUsersResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+    User:
+      type: object
+      properties:
+        id:
+          description: The unique ID of the user.
+          type: string
+          format: uuid
+        firstName:
+          description: First name of the user.
+          type: string
+        lastName:
+          description: Last name of the user.
+          type: string
+        email:
+          description: Email of the user.
+          type: string
+          format: email

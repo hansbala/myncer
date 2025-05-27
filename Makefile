@@ -10,6 +10,9 @@ OPENAPI_FILE := openapi/api.yaml
 OPENAPI_GO_OUT := backend/api/
 OPENAPI_GO_PKG_NAME := api
 
+##############################################
+# Proto targets.
+##############################################
 .PHONY: proto
 proto:
 	protoc \
@@ -17,6 +20,9 @@ proto:
 	  --go_out=paths=source_relative:$(PROTO_DIR) \
 	  $(PROTO_DIR)/*.proto
 
+##############################################
+# Openapi targets.
+##############################################
 .PHONY: openapi-go
 openapi-go:
 	mkdir -p $(OPENAPI_GO_OUT)
@@ -31,6 +37,9 @@ openapi-go:
 openapi-go-clean:
 	rm -rf $(OPENAPI_GO_OUT)
 
+##############################################
+# Backend targets.
+##############################################
 .PHONY: backend
 backend-run:
 	@cd backend && go run .
@@ -39,5 +48,32 @@ backend-run:
 backend-build:
 	@cd backend && go build ./...
 
+.PHONY: tidy
+tidy:
+	@cd backend && go mod tidy
+
+##############################################
+# Database targets.
+##############################################
+.PHONY: db-up
+db-up:
+	docker-compose up --build -d
+
+.PHONY: db-down
+db-down:
+	docker-compose down
+
+.PHONY: db-clean
+db-clean:
+	docker-compose down --volumes --remove-orphans
+
+.PHONY: psql
 psql:
 	psql "postgres://devuser:devpass@localhost:5432/myncer"
+
+##############################################
+# Nix targets.
+##############################################
+.PHONY: nix
+nix:
+	nix develop

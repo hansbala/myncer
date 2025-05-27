@@ -21,8 +21,8 @@ var _ MappedNullable = &CreateUserRequest{}
 
 // CreateUserRequest struct for CreateUserRequest
 type CreateUserRequest struct {
-	Id string `json:"id"`
-	Name string `json:"name"`
+	FirstName string `json:"firstName"`
+	LastName string `json:"lastName"`
 	Email string `json:"email"`
 }
 
@@ -32,10 +32,10 @@ type _CreateUserRequest CreateUserRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateUserRequest(id string, name string, email string) *CreateUserRequest {
+func NewCreateUserRequest(firstName string, lastName string, email string) *CreateUserRequest {
 	this := CreateUserRequest{}
-	this.Id = id
-	this.Name = name
+	this.FirstName = firstName
+	this.LastName = lastName
 	this.Email = email
 	return &this
 }
@@ -48,52 +48,52 @@ func NewCreateUserRequestWithDefaults() *CreateUserRequest {
 	return &this
 }
 
-// GetId returns the Id field value
-func (o *CreateUserRequest) GetId() string {
+// GetFirstName returns the FirstName field value
+func (o *CreateUserRequest) GetFirstName() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Id
+	return o.FirstName
 }
 
-// GetIdOk returns a tuple with the Id field value
+// GetFirstNameOk returns a tuple with the FirstName field value
 // and a boolean to check if the value has been set.
-func (o *CreateUserRequest) GetIdOk() (*string, bool) {
+func (o *CreateUserRequest) GetFirstNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Id, true
+	return &o.FirstName, true
 }
 
-// SetId sets field value
-func (o *CreateUserRequest) SetId(v string) {
-	o.Id = v
+// SetFirstName sets field value
+func (o *CreateUserRequest) SetFirstName(v string) {
+	o.FirstName = v
 }
 
-// GetName returns the Name field value
-func (o *CreateUserRequest) GetName() string {
+// GetLastName returns the LastName field value
+func (o *CreateUserRequest) GetLastName() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Name
+	return o.LastName
 }
 
-// GetNameOk returns a tuple with the Name field value
+// GetLastNameOk returns a tuple with the LastName field value
 // and a boolean to check if the value has been set.
-func (o *CreateUserRequest) GetNameOk() (*string, bool) {
+func (o *CreateUserRequest) GetLastNameOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Name, true
+	return &o.LastName, true
 }
 
-// SetName sets field value
-func (o *CreateUserRequest) SetName(v string) {
-	o.Name = v
+// SetLastName sets field value
+func (o *CreateUserRequest) SetLastName(v string) {
+	o.LastName = v
 }
 
 // GetEmail returns the Email field value
@@ -130,8 +130,8 @@ func (o CreateUserRequest) MarshalJSON() ([]byte, error) {
 
 func (o CreateUserRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["id"] = o.Id
-	toSerialize["name"] = o.Name
+	toSerialize["firstName"] = o.FirstName
+	toSerialize["lastName"] = o.LastName
 	toSerialize["email"] = o.Email
 	return toSerialize, nil
 }
@@ -141,8 +141,8 @@ func (o *CreateUserRequest) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"id",
-		"name",
+		"firstName",
+		"lastName",
 		"email",
 	}
 

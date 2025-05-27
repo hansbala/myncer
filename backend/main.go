@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 
 	"github.com/hansbala/myncer/core"
@@ -14,9 +15,16 @@ func main() {
 	myncerCtx := core.MustGetMyncerCtx(ctx)
 
 	http.HandleFunc(
-		"/users/create",
+		"/api/v1/users/create",
 		ServerHandler(
 			handlers.NewCreateUserHandler(),
+			myncerCtx,
+		),
+	)
+	http.HandleFunc(
+		"/api/v1/users/list",
+		ServerHandler(
+			handlers.NewListUsersHandler(),
 			myncerCtx,
 		),
 	)
@@ -37,7 +45,15 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 			core.Errorf(core.WrappedError(err, "check user perms failed"))
 		}
 
-		if err := h.ProcessRequest(ctx, r, w); err != nil {
+		reqContainer := h.GetRequestContainer(ctx)
+		if reqContainer != nil {
+			// Unmarshal request body here for usage in process request.
+			if err := json.NewDecoder(r.Body).Decode(reqContainer); err != nil {
+				core.Errorf(core.WrappedError(err, "failed to decode request body into container"))
+			}
+		}
+
+		if err := h.ProcessRequest(ctx, reqContainer, r, w); err != nil {
 			core.Errorf(core.WrappedError(err, "process request failed"))
 		}
 	}

@@ -1,3 +1,5 @@
 model_create_user_request.go
 model_create_user_response.go
+model_list_users_response.go
+model_user.go
 utils.go
