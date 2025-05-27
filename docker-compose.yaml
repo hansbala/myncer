@@ -11,6 +11,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
-
+  server:
+    build:
+      context: ./backend
+      dockerfile: server.Dockerfile
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
 volumes:
   pgdata:

@@ -1,5 +1,16 @@
 # This makefile is expected to be run within the nix envrionment so it has all necessary tooling.
 
+##############################################
+# Docker targets for testing production.
+##############################################
+.PHONY: up
+up:
+	docker-compose up --build -d
+
+.PHONY: down
+down:
+	docker-compose down --volumes --remove-orphans
+
 # Proto constants.
 PROTO_DIR := backend/proto
 
@@ -14,15 +25,31 @@ OPENAPI_GO_PKG_NAME := api
 # Proto targets.
 ##############################################
 .PHONY: proto
-proto:
+proto: proto-go
+
+.PHONY: proto-clean
+proto-clean: proto-go-clean
+
+.PHONY: proto-go
+proto-go:
 	protoc \
 	  --proto_path=$(PROTO_DIR) \
 	  --go_out=paths=source_relative:$(PROTO_DIR) \
 	  $(PROTO_DIR)/*.proto
 
+.PHONY: proto-go-clean
+proto-go-clean:
+	rm -rf $(PROTO_DIR)/*.pb.go
+
 ##############################################
 # Openapi targets.
 ##############################################
+.PHONY: openapi
+openapi: openapi-go
+
+.PHONY: openapi-clean
+openapi-clean: openapi-go-clean
+
 .PHONY: openapi-go
 openapi-go:
 	mkdir -p $(OPENAPI_GO_OUT)
@@ -55,18 +82,6 @@ tidy:
 ##############################################
 # Database targets.
 ##############################################
-.PHONY: db-up
-db-up:
-	docker-compose up --build -d
-
-.PHONY: db-down
-db-down:
-	docker-compose down
-
-.PHONY: db-clean
-db-clean:
-	docker-compose down --volumes --remove-orphans
-
 .PHONY: psql
 psql:
 	psql "postgres://devuser:devpass@localhost:5432/myncer"
