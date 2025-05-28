@@ -8,6 +8,7 @@ import (
 
 type Config struct {
 	DatabaseUrl string
+	JwtSecret   string
 }
 
 func MustGetConfig() *Config {
@@ -17,5 +18,6 @@ func MustGetConfig() *Config {
 	}
 	return &Config{
 		DatabaseUrl: os.Getenv("DB_URL"),
+		JwtSecret:   os.Getenv("JWT_SECRET"),
 	}
 }

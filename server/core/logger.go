@@ -2,8 +2,8 @@ package core
 
 import "log"
 
-func Printf(v ...any) {
-	log.Print(v...)
+func Printf(format string, v ...any) {
+	log.Printf(format, v...)
 }
 
 func Errorf(v ...any) {

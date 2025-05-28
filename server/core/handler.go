@@ -61,3 +61,12 @@ func NewProcessRequestResponse_BadRequest(err error) *ProcessRequestResponse {
 		StatusCode: http.StatusBadRequest,
 	}
 }
+
+func NewProcessRequestResponse_Unauthorized(err error) *ProcessRequestResponse {
+	return &ProcessRequestResponse{
+		MsgForHttp: "Unauthorized",
+		Err:        err,
+		StatusCode: http.StatusUnauthorized,
+	}
+}
+

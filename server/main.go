@@ -22,6 +22,13 @@ func main() {
 		),
 	)
 	http.HandleFunc(
+		"/api/v1/users/login",
+		ServerHandler(
+			handlers.NewLoginUserHandler(),
+			myncerCtx,
+		),
+	)
+	http.HandleFunc(
 		"/api/v1/users/list",
 		ServerHandler(
 			handlers.NewListUsersHandler(),
