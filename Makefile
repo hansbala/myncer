@@ -47,10 +47,10 @@ proto-go-clean:
 # Openapi targets.
 ##############################################
 .PHONY: openapi
-openapi: openapi-go
+openapi: openapi-go openapi-ts
 
 .PHONY: openapi-clean
-openapi-clean: openapi-go-clean
+openapi-clean: openapi-go-clean openapi-ts-clean
 
 .PHONY: openapi-go
 openapi-go:
@@ -74,8 +74,8 @@ openapi-ts:
 	  -g typescript-fetch \
 	  -o $(OPENAPI_TS_OUT) \
 	  --additional-properties=npmName=$(OPENAPI_TS_PKG_NAME),supportsES6=true
-		# TODO: Figure out how to generate less slop.
-		# --global-property=apis,models,supportingFiles=runtime.ts,base.ts \
+# TODO: Figure out how to generate less slop.
+# --global-property=apis,models,supportingFiles=runtime.ts,base.ts \
 
 .PHONY: openapi-ts-clean
 openapi-ts-clean:
