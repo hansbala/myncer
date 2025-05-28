@@ -20,6 +20,8 @@ OPENAPI_CMD := java -jar $(OPENAPI_JAR)
 OPENAPI_FILE := openapi/api.yaml
 OPENAPI_GO_OUT := server/api/
 OPENAPI_GO_PKG_NAME := api
+OPENAPI_TS_OUT := myncer-web/src/generated_api
+OPENAPI_TS_PKG_NAME := myncer-api
 
 ##############################################
 # Proto targets.
@@ -63,6 +65,21 @@ openapi-go:
 .PHONY: openapi-go-clean
 openapi-go-clean:
 	rm -rf $(OPENAPI_GO_OUT)
+
+.PHONY: openapi-ts
+openapi-ts:
+	mkdir -p $(OPENAPI_TS_OUT)
+	$(OPENAPI_CMD) generate \
+	  -i $(OPENAPI_FILE) \
+	  -g typescript-fetch \
+	  -o $(OPENAPI_TS_OUT) \
+	  --additional-properties=npmName=$(OPENAPI_TS_PKG_NAME),supportsES6=true
+		# TODO: Figure out how to generate less slop.
+		# --global-property=apis,models,supportingFiles=runtime.ts,base.ts \
+
+.PHONY: openapi-ts-clean
+openapi-ts-clean:
+	rm -rf $(OPENAPI_TS_OUT)
 
 ##############################################
 # Server targets.

@@ -1,0 +1,17 @@
+.gitignore
+.npmignore
+.openapi-generator-ignore
+README.md
+package.json
+src/apis/DefaultApi.ts
+src/apis/index.ts
+src/index.ts
+src/models/CreateUserRequest.ts
+src/models/CreateUserResponse.ts
+src/models/ListUsersResponse.ts
+src/models/User.ts
+src/models/UserLoginRequest.ts
+src/models/index.ts
+src/runtime.ts
+tsconfig.esm.json
+tsconfig.json
