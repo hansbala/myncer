@@ -48,6 +48,7 @@ components:
         - firstName
         - lastName
         - email
+        - password
       properties:
         firstName:
           type: string
@@ -56,6 +57,9 @@ components:
         email:
           type: string
           format: email
+        password:
+          description: The plain text password of the user.
+          type: string
     CreateUserResponse:
       type: object
       properties:

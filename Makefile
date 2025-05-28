@@ -79,6 +79,13 @@ server-build:
 tidy:
 	@cd server && go mod tidy
 
+.PHONY: test
+test: server-test
+
+.PHONY: server-test
+server-test:
+	@cd server/ && go test ./...
+
 ##############################################
 # Database targets.
 ##############################################

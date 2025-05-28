@@ -4,9 +4,9 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/hansbala/myncer/api"
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto"
-	"github.com/hansbala/myncer/api"
 )
 
 func NewListUsersHandler() core.Handler {
@@ -35,12 +35,21 @@ func (l *listUsersHandlerImpl) ProcessRequest(
 	_ any, /*const,@nullable*/
 	_ *http.Request, /*const*/
 	resp http.ResponseWriter,
-) error {
+) *core.ProcessRequestResponse {
 	users, err := core.ToMyncerCtx(ctx).DB.UserStore.GetUsers(ctx)
 	if err != nil {
-		return core.WrappedError(err, "failed to list all users")
+		return core.NewProcessRequestResponse_InternalServerError(
+			core.WrappedError(err, "failed to list all users"),
+		)
 	}
-	return WriteJSONOk(resp, getJsonResponse(users))
+
+	if err := WriteJSONOk(resp, getJsonResponse(users)); err != nil {
+		return core.NewProcessRequestResponse_InternalServerError(
+			core.WrappedError(err, "failed to write users response"),
+		)
+	}
+
+	return core.NewProcessRequestResponse_OK()
 }
 
 func getJsonResponse(users []*myncer_pb.User /*const*/) *api.ListUsersResponse {
@@ -57,4 +66,3 @@ func getJsonResponse(users []*myncer_pb.User /*const*/) *api.ListUsersResponse {
 	resp.SetUsers(restUsers)
 	return resp
 }
-

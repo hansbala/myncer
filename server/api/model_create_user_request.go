@@ -24,6 +24,8 @@ type CreateUserRequest struct {
 	FirstName string `json:"firstName"`
 	LastName string `json:"lastName"`
 	Email string `json:"email"`
+	// The plain text password of the user.
+	Password string `json:"password"`
 }
 
 type _CreateUserRequest CreateUserRequest
@@ -32,11 +34,12 @@ type _CreateUserRequest CreateUserRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateUserRequest(firstName string, lastName string, email string) *CreateUserRequest {
+func NewCreateUserRequest(firstName string, lastName string, email string, password string) *CreateUserRequest {
 	this := CreateUserRequest{}
 	this.FirstName = firstName
 	this.LastName = lastName
 	this.Email = email
+	this.Password = password
 	return &this
 }
 
@@ -120,6 +123,30 @@ func (o *CreateUserRequest) SetEmail(v string) {
 	o.Email = v
 }
 
+// GetPassword returns the Password field value
+func (o *CreateUserRequest) GetPassword() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Password
+}
+
+// GetPasswordOk returns a tuple with the Password field value
+// and a boolean to check if the value has been set.
+func (o *CreateUserRequest) GetPasswordOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Password, true
+}
+
+// SetPassword sets field value
+func (o *CreateUserRequest) SetPassword(v string) {
+	o.Password = v
+}
+
 func (o CreateUserRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -133,6 +160,7 @@ func (o CreateUserRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["firstName"] = o.FirstName
 	toSerialize["lastName"] = o.LastName
 	toSerialize["email"] = o.Email
+	toSerialize["password"] = o.Password
 	return toSerialize, nil
 }
 
@@ -144,6 +172,7 @@ func (o *CreateUserRequest) UnmarshalJSON(data []byte) (err error) {
 		"firstName",
 		"lastName",
 		"email",
+		"password",
 	}
 
 	allProperties := make(map[string]interface{})
