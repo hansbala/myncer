@@ -63,6 +63,17 @@ paths:
           description: Unauthorized
         500:
           description: Internal Server Error
+  /users/me:
+    get:
+      summary: Get the potentially authenticated user's details.
+      operationId: getCurrentUser
+      responses:
+        200:
+          description: Authenticated user's details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
 components:
   schemas:
     CreateUserRequest:

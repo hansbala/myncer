@@ -18,6 +18,7 @@ import type {
   CreateUserRequest,
   CreateUserResponse,
   ListUsersResponse,
+  User,
   UserLoginRequest,
 } from '../models/index';
 import {
@@ -27,6 +28,8 @@ import {
     CreateUserResponseToJSON,
     ListUsersResponseFromJSON,
     ListUsersResponseToJSON,
+    UserFromJSON,
+    UserToJSON,
     UserLoginRequestFromJSON,
     UserLoginRequestToJSON,
 } from '../models/index';
@@ -77,6 +80,32 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async createUser(requestParameters: CreateUserOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateUserResponse> {
         const response = await this.createUserRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get the potentially authenticated user\'s details.
+     */
+    async getCurrentUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/users/me`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
+    }
+
+    /**
+     * Get the potentially authenticated user\'s details.
+     */
+    async getCurrentUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
+        const response = await this.getCurrentUserRaw(initOverrides);
         return await response.value();
     }
 
