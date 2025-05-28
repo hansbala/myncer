@@ -10,31 +10,22 @@ import (
 	"github.com/hansbala/myncer/handlers"
 )
 
+var (
+	cHandlersMap = map[string]core.Handler{
+		// User handlers.
+		"/api/v1/users/create": handlers.NewCreateUserHandler(),
+		"/api/v1/users/login": handlers.NewLoginUserHandler(),
+		"/api/v1/users/me": handlers.NewCurrentUserHandler(),
+	}
+)
+
 func main() {
 	ctx := context.Background()
 	myncerCtx := core.MustGetMyncerCtx(ctx)
 
-	http.HandleFunc(
-		"/api/v1/users/create",
-		ServerHandler(
-			handlers.NewCreateUserHandler(),
-			myncerCtx,
-		),
-	)
-	http.HandleFunc(
-		"/api/v1/users/login",
-		ServerHandler(
-			handlers.NewLoginUserHandler(),
-			myncerCtx,
-		),
-	)
-	http.HandleFunc(
-		"/api/v1/users/list",
-		ServerHandler(
-			handlers.NewListUsersHandler(),
-			myncerCtx,
-		),
-	)
+	for pattern, handler := range cHandlersMap {
+		http.HandleFunc(pattern, ServerHandler(handler, myncerCtx))
+	}
 	core.Printf("Myncer listening on port 8080")
 	if err := http.ListenAndServe(":8080", nil /*handler*/); err != nil {
 		core.Errorf("failed: ", err)

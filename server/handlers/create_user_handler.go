@@ -40,6 +40,7 @@ func (c *createUserHandlerImpl) CheckUserPermissions(
 
 func (c *createUserHandlerImpl) ProcessRequest(
 	ctx context.Context,
+	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody any, /*const,@nullable*/
 	req *http.Request, /*const*/
 	resp http.ResponseWriter,
@@ -103,15 +104,15 @@ func validatePassword(password string) error {
 	}
 	runeSlice := []rune(password)
 	// At least one uppercase.
-	if !slices.ContainsFunc(runeSlice, func(r rune) bool { return unicode.IsUpper(r)}) {
+	if !slices.ContainsFunc(runeSlice, func(r rune) bool { return unicode.IsUpper(r) }) {
 		return core.NewError("at least one uppercase letter is required")
 	}
 	// At least one lowercase.
-	if !slices.ContainsFunc(runeSlice, func(r rune) bool { return unicode.IsLower(r)}) {
+	if !slices.ContainsFunc(runeSlice, func(r rune) bool { return unicode.IsLower(r) }) {
 		return core.NewError("at least one lowercase letter is required")
 	}
 	// At least one number.
-	if !slices.ContainsFunc(runeSlice, func(r rune) bool { return unicode.IsNumber(r)}) {
+	if !slices.ContainsFunc(runeSlice, func(r rune) bool { return unicode.IsNumber(r) }) {
 		return core.NewError("at least one number is required")
 	}
 	return nil
@@ -138,4 +139,3 @@ func hashPassword(plaintext string) (string, error) {
 	}
 	return string(bytes), nil
 }
-

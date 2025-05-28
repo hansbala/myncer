@@ -9,9 +9,13 @@ import (
 
 type Handler interface {
 	GetRequestContainer(ctx context.Context) any /*@nullable*/
-	CheckUserPermissions(ctx context.Context, userInfo *myncer_pb.User /*const,@nullable*/) error
+	CheckUserPermissions(
+		ctx context.Context,
+		userInfo *myncer_pb.User, /*const,@nullable*/
+	) error
 	ProcessRequest(
 		ctx context.Context,
+		userInfo *myncer_pb.User, /*const,@nullable*/
 		reqBody any, /*const,@nullable*/
 		req *http.Request, /*const*/
 		resp http.ResponseWriter,
@@ -69,4 +73,3 @@ func NewProcessRequestResponse_Unauthorized(err error) *ProcessRequestResponse {
 		StatusCode: http.StatusUnauthorized,
 	}
 }
-

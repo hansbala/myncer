@@ -34,6 +34,7 @@ func (l *loginUserHandlerImpl) CheckUserPermissions(
 
 func (l *loginUserHandlerImpl) ProcessRequest(
 	ctx context.Context,
+	userInfo *myncer_pb.User, /*const*/
 	reqBody any, /*const,@nullable*/
 	req *http.Request, /*const*/
 	resp http.ResponseWriter,
