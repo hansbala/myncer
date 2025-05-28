@@ -3,13 +3,11 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/hansbala/myncer/auth"
 	"github.com/hansbala/myncer/core"
 	"github.com/hansbala/myncer/handlers"
-	myncer_pb "github.com/hansbala/myncer/proto"
 )
 
 func main() {
