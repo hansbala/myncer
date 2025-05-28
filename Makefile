@@ -94,6 +94,13 @@ psql:
 	psql "postgres://devuser:devpass@localhost:5432/myncer"
 
 ##############################################
+# Web app targets.
+##############################################
+.PHONY: web-dev
+web-dev:
+	@cd myncer-web && pnpm dev
+
+##############################################
 # Nix targets.
 ##############################################
 .PHONY: nix
