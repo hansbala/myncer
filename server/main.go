@@ -59,7 +59,7 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 			}
 		}
 
-		prr := h.ProcessRequest(ctx, reqContainer, r, w)
+		prr := h.ProcessRequest(ctx, user, reqContainer, r, w)
 		// Http status code writing.
 		// Order matters: status code should be written before any response writer writes.
 		// StatusOK is written by default if we're writing JSON to response writer.

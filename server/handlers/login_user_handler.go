@@ -75,7 +75,7 @@ func (l *loginUserHandlerImpl) ProcessRequest(
 			core.WrappedError(err, "failed to generate jwt token"),
 		)
 	}
-	auth.SetAuthCookie(resp, jwtToken)
+	auth.SetAuthCookie(resp, jwtToken, myncerCtx.Config.ServerMode)
 	
 	if _, err := resp.Write([]byte("Success. Set auth cookie")); err != nil {
 		return core.NewProcessRequestResponse_InternalServerError(
