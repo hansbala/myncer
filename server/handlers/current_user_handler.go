@@ -38,8 +38,7 @@ func (c *currentUserHandlerImpl) ProcessRequest(
 	req *http.Request, /*const*/
 	resp http.ResponseWriter,
 ) *core.ProcessRequestResponse /*const*/ {
-	restUser := rest_helpers.UserProtoToRest(userInfo)
-	if err := WriteJSONOk(resp, restUser); err != nil {
+	if err := WriteJSONOk(resp, rest_helpers.UserProtoToRest(userInfo)); err != nil {
 		return core.NewProcessRequestResponse_InternalServerError(
 			core.WrappedError(err, "failed to write user to response"),
 		)
