@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
+	"github.com/hansbala/myncer/auth"
 	"github.com/hansbala/myncer/core"
 	"github.com/hansbala/myncer/handlers"
 	myncer_pb "github.com/hansbala/myncer/proto"
@@ -45,9 +47,16 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Create custom ctx passing myncer ctx down with it.
 		ctx := core.WithMyncerCtx(r.Context(), myncerCtx)
-		// TODO: Get the user with JWT auth here.
-		user := &myncer_pb.User{Id: "some-id", FirstName: "devuser"}
 
+		// Get user based on JWT auth.
+		user, err := auth.MaybeGetUserFromRequest(ctx, r)
+		if err != nil {
+			// Not a fatal case. Expected for unathenticated endpoints.
+			// Logging error for now but if it gets too much, we can remove.
+			core.Warning(core.WrappedError(err, "failed to get user from request"))
+		}
+
+		// Check perms first.
 		if err := h.CheckUserPermissions(ctx, user); err != nil {
 			core.Errorf(core.WrappedError(err, "check user perms failed"))
 		}
@@ -81,3 +90,4 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 		}
 	}
 }
+

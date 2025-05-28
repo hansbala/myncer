@@ -12,8 +12,14 @@ func Errorf(v ...any) {
 	log.SetPrefix("")
 }
 
-func Warningf(v ...any) {
-	log.SetPrefix("ERROR: ")
+func Warningf(format string, v ...any) {
+	log.SetPrefix("WARNING: ")
+	log.Printf(format, v...)
+	log.SetPrefix("")
+}
+
+func Warning(v ...any) {
+	log.SetPrefix("WARNING: ")
 	log.Print(v...)
 	log.SetPrefix("")
 }
