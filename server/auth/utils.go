@@ -26,15 +26,14 @@ func GenerateJWTToken(jwtSecret string, userID string) (string, error) {
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(jwtSecret))
 }
 
-func SetAuthCookie(w http.ResponseWriter, jwtToken string) {
+func SetAuthCookie(w http.ResponseWriter, jwtToken string, serverMode core.ServerMode) {
 	http.SetCookie(
 		w,
 		&http.Cookie{
 			Name:     cJwtCookieName,
 			Value:    jwtToken,
 			Path:     "/",
-			HttpOnly: true,
-			// TODO: Support dev mode.
+			HttpOnly: isHttpOnly(serverMode),
 			Secure:   true, // Send the cookie only over HTTPS.
 			SameSite: http.SameSiteStrictMode,
 			Expires:  time.Now().Add(24 * time.Hour),
@@ -96,4 +95,13 @@ func extractUserIdFromJWTCookie(
 	}
 
 	return userId, nil
+}
+
+func isHttpOnly(mode core.ServerMode) bool {
+	switch mode {
+	case core.SERVER_MODE_DEV:
+		return false
+	default:
+		return true
+	}
 }
