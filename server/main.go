@@ -14,8 +14,8 @@ var (
 	cHandlersMap = map[string]core.Handler{
 		// User handlers.
 		"/api/v1/users/create": handlers.NewCreateUserHandler(),
-		"/api/v1/users/login": handlers.NewLoginUserHandler(),
-		"/api/v1/users/me": handlers.NewCurrentUserHandler(),
+		"/api/v1/users/login":  handlers.NewLoginUserHandler(),
+		"/api/v1/users/me":     handlers.NewCurrentUserHandler(),
 	}
 )
 
@@ -24,12 +24,29 @@ func main() {
 	myncerCtx := core.MustGetMyncerCtx(ctx)
 
 	for pattern, handler := range cHandlersMap {
-		http.HandleFunc(pattern, ServerHandler(handler, myncerCtx))
+		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx)))
 	}
 	core.Printf("Myncer listening on port 8080")
 	if err := http.ListenAndServe(":8080", nil /*handler*/); err != nil {
 		core.Errorf("failed: ", err)
 	}
+}
+
+func WithCors(h http.Handler) http.Handler {
+	return http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			// Allow frontend origin
+			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+			w.Header().Set("Access-Control-Allow-Credentials", "true") // for cookies
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+			if r.Method == http.MethodOptions {
+				w.WriteHeader(http.StatusOK)
+				return
+			}
+			h.ServeHTTP(w, r)
+		},
+	)
 }
 
 func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.HandlerFunc {
@@ -48,6 +65,8 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 		// Check perms first.
 		if err := h.CheckUserPermissions(ctx, user); err != nil {
 			core.Errorf(core.WrappedError(err, "check user perms failed"))
+			w.WriteHeader(http.StatusUnauthorized)
+			return
 		}
 
 		reqContainer := h.GetRequestContainer(ctx)
@@ -79,4 +98,3 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 		}
 	}
 }
-
