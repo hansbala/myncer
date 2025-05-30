@@ -1,14 +1,14 @@
 import { Outlet } from "react-router-dom"
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { MyncerSidebar } from "@/components/MyncerSidebar"
 
 export const Root = () => {
   return (
-    <div>
-      <header style={{ padding: "1rem", borderBottom: "1px solid #ccc" }}>
-        <h1>Myncer Syncing App</h1>
-      </header>
+    <SidebarProvider>
+      <MyncerSidebar />
       <main>
         <Outlet />
       </main>
-    </div>
+    </SidebarProvider>
   )
 }
