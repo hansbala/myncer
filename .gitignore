@@ -2,3 +2,5 @@
 .env
 # Nix downloads thirdparty stuff into here.
 thirdparty/
+.DS_Store
+**/node_modules/**
