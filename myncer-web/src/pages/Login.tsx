@@ -3,6 +3,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useApiClient } from "../hooks/useApiClient"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../hooks/useAuth"
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Enter a valid email" }),
@@ -14,6 +15,7 @@ type LoginFormInputs = z.infer<typeof loginSchema>
 export const Login = () => {
   const apiClient = useApiClient()
   const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
 
   const {
     register,
@@ -34,6 +36,10 @@ export const Login = () => {
         message: "Invalid email or password",
       })
     }
+  }
+
+  if (isAuthenticated) {
+    navigate("/")
   }
 
   return (
