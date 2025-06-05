@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   CreateUserRequest,
   CreateUserResponse,
+  EditUserRequest,
   ListUsersResponse,
   User,
   UserLoginRequest,
@@ -26,6 +27,8 @@ import {
     CreateUserRequestToJSON,
     CreateUserResponseFromJSON,
     CreateUserResponseToJSON,
+    EditUserRequestFromJSON,
+    EditUserRequestToJSON,
     ListUsersResponseFromJSON,
     ListUsersResponseToJSON,
     UserFromJSON,
@@ -36,6 +39,10 @@ import {
 
 export interface CreateUserOperationRequest {
     createUserRequest: CreateUserRequest;
+}
+
+export interface EditUserOperationRequest {
+    editUserRequest?: EditUserRequest;
 }
 
 export interface LoginUserRequest {
@@ -80,6 +87,35 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async createUser(requestParameters: CreateUserOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateUserResponse> {
         const response = await this.createUserRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Edits the current user.
+     */
+    async editUserRaw(requestParameters: EditUserOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/users/edit`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EditUserRequestToJSON(requestParameters['editUserRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
+    }
+
+    /**
+     * Edits the current user.
+     */
+    async editUser(requestParameters: EditUserOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
+        const response = await this.editUserRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

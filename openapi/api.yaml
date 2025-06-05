@@ -63,6 +63,26 @@ paths:
           description: Unauthorized
         500:
           description: Internal Server Error
+  /users/edit:
+    post:
+      summary: Edits the current user.
+      operationId: editUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditUserRequest"
+      responses:
+        200:
+          description: User edited successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          description: Bad Request
+        500:
+          description: Internal Server Error
   /users/me:
     get:
       summary: Get the potentially authenticated user's details.
@@ -135,3 +155,6 @@ components:
         password:
           description: Password of the user.
           type: string
+    EditUserRequest:
+      allOf:
+        - $ref: "#/components/schemas/CreateUserRequest"

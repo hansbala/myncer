@@ -1,5 +1,6 @@
 model_create_user_request.go
 model_create_user_response.go
+model_edit_user_request.go
 model_list_users_response.go
 model_user.go
 model_user_login_request.go
