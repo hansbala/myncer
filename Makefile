@@ -84,8 +84,8 @@ openapi-ts-clean:
 ##############################################
 # Server targets.
 ##############################################
-.PHONY: server-run
-server-run:
+.PHONY: server-dev
+server-dev:
 	@cd server && go run .
 
 .PHONY: server-build
