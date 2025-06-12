@@ -23,6 +23,7 @@ func (thi *templateHandlerImpl) GetRequestContainer(ctx context.Context) any /*@
 func (thi *templateHandlerImpl) CheckUserPermissions(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
+	reqBody any, /*const,@nullable*/
 ) error {
 	return nil
 }

@@ -12,6 +12,7 @@ type Handler interface {
 	CheckUserPermissions(
 		ctx context.Context,
 		userInfo *myncer_pb.User, /*const,@nullable*/
+		reqBody any, /*const,@nullable*/
 	) error
 	ProcessRequest(
 		ctx context.Context,

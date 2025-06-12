@@ -3,8 +3,17 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"slices"
+	"unicode"
+
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/hansbala/myncer/core"
+	myncer_pb "github.com/hansbala/myncer/proto"
+)
+
+const (
+	cMinPasswordLen = 10
 )
 
 func WriteJSONOk(resp http.ResponseWriter, body any) error {
@@ -13,5 +22,76 @@ func WriteJSONOk(resp http.ResponseWriter, body any) error {
 		return core.WrappedError(err, "failed to write to response body")
 	}
 	resp.Header().Add("Content-Type", "application/json")
+	return nil
+}
+
+func getProtoUser(
+	id string,
+	firstName string,
+	lastName string,
+	email string,
+	password string,
+) (*myncer_pb.User, error) {
+	hashedPassword, err := hashPassword(password)
+	if err != nil {
+		return nil, err
+	}
+	return &myncer_pb.User{
+		Id:             id,
+		FirstName:      firstName,
+		LastName:       lastName,
+		Email:          email,
+		HashedPassword: hashedPassword,
+	}, nil
+}
+
+func hashPassword(plaintext string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(plaintext), bcrypt.DefaultCost)
+	if err != nil {
+		return "", core.WrappedError(err, "failed to hash password using bcrypt")
+	}
+	return string(bytes), nil
+}
+
+func validateUserFields(
+	firstName string,
+	lastName string,
+	email string,
+	password string,
+) error {
+	if len(email) == 0 {
+		return core.NewError("email is required")
+	}
+	if len(firstName) == 0 {
+		return core.NewError("first name is required")
+	}
+	if len(lastName) == 0 {
+		return core.NewError("last name is required")
+	}
+	if err := validatePassword(password); err != nil {
+		return core.WrappedError(err, "password validation failed")
+	}
+	return nil
+}
+
+func validatePassword(password string) error {
+	// Length requirements.
+	plen := len(password)
+	if plen < cMinPasswordLen {
+		return core.NewError("expected password to be a minimum of %d characters", cMinPasswordLen)
+	}
+	runeSlice := []rune(password)
+	// At least one uppercase.
+	if !slices.ContainsFunc(runeSlice, func(r rune) bool { return unicode.IsUpper(r) }) {
+		return core.NewError("at least one uppercase letter is required")
+	}
+	// At least one lowercase.
+	if !slices.ContainsFunc(runeSlice, func(r rune) bool { return unicode.IsLower(r) }) {
+		return core.NewError("at least one lowercase letter is required")
+	}
+	// At least one number.
+	if !slices.ContainsFunc(runeSlice, func(r rune) bool { return unicode.IsNumber(r) }) {
+		return core.NewError("at least one number is required")
+	}
 	return nil
 }

@@ -27,6 +27,7 @@ func (l *loginUserHandlerImpl) GetRequestContainer(ctx context.Context) any /*@n
 func (l *loginUserHandlerImpl) CheckUserPermissions(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
+	reqBody any, /*const,@nullable*/
 ) error {
 	// Logging in requires no user permissions.
 	return nil
@@ -60,7 +61,7 @@ func (l *loginUserHandlerImpl) ProcessRequest(
 	}
 
 	if err := bcrypt.CompareHashAndPassword(
-		[]byte(user.GetHashedPassword()), 
+		[]byte(user.GetHashedPassword()),
 		[]byte(restReq.GetPassword()),
 	); err != nil {
 		return core.NewProcessRequestResponse_Unauthorized(
@@ -76,7 +77,7 @@ func (l *loginUserHandlerImpl) ProcessRequest(
 		)
 	}
 	auth.SetAuthCookie(resp, jwtToken, myncerCtx.Config.ServerMode)
-	
+
 	if _, err := resp.Write([]byte("Success. Set auth cookie")); err != nil {
 		return core.NewProcessRequestResponse_InternalServerError(
 			core.WrappedError(err, "failed to write success message"),

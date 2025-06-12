@@ -17,6 +17,7 @@ var (
 
 type UserStore interface {
 	CreateUser(ctx context.Context, user *myncer_pb.User /*const*/) error
+	EditUser(ctx context.Context, user *myncer_pb.User /*const*/) error
 	GetUsers(ctx context.Context) ([]*myncer_pb.User, error)
 	GetUserById(ctx context.Context, id string) (*myncer_pb.User, error)
 	GetUserByEmail(ctx context.Context, email string) (*myncer_pb.User, error)
@@ -43,6 +44,23 @@ func (u *userStoreImpl) CreateUser(ctx context.Context, user *myncer_pb.User /*c
 		user.GetEmail(),
 	); err != nil {
 		return WrappedError(err, "failed to create user in sql")
+	}
+	return nil
+}
+
+func (u *userStoreImpl) EditUser(ctx context.Context, user *myncer_pb.User /*const*/) error {
+	protoBytes, err := proto.Marshal(user)
+	if err != nil {
+		return WrappedError(err, "failed to marshal user proto")
+	}
+	if _, err := u.db.ExecContext(
+		ctx,
+		`UPDATE users SET data = $2, email = $3, updated_at = now() WHERE id = $1`,
+		user.GetId(),
+		protoBytes,
+		user.GetEmail(),
+	); err != nil {
+		return WrappedError(err, "failed to edit user in sql")
 	}
 	return nil
 }

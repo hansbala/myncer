@@ -16,6 +16,7 @@ var (
 		"/api/v1/users/create": handlers.NewCreateUserHandler(),
 		"/api/v1/users/login":  handlers.NewLoginUserHandler(),
 		"/api/v1/users/me":     handlers.NewCurrentUserHandler(),
+		"/api/v1/users/edit":   handlers.NewEditUserHandler(),
 	}
 )
 
@@ -62,20 +63,21 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 			core.Warning(core.WrappedError(err, "failed to get user from request"))
 		}
 
-		// Check perms first.
-		if err := h.CheckUserPermissions(ctx, user); err != nil {
-			core.Errorf(core.WrappedError(err, "check user perms failed"))
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
-
-		reqContainer := h.GetRequestContainer(ctx)
 		// Unmarshal request body here for usage in process request.
+		// Do this before checking perms since handlers often need to check perms based on the body.
+		reqContainer := h.GetRequestContainer(ctx)
 		if reqContainer != nil {
 			if err := json.NewDecoder(r.Body).Decode(reqContainer); err != nil {
 				core.Errorf(core.WrappedError(err, "failed to decode request body into container"))
 				return
 			}
+		}
+
+		// Check perms.
+		if err := h.CheckUserPermissions(ctx, user, reqContainer); err != nil {
+			core.Errorf(core.WrappedError(err, "check user perms failed"))
+			w.WriteHeader(http.StatusUnauthorized)
+			return
 		}
 
 		prr := h.ProcessRequest(ctx, user, reqContainer, r, w)

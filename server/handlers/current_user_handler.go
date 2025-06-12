@@ -24,6 +24,7 @@ func (c *currentUserHandlerImpl) GetRequestContainer(ctx context.Context) any /*
 func (c *currentUserHandlerImpl) CheckUserPermissions(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
+	reqBody any, /*const,@nullable*/
 ) error {
 	if userInfo == nil {
 		return core.NewError("user is required")
