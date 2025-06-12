@@ -4,11 +4,16 @@ import { Login } from './pages/Login';
 import { RequireAuth } from './RequireAuth';
 import { NotFound } from './pages/NotFound';
 import { Root } from './layouts/Root';
+import { SignUp } from './pages/SignUp';
 
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
   },
   {
     path: "/",

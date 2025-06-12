@@ -199,4 +199,29 @@ export class DefaultApi extends runtime.BaseAPI {
         await this.loginUserRaw(requestParameters, initOverrides);
     }
 
+    /**
+     * Log out the currently authenticated user by clearing the session cookie.
+     */
+    async logoutUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/users/logout`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Log out the currently authenticated user by clearing the session cookie.
+     */
+    async logoutUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.logoutUserRaw(initOverrides);
+    }
+
 }

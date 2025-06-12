@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useApiClient } from "../hooks/useApiClient"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../hooks/useAuth"
 
 const loginSchema = z.object({
@@ -80,6 +80,13 @@ export const Login = () => {
         >
           {isSubmitting ? "Logging in..." : "Login"}
         </button>
+
+        <p className="text-center text-sm text-gray-600">
+          Don&apos;t have an account?{" "}
+          <Link to="/signup" className="text-primary hover:underline">
+            Sign up here
+          </Link>
+        </p>
       </form>
     </div>
   )
