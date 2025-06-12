@@ -15,6 +15,7 @@ var (
 		// User handlers.
 		"/api/v1/users/create": handlers.NewCreateUserHandler(),
 		"/api/v1/users/login":  handlers.NewLoginUserHandler(),
+		"/api/v1/users/logout": handlers.NewLogoutUserHandler(),
 		"/api/v1/users/me":     handlers.NewCurrentUserHandler(),
 		"/api/v1/users/edit":   handlers.NewEditUserHandler(),
 	}

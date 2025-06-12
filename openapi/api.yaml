@@ -76,7 +76,7 @@ paths:
               schema:
                 type: string
         401:
-          description: Unauthorized – if the user was not logged in.
+          description: Unauthorized
         500:
           description: Internal Server Error
   /users/edit:

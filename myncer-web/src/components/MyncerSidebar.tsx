@@ -1,5 +1,4 @@
-import { Home, FolderSync, Settings } from "lucide-react"
-
+import { Home, FolderSync, Settings, User, LogOut } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -10,10 +9,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Separator } from "@radix-ui/react-separator"
+import { useAuth } from "@/hooks/useAuth" // Adjust path if needed
 
-// Menu items.
-const items = [
+const menuItems = [
   {
     title: "Dashboard",
     url: "#",
@@ -32,28 +30,51 @@ const items = [
 ]
 
 export const MyncerSidebar = () => {
+  const { user, loading, isAuthenticated, logout } = useAuth()
+
   return (
     <Sidebar>
-      <SidebarContent>
-        <h1 className="w-full px-5 py-4 text-xl">Myncer</h1>
-        <SidebarGroup>
-          {/* <SidebarGroupLabel>Myncer</SidebarGroupLabel> */}
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+      <SidebarContent className="flex h-full flex-col justify-between">
+        {/* Top section */}
+        <div>
+          <h1 className="w-full px-5 py-4 text-xl font-semibold">Myncer</h1>
+          <SidebarGroup>
+            <SidebarGroupLabel>Main</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {menuItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <a href={item.url} className="flex items-center gap-2">
+                        <item.icon className="w-4 h-4" />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </div>
+
+        {/* User section */}
+        {isAuthenticated && !loading && user && (
+          <div className="flex items-center justify-between border-t px-4 py-3 text-sm">
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4" />
+              <span>{user.firstName || user.email}</span>
+            </div>
+            <button
+              onClick={logout}
+              className="flex items-center gap-2 text-red-500 hover:underline"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Logout</span>
+            </button>
+          </div>
+        )}
       </SidebarContent>
     </Sidebar>
   )
 }
+

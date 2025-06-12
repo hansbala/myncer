@@ -41,9 +41,25 @@ func SetAuthCookie(w http.ResponseWriter, jwtToken string, serverMode core.Serve
 	)
 }
 
+func ClearAuthCookie(w http.ResponseWriter, serverMode core.ServerMode) {
+	http.SetCookie(
+		w,
+		&http.Cookie{
+			Name:     cJwtCookieName,
+			Value:    "",
+			Path:     "/",
+			HttpOnly: isHttpOnly(serverMode),
+			Secure:   true,
+			SameSite: http.SameSiteStrictMode,
+			Expires:  time.Unix(0, 0),
+			MaxAge:   -1,
+		},
+	)
+}
+
 func MaybeGetUserFromRequest(
 	ctx context.Context,
-	r *http.Request, /*const*/ 
+	r *http.Request, /*const*/
 ) (*myncer_pb.User /*@nullable*/, error) {
 	myncerCtx := core.ToMyncerCtx(ctx)
 	userId, err := extractUserIdFromJWTCookie(myncerCtx.Config.JwtSecret, r)
