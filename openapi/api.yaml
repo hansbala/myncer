@@ -63,6 +63,22 @@ paths:
           description: Unauthorized
         500:
           description: Internal Server Error
+  /users/logout:
+    post:
+      summary: Log out the currently authenticated user by clearing the session cookie.
+      operationId: logoutUser
+      responses:
+        200:
+          description: Logout successful. Authentication cookie cleared.
+          headers:
+            Set-Cookie:
+              description: Expired authentication cookie to clear session.
+              schema:
+                type: string
+        401:
+          description: Unauthorized – if the user was not logged in.
+        500:
+          description: Internal Server Error
   /users/edit:
     post:
       summary: Edits the current user.
