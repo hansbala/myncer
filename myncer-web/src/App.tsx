@@ -6,6 +6,7 @@ import { NotFound } from './pages/NotFound';
 import { Root } from './layouts/Root';
 import { SignUp } from './pages/SignUp';
 import { Datasources } from './pages/Datasources';
+import { DatasourceAuthPage } from './pages/DatasourceAuthPage';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,14 @@ const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <Datasources />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "datasource/spotify/callback",
+        element: (
+          <RequireAuth>
+            <DatasourceAuthPage />
           </RequireAuth>
         ),
       },
