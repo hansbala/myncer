@@ -17,8 +17,10 @@ import * as runtime from '../runtime';
 import type {
   CreateUserRequest,
   CreateUserResponse,
+  Datasource,
   EditUserRequest,
   ListUsersResponse,
+  OAuthExchangeRequest,
   User,
   UserLoginRequest,
 } from '../models/index';
@@ -27,10 +29,14 @@ import {
     CreateUserRequestToJSON,
     CreateUserResponseFromJSON,
     CreateUserResponseToJSON,
+    DatasourceFromJSON,
+    DatasourceToJSON,
     EditUserRequestFromJSON,
     EditUserRequestToJSON,
     ListUsersResponseFromJSON,
     ListUsersResponseToJSON,
+    OAuthExchangeRequestFromJSON,
+    OAuthExchangeRequestToJSON,
     UserFromJSON,
     UserToJSON,
     UserLoginRequestFromJSON,
@@ -43,6 +49,11 @@ export interface CreateUserOperationRequest {
 
 export interface EditUserOperationRequest {
     editUserRequest?: EditUserRequest;
+}
+
+export interface ExchangeOAuthCodeRequest {
+    datasource: Datasource;
+    oAuthExchangeRequest: OAuthExchangeRequest;
 }
 
 export interface LoginUserRequest {
@@ -117,6 +128,50 @@ export class DefaultApi extends runtime.BaseAPI {
     async editUser(requestParameters: EditUserOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
         const response = await this.editUserRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Exchanges an OAuth2 authorization code from a supported datasource for access and refresh tokens. 
+     * Exchange authorization code for access and refresh tokens
+     */
+    async exchangeOAuthCodeRaw(requestParameters: ExchangeOAuthCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['datasource'] == null) {
+            throw new runtime.RequiredError(
+                'datasource',
+                'Required parameter "datasource" was null or undefined when calling exchangeOAuthCode().'
+            );
+        }
+
+        if (requestParameters['oAuthExchangeRequest'] == null) {
+            throw new runtime.RequiredError(
+                'oAuthExchangeRequest',
+                'Required parameter "oAuthExchangeRequest" was null or undefined when calling exchangeOAuthCode().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/auth/{datasource}/exchange`.replace(`{${"datasource"}}`, encodeURIComponent(String(requestParameters['datasource']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: OAuthExchangeRequestToJSON(requestParameters['oAuthExchangeRequest']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Exchanges an OAuth2 authorization code from a supported datasource for access and refresh tokens. 
+     * Exchange authorization code for access and refresh tokens
+     */
+    async exchangeOAuthCode(requestParameters: ExchangeOAuthCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.exchangeOAuthCodeRaw(requestParameters, initOverrides);
     }
 
     /**

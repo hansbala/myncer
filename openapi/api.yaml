@@ -110,6 +110,28 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+  /auth/{datasource}/exchange:
+    post:
+      summary: Exchange authorization code for access and refresh tokens
+      description: |
+        Exchanges an OAuth2 authorization code from a supported datasource for access and refresh tokens.
+      operationId: exchangeOAuthCode
+      parameters:
+        - name: datasource
+          in: path
+          required: true
+          description: The datasource to exchange the code for (e.g. 'spotify', 'youtube').
+          schema:
+            $ref: "#/components/schemas/Datasource"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OAuthExchangeRequest"
+      responses:
+        200:
+          description: Token exchange successful
 components:
   schemas:
     CreateUserRequest:
@@ -174,3 +196,21 @@ components:
     EditUserRequest:
       allOf:
         - $ref: "#/components/schemas/CreateUserRequest"
+    Datasource:
+      type: string
+      enum:
+        - SPOTIFY
+        - YOUTUBE
+        - DEEZER
+        - TIDAL
+    OAuthExchangeRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The authorization code returned by the datasource.
+        state:
+          type: string
+          description: Optional CSRF protection token returned from the datasource.
+      required:
+        - code

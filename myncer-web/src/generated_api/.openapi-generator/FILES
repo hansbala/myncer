@@ -7,8 +7,10 @@ src/apis/index.ts
 src/index.ts
 src/models/CreateUserRequest.ts
 src/models/CreateUserResponse.ts
+src/models/Datasource.ts
 src/models/EditUserRequest.ts
 src/models/ListUsersResponse.ts
+src/models/OAuthExchangeRequest.ts
 src/models/User.ts
 src/models/UserLoginRequest.ts
 src/models/index.ts
