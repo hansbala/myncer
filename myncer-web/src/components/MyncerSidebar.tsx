@@ -39,7 +39,6 @@ export const MyncerSidebar = () => {
         <div>
           <h1 className="w-full px-5 py-4 text-xl font-semibold">Myncer</h1>
           <SidebarGroup>
-            <SidebarGroupLabel>Main</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {menuItems.map((item) => (
