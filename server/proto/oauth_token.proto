@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package myncer;
+
+import "google/protobuf/timestamp.proto";
+import "datasource.proto";
+
+option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
+
+// Represents an OAuth token issued by a datasource.
+message OAuthToken {
+  string access_token = 1;
+  string refresh_token = 2;
+  string token_type = 3;
+  string scope = 4;
+
+  google.protobuf.Timestamp expires_at = 5;
+  myncer.Datasource datasource = 6;
+}
