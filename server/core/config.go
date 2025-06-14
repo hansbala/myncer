@@ -14,9 +14,16 @@ const (
 )
 
 type Config struct {
-	DatabaseUrl string
-	JwtSecret   string
-	ServerMode  ServerMode
+	DatabaseUrl   string
+	JwtSecret     string
+	ServerMode    ServerMode
+	SpotifyConfig *SpotifyConfig
+}
+
+type SpotifyConfig struct {
+	ClientId     string
+	ClientSecret string
+	RedirectUri  string
 }
 
 func MustGetConfig() *Config {
@@ -39,5 +46,10 @@ func MustGetConfig() *Config {
 		DatabaseUrl: os.Getenv("DB_URL"),
 		JwtSecret:   os.Getenv("JWT_SECRET"),
 		ServerMode:  serverMode,
+		SpotifyConfig: &SpotifyConfig{
+			ClientId:     os.Getenv("SPOTIFY_CLIENT_ID"),
+			ClientSecret: os.Getenv("SPOTIFY_CLIENT_SECRET"),
+			RedirectUri:  os.Getenv("SPOTIFY_REDIRECT_URI"),
+		},
 	}
 }
