@@ -7,17 +7,22 @@ import (
 
 	"github.com/hansbala/myncer/auth"
 	"github.com/hansbala/myncer/core"
+	"github.com/hansbala/myncer/datasources"
 	"github.com/hansbala/myncer/handlers"
 )
 
 var (
 	cHandlersMap = map[string]core.Handler{
 		// User handlers.
-		"/api/v1/users/create": handlers.NewCreateUserHandler(),
-		"/api/v1/users/login":  handlers.NewLoginUserHandler(),
-		"/api/v1/users/logout": handlers.NewLogoutUserHandler(),
-		"/api/v1/users/me":     handlers.NewCurrentUserHandler(),
-		"/api/v1/users/edit":   handlers.NewEditUserHandler(),
+		"/api/v1/users/create":               handlers.NewCreateUserHandler(),
+		"/api/v1/users/login":                handlers.NewLoginUserHandler(),
+		"/api/v1/users/logout":               handlers.NewLogoutUserHandler(),
+		"/api/v1/users/me":                   handlers.NewCurrentUserHandler(),
+		"/api/v1/users/edit":                 handlers.NewEditUserHandler(),
+		// Datasource handlers.
+		"/api/v1/auth/{datasource}/exchange": handlers.NewAuthExchangeHandler(
+			datasources.NewSpotifyClient(),
+		),
 	}
 )
 

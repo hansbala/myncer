@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 	"slices"
+	"time"
 	"unicode"
 
 	"golang.org/x/crypto/bcrypt"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto"
@@ -94,4 +96,22 @@ func validatePassword(password string) error {
 		return core.NewError("at least one number is required")
 	}
 	return nil
+}
+
+func buildOAuthToken(
+	accessToken string,
+	refreshToken string,
+	tokenType string,
+	scope string,
+	expiresAt time.Time,
+	datasource myncer_pb.Datasource,
+) *myncer_pb.OAuthToken {
+	return &myncer_pb.OAuthToken{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+		TokenType:    tokenType,
+		Scope:        scope,
+		ExpiresAt:    timestamppb.New(expiresAt),
+		Datasource:   datasource,
+	}
 }
