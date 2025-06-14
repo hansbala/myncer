@@ -5,6 +5,7 @@ import { RequireAuth } from './RequireAuth';
 import { NotFound } from './pages/NotFound';
 import { Root } from './layouts/Root';
 import { SignUp } from './pages/SignUp';
+import { Datasources } from './pages/Datasources';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,14 @@ const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <Home />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "datasources",
+        element: (
+          <RequireAuth>
+            <Datasources />
           </RequireAuth>
         ),
       },

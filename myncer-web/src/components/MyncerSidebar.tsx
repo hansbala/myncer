@@ -1,15 +1,14 @@
-import { Home, FolderSync, Settings, User, LogOut } from "lucide-react"
+import { Home, FolderSync, User, LogOut, Database } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { useAuth } from "@/hooks/useAuth" // Adjust path if needed
+import { useAuth } from "@/hooks/useAuth"
 
 const menuItems = [
   {
@@ -23,9 +22,9 @@ const menuItems = [
     icon: FolderSync,
   },
   {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Datasources",
+    url: "/datasources",
+    icon: Database,
   },
 ]
 
