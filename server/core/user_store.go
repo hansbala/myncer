@@ -124,10 +124,7 @@ func (u *userStoreImpl) getUsersInternal(
 	if len(conditions) > 0 {
 		query += makeWhereAnd(conditions)
 	}
-	rows, err := u.db.QueryContext(
-		ctx,
-		`SELECT id, data, created_at, updated_at FROM users`,
-	)
+	rows, err := u.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, WrappedError(err, "failed to query users")
 	}

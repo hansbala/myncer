@@ -3,7 +3,7 @@ package core
 import (
 	"context"
 	"database/sql"
-	"errors"
+	"fmt"
 	"time"
 
 	"google.golang.org/protobuf/proto"
@@ -18,6 +18,7 @@ var (
 
 type DatasourceTokenStore interface {
 	AddToken(ctx context.Context, oAuthToken *myncer_pb.OAuthToken /*const*/) error
+	GetTokens(ctx context.Context, userId string) ([]*myncer_pb.OAuthToken, error)
 	GetToken(
 		ctx context.Context,
 		userId string,
@@ -55,36 +56,82 @@ func (d *datasourceTokenStoreImpl) AddToken(
 	return nil
 }
 
+func (d *datasourceTokenStoreImpl) GetTokens(
+	ctx context.Context,
+	userId string,
+) ([]*myncer_pb.OAuthToken, error) {
+	return d.getTokensInternal(ctx, userId, nil /*datasources*/)
+}
+
 func (d *datasourceTokenStoreImpl) GetToken(
 	ctx context.Context,
 	userId string,
 	datasource myncer_pb.Datasource,
 ) (*myncer_pb.OAuthToken, error) {
-	rows := d.db.QueryRowContext(
+	tokens, err := d.getTokensInternal(
 		ctx,
-		`SELECT data, created_at, updated_at
-		FROM datasource_tokens
-		WHERE user_id = $1 AND datasource = $2 LIMIT 1`,
 		userId,
-		datasource.String(),
+		NewSet(datasource),
 	)
+	if err != nil {
+		return nil, WrappedError(err, "failed to get tokens")
+	}
+	switch len(tokens) {
+	case 0:
+		return nil, CErrTokenNotFound
+	case 1:
+		return tokens[0], nil
+	default:
+		return nil, NewError("expected to have found one token but multiple were found")
+	}
+}
 
-	var (
-		protoBytes []byte
-		createdAt  time.Time
-		updatedAt  time.Time
-		oAuthToken myncer_pb.OAuthToken
-	)
-	if err := rows.Scan(&protoBytes, &createdAt, &updatedAt); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, CErrTokenNotFound
+func (d *datasourceTokenStoreImpl) getTokensInternal(
+	ctx context.Context,
+	userId string, // empty indicates no filtering
+	datasources Set[myncer_pb.Datasource], /*@nullable*/ // nil, empty indicates no filtering
+) ([]*myncer_pb.OAuthToken, error) {
+	conditions := []string{}
+	args := []any{}
+	if len(userId) != 0 {
+		conditions = append(conditions, fmt.Sprintf("user_id = $%d", len(args)+1))
+		args = append(args, userId)
+	}
+	if datasources != nil && !datasources.IsEmpty() {
+		conditions = append(
+			conditions,
+			fmt.Sprintf("datasource IN (%s)", makePlaceholders(len(args), datasources.ToArray())),
+		)
+	}
+
+	query := `SELECT data, created_at, updated_at FROM datasource_tokens`
+	if len(conditions) > 0 {
+		query += makeWhereAnd(conditions)
+	}
+
+	rows, err := d.db.QueryContext(ctx, query, args)
+	if err != nil {
+		return nil, WrappedError(err, "failed to execute get datasource tokens sql query")
+	}
+	defer rows.Close()
+
+	r := []*myncer_pb.OAuthToken{}
+	for rows.Next() {
+		var (
+			protoBytes []byte
+			createdAt  time.Time
+			updatedAt  time.Time
+			oAuthToken myncer_pb.OAuthToken
+		)
+		if err := rows.Scan(&protoBytes, &createdAt, &updatedAt); err != nil {
+			return nil, WrappedError(err, "failed to scan datasource token row")
 		}
-		return nil, WrappedError(err, "failed to scan datasource token row")
+		if err := proto.Unmarshal(protoBytes, &oAuthToken); err != nil {
+			return nil, WrappedError(err, "failed to unmarshal oauth token proto")
+		}
+		oAuthToken.CreatedAt = timestamppb.New(createdAt)
+		oAuthToken.UpdatedAt = timestamppb.New(updatedAt)
+		r = append(r, &oAuthToken)
 	}
-	if err := proto.Unmarshal(protoBytes, &oAuthToken); err != nil {
-		return nil, WrappedError(err, "failed to unmarshal oauth token proto")
-	}
-	oAuthToken.CreatedAt = timestamppb.New(createdAt)
-	oAuthToken.UpdatedAt = timestamppb.New(updatedAt)
-	return &oAuthToken, nil
+	return r, nil
 }
