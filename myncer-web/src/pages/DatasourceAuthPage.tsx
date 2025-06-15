@@ -3,7 +3,10 @@ import { useApiClient } from "@/hooks/useApiClient"
 import { useEffect, useRef, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 
-export const DatasourceAuthPage = () => {
+interface DatasourceAuthPageProps {
+  datasource: Datasource
+}
+export const DatasourceAuthPage = ({ datasource }: DatasourceAuthPageProps) => {
   const apiClient = useApiClient()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -26,7 +29,7 @@ export const DatasourceAuthPage = () => {
 
       try {
         await apiClient.exchangeOAuthCode({
-          datasource: Datasource.Spotify,  // Hardcoded for now but later get proper typing.
+          datasource,
           oAuthExchangeRequest: {
             code,
             state: state || undefined,

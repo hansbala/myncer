@@ -41,7 +41,15 @@ const router = createBrowserRouter([
         path: "datasource/spotify/callback",
         element: (
           <RequireAuth>
-            <DatasourceAuthPage />
+            <DatasourceAuthPage datasource='SPOTIFY' />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "datasource/youtube/callback",
+        element: (
+          <RequireAuth>
+            <DatasourceAuthPage datasource='YOUTUBE'/>
           </RequireAuth>
         ),
       },
