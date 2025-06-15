@@ -6,7 +6,7 @@ export const Root = () => {
   return (
     <SidebarProvider>
       <MyncerSidebar />
-      <main>
+      <main className="w-full">
         <Outlet />
       </main>
     </SidebarProvider>
