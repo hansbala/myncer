@@ -34,7 +34,7 @@ func main() {
 	myncerCtx := core.MustGetMyncerCtx(ctx)
 
 	for pattern, handler := range cHandlersMap {
-		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx)))
+		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx), myncerCtx))
 	}
 	core.Printf("Myncer listening on port 8080")
 	if err := http.ListenAndServe(":8080", nil /*handler*/); err != nil {
@@ -42,10 +42,15 @@ func main() {
 	}
 }
 
-func WithCors(h http.Handler) http.Handler {
+func WithCors(h http.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			// Allow frontend origin
+			if myncerCtx.Config.ServerMode == core.SERVER_MODE_DEV {
+				w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+			} else {
+				w.Header().Set("Access-Control-Allow-Origin", "https://myncer.hansbala.com")
+			}
 			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
 			w.Header().Set("Access-Control-Allow-Credentials", "true") // for cookies
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
