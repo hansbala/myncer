@@ -9,16 +9,15 @@ import (
 	"github.com/google/uuid"
 	"github.com/hansbala/myncer/api"
 	"github.com/hansbala/myncer/core"
-	"github.com/hansbala/myncer/datasources"
 	myncer_pb "github.com/hansbala/myncer/proto"
 )
 
-func NewAuthExchangeHandler(spotifyClient *datasources.SpotifyClient) core.Handler {
+func NewAuthExchangeHandler(spotifyClient core.DatasourceClient) core.Handler {
 	return &authExchangeHandlerImpl{spotifyClient: spotifyClient}
 }
 
 type authExchangeHandlerImpl struct {
-	spotifyClient *datasources.SpotifyClient /*const*/
+	spotifyClient core.DatasourceClient
 }
 
 var _ core.Handler = (*authExchangeHandlerImpl)(nil)
@@ -81,7 +80,7 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 			token.AccessToken,
 			token.RefreshToken,
 			token.TokenType,
-			time.Now().Add(time.Second * time.Duration(token.ExpiresIn)),
+			time.Now().Add(time.Second*time.Duration(token.ExpiresIn)),
 			datasource,
 		)
 	default:

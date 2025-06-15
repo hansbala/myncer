@@ -17,14 +17,16 @@ const (
 	cSpotifyTokenUrl = "https://accounts.spotify.com/api/token"
 )
 
-func NewSpotifyClient() *SpotifyClient {
-	return &SpotifyClient{}
+func NewSpotifyClient() core.DatasourceClient {
+	return &spotifyClientImpl{}
 }
 
-type SpotifyClient struct{}
+type spotifyClientImpl struct{}
+
+var _ core.DatasourceClient = (*spotifyClientImpl)(nil)
 
 // ExchangeCodeForToken makes an API request to spotify to to retrieve the access and refresh token.
-func (s *SpotifyClient) ExchangeCodeForToken(
+func (s *spotifyClientImpl) ExchangeCodeForToken(
 	ctx context.Context,
 	authCode string,
 ) (*oauth2.Token, error) {
@@ -36,13 +38,13 @@ func (s *SpotifyClient) ExchangeCodeForToken(
 	return token, nil
 }
 
-func (s *SpotifyClient) GetPlaylists(
+func (s *spotifyClientImpl) GetPlaylists(
 	ctx context.Context,
 	oAuthToken *myncer_pb.OAuthToken, /*const*/
-) ([]*Playlist, error) {
+) ([]*core.Playlist, error) {
 	clientSDK := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
 
-	r := []*Playlist{}
+	r := []*core.Playlist{}
 	for offset := 0; ; offset += cPageLimit {
 		page, err := clientSDK.CurrentUsersPlaylists(
 			ctx,
@@ -60,7 +62,7 @@ func (s *SpotifyClient) GetPlaylists(
 		for _, p := range page.Playlists {
 			r = append(
 				r,
-				&Playlist{
+				&core.Playlist{
 					ID:   p.ID.String(),
 					Name: p.Name,
 					URI:  string(p.URI),
@@ -77,13 +79,13 @@ func (s *SpotifyClient) GetPlaylists(
 	return r, nil
 }
 
-func (s *SpotifyClient) getClient(ctx context.Context, token *oauth2.Token /*const*/) *spotify.Client {
+func (s *spotifyClientImpl) getClient(ctx context.Context, token *oauth2.Token /*const*/) *spotify.Client {
 	tokenSource := s.getOAuthConfig(ctx).TokenSource(ctx, token)
 	httpClient := oauth2.NewClient(ctx, tokenSource)
 	return spotify.New(httpClient)
 }
 
-func (s *SpotifyClient) getAuthenticator(ctx context.Context) *spotifyauth.Authenticator {
+func (s *spotifyClientImpl) getAuthenticator(ctx context.Context) *spotifyauth.Authenticator {
 	spotifyConfig := core.ToMyncerCtx(ctx).Config.SpotifyConfig
 	return spotifyauth.New(
 		spotifyauth.WithClientID(spotifyConfig.ClientId),
@@ -92,7 +94,7 @@ func (s *SpotifyClient) getAuthenticator(ctx context.Context) *spotifyauth.Authe
 	)
 }
 
-func (s *SpotifyClient) getOAuthConfig(ctx context.Context) *oauth2.Config {
+func (s *spotifyClientImpl) getOAuthConfig(ctx context.Context) *oauth2.Config {
 	spotifyConfig := core.ToMyncerCtx(ctx).Config.SpotifyConfig
 	return &oauth2.Config{
 		ClientID:     spotifyConfig.ClientId,
