@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/hansbala/myncer/api"
 	"github.com/hansbala/myncer/core"
 	"github.com/hansbala/myncer/datasources"
@@ -75,6 +76,8 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 			)
 		}
 		oAuthToken = buildOAuthToken(
+			uuid.New().String(),
+			userInfo.GetId(),
 			tokenResponse.AccessToken,
 			tokenResponse.RefreshToken,
 			tokenResponse.TokenType,
@@ -88,8 +91,13 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 		)
 	}
 
-	// TODO: Save the `oAuthToken` to the database but just log it for now.
-	core.Printf("oauth token: %v", oAuthToken)
+	// Save token to DB so we can use it later.
+	if err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.AddToken(ctx, oAuthToken); err != nil {
+		return core.NewProcessRequestResponse_InternalServerError(
+			core.WrappedError(err, "failed to store oauth token to database"),
+		)
+	}
+
 	return core.NewProcessRequestResponse_OK()
 }
 

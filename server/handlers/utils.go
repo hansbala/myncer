@@ -99,6 +99,8 @@ func validatePassword(password string) error {
 }
 
 func buildOAuthToken(
+	id string,
+	userId string,
 	accessToken string,
 	refreshToken string,
 	tokenType string,
@@ -107,6 +109,8 @@ func buildOAuthToken(
 	datasource myncer_pb.Datasource,
 ) *myncer_pb.OAuthToken {
 	return &myncer_pb.OAuthToken{
+		Id:           id,
+		UserId:       userId,
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 		TokenType:    tokenType,
