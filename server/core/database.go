@@ -13,8 +13,9 @@ import (
 var schemaFile embed.FS
 
 type Database struct {
-	UserStore UserStore
-	DB        *sql.DB
+	DatasourceTokenStore DatasourceTokenStore
+	UserStore            UserStore
+	DB                   *sql.DB
 }
 
 func MustGetDatabase(ctx context.Context, config *Config /*const*/) *Database {
@@ -32,8 +33,9 @@ func MustGetDatabase(ctx context.Context, config *Config /*const*/) *Database {
 	}
 
 	return &Database{
-		DB:        db,
-		UserStore: NewUserStore(db),
+		DB:                   db,
+		UserStore:            NewUserStore(db),
+		DatasourceTokenStore: NewDatasourceTokenStore(db),
 	}
 }
 
