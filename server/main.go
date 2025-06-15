@@ -45,13 +45,18 @@ func main() {
 func WithCors(h http.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
-			// Allow frontend origin
+			origin := r.Header.Get("Origin")
+			allowedOrigin := ""
 			if myncerCtx.Config.ServerMode == core.SERVER_MODE_DEV {
-				w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+				if origin == "http://localhost:5173" || origin == "http://localhost" {
+					allowedOrigin = origin
+				}
 			} else {
-				w.Header().Set("Access-Control-Allow-Origin", "https://myncer.hansbala.com")
+				if origin == "https://myncer.hansbala.com" {
+					allowedOrigin = origin
+				}
 			}
-			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+			w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
 			w.Header().Set("Access-Control-Allow-Credentials", "true") // for cookies
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
