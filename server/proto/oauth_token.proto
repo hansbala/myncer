@@ -21,4 +21,8 @@ message OAuthToken {
 
   google.protobuf.Timestamp expires_at = 7;
   myncer.Datasource datasource = 8;
+
+  // Metadata which is fetched from SQL (for it's ACID compliance).
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
 }
