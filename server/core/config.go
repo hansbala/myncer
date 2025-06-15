@@ -18,9 +18,16 @@ type Config struct {
 	JwtSecret     string
 	ServerMode    ServerMode
 	SpotifyConfig *SpotifyConfig
+	YoutubeConfig *YoutubeConfig
 }
 
 type SpotifyConfig struct {
+	ClientId     string
+	ClientSecret string
+	RedirectUri  string
+}
+
+type YoutubeConfig struct {
 	ClientId     string
 	ClientSecret string
 	RedirectUri  string
@@ -50,6 +57,11 @@ func MustGetConfig() *Config {
 			ClientId:     os.Getenv("SPOTIFY_CLIENT_ID"),
 			ClientSecret: os.Getenv("SPOTIFY_CLIENT_SECRET"),
 			RedirectUri:  os.Getenv("SPOTIFY_REDIRECT_URI"),
+		},
+		YoutubeConfig: &YoutubeConfig{
+			ClientId:     os.Getenv("YOUTUBE_CLIENT_ID"),
+			ClientSecret: os.Getenv("YOUTUBE_CLIENT_SECRET"),
+			RedirectUri:  os.Getenv("YOUTUBE_REDIRECT_URI"),
 		},
 	}
 }
