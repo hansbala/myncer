@@ -18,3 +18,12 @@ CREATE TABLE IF NOT EXISTS datasource_tokens (
   updated_at TIMESTAMPTZ DEFAULT now(),
   UNIQUE (user_id, datasource)
 );
+
+CREATE TABLE IF NOT EXISTS syncs (
+  id UUID PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  -- Source of truth: Serialized Sync proto.
+  data BYTEA NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
