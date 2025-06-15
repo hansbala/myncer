@@ -2,6 +2,7 @@ model_create_user_request.go
 model_create_user_response.go
 model_datasource.go
 model_edit_user_request.go
+model_list_datasources_response.go
 model_list_users_response.go
 model_o_auth_exchange_request.go
 model_user.go

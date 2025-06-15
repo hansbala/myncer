@@ -19,6 +19,7 @@ import type {
   CreateUserResponse,
   Datasource,
   EditUserRequest,
+  ListDatasourcesResponse,
   ListUsersResponse,
   OAuthExchangeRequest,
   User,
@@ -33,6 +34,8 @@ import {
     DatasourceToJSON,
     EditUserRequestFromJSON,
     EditUserRequestToJSON,
+    ListDatasourcesResponseFromJSON,
+    ListDatasourcesResponseToJSON,
     ListUsersResponseFromJSON,
     ListUsersResponseToJSON,
     OAuthExchangeRequestFromJSON,
@@ -197,6 +200,34 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getCurrentUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
         const response = await this.getCurrentUserRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get list of connected datasources of the current user.
+     * Get list of connected datasources
+     */
+    async listConnectedDatasourcesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListDatasourcesResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/datasources/list`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListDatasourcesResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Get list of connected datasources of the current user.
+     * Get list of connected datasources
+     */
+    async listConnectedDatasources(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListDatasourcesResponse> {
+        const response = await this.listConnectedDatasourcesRaw(initOverrides);
         return await response.value();
     }
 

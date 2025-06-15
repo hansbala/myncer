@@ -9,6 +9,7 @@ src/models/CreateUserRequest.ts
 src/models/CreateUserResponse.ts
 src/models/Datasource.ts
 src/models/EditUserRequest.ts
+src/models/ListDatasourcesResponse.ts
 src/models/ListUsersResponse.ts
 src/models/OAuthExchangeRequest.ts
 src/models/User.ts

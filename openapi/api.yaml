@@ -97,6 +97,8 @@ paths:
                 $ref: "#/components/schemas/User"
         400:
           description: Bad Request
+        401:
+          description: Unauthorized
         500:
           description: Internal Server Error
   /users/me:
@@ -132,6 +134,26 @@ paths:
       responses:
         200:
           description: Token exchange successful
+        401:
+          description: Unauthorized
+        500:
+          description: Internal Server Error
+  /datasources/list:
+    get:
+      summary: Get list of connected datasources
+      description: Get list of connected datasources of the current user.
+      operationId: listConnectedDatasources
+      responses:
+        200:
+          description: List of connection datasources.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListDatasourcesResponse"
+        401:
+          description: Unauthorized
+        500:
+          description: Internal Server Error
 components:
   schemas:
     CreateUserRequest:
@@ -214,3 +236,10 @@ components:
           description: Optional CSRF protection token returned from the datasource.
       required:
         - code
+    ListDatasourcesResponse:
+      type: object
+      properties:
+        connectedDatasources:
+          type: array
+          items:
+            $ref: "#/components/schemas/Datasource"
