@@ -67,13 +67,13 @@ export const SignUp = () => {
     <div className="flex h-screen w-screen items-center justify-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-xl space-y-6 rounded-2xl border border-gray-200 bg-white p-10 shadow-md"
+        className="w-full max-w-xl space-y-6 rounded-2xl border border-gray-200 p-10 shadow-md"
       >
-        <h2 className="text-center text-3xl font-bold text-gray-800">Create Account</h2>
+        <h2 className="text-center text-3xl font-bold ">Create Account</h2>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-2 block text-base font-medium text-gray-700">First Name</label>
+            <label className="mb-2 block text-base font-medium ">First Name</label>
             <input
               type="text"
               className="w-full rounded-md border px-4 py-3 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -85,7 +85,7 @@ export const SignUp = () => {
           </div>
 
           <div>
-            <label className="mb-2 block text-base font-medium text-gray-700">Last Name</label>
+            <label className="mb-2 block text-base font-medium ">Last Name</label>
             <input
               type="text"
               className="w-full rounded-md border px-4 py-3 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -98,7 +98,7 @@ export const SignUp = () => {
         </div>
 
         <div>
-          <label className="mb-2 block text-base font-medium text-gray-700">Email</label>
+          <label className="mb-2 block text-base font-medium ">Email</label>
           <input
             type="email"
             className="w-full rounded-md border px-4 py-3 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -110,7 +110,7 @@ export const SignUp = () => {
         </div>
 
         <div>
-          <label className="mb-2 block text-base font-medium text-gray-700">Password</label>
+          <label className="mb-2 block text-base font-medium ">Password</label>
           <input
             type="password"
             className="w-full rounded-md border px-4 py-3 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -122,7 +122,7 @@ export const SignUp = () => {
         </div>
 
         <div>
-          <label className="mb-2 block text-base font-medium text-gray-700">Confirm Password</label>
+          <label className="mb-2 block text-base font-medium ">Confirm Password</label>
           <input
             type="password"
             className="w-full rounded-md border px-4 py-3 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -136,7 +136,7 @@ export const SignUp = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-md bg-primary px-6 py-3 text-lg text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-md bg-primary px-6 py-3 text-lg text-secondary hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSubmitting ? "Creating account..." : "Sign Up"}
         </button>

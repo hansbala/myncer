@@ -9,8 +9,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/hooks/useAuth"
-import { Switch } from "./ui/switch"
-import { ThemeToggle } from "./ThemeToggle"
 
 const menuItems = [
   {
