@@ -1,5 +1,3 @@
-events {}
-
 http {
   server {
     listen 80;
