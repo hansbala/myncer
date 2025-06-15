@@ -1,4 +1,4 @@
-import { Home, FolderSync, User, LogOut, Database } from "lucide-react"
+import { User, LogOut, Database } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -9,18 +9,10 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/hooks/useAuth"
+import { Switch } from "./ui/switch"
+import { ThemeToggle } from "./ThemeToggle"
 
 const menuItems = [
-  {
-    title: "Dashboard",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Syncs",
-    url: "#",
-    icon: FolderSync,
-  },
   {
     title: "Datasources",
     url: "/datasources",
@@ -54,6 +46,13 @@ export const MyncerSidebar = () => {
             </SidebarGroupContent>
           </SidebarGroup>
         </div>
+
+        {/* Dark mode toggle */}
+        {/*
+        <div className="flex items-center justify-center border-t px-4 py-3 text-sm">
+          <ThemeToggle />
+        </div>
+        */}
 
         {/* User section */}
         {isAuthenticated && !loading && user && (
