@@ -3,7 +3,7 @@ info:
   title: Myncer API
   version: 1.0.0
 servers:
-  - url: https://myncer.hansbala.com/api/v1
+  - url: https://myncer-api.hansbala.com/api/v1
     description: Production server
   - url: http://localhost:8080/api/v1
     description: Local dev server

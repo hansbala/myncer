@@ -23,7 +23,7 @@ services:
       context: ./myncer-web
       dockerfile: web.Dockerfile
     ports:
-      - "80:80"
+      - "80:8080"
     restart: unless-stopped
     env_file:
       - ./myncer-web/.env
