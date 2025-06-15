@@ -109,7 +109,7 @@ func (d *datasourceTokenStoreImpl) getTokensInternal(
 		query += makeWhereAnd(conditions)
 	}
 
-	rows, err := d.db.QueryContext(ctx, query, args)
+	rows, err := d.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, WrappedError(err, "failed to execute get datasource tokens sql query")
 	}

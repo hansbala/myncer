@@ -24,7 +24,7 @@ var (
 		"/api/v1/auth/{datasource}/exchange": handlers.NewAuthExchangeHandler(
 			datasources.NewSpotifyClient(),
 		),
-		"api/v1/datasources/list": handlers.NewListDatasourcesHandler(),
+		"/api/v1/datasources/list": handlers.NewListDatasourcesHandler(),
 	}
 )
 

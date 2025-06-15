@@ -43,7 +43,7 @@ func (ld *listDatasourcesHandlerImpl) ProcessRequest(
 	tokens, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetTokens(ctx, userInfo.GetId())
 	if err != nil {
 		return core.NewProcessRequestResponse_InternalServerError(
-			core.NewError("failed to get auth tokens for user"),
+			core.WrappedError(err, "failed to get auth tokens for user"),
 		)
 	}
 

@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "./hooks/useAuth";
+import { PageLoader } from "./components/ui/page-loader";
 
 export function RequireAuth({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, loading } = useAuth();
@@ -7,7 +8,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     // Optional: Replace with a proper loading spinner
-    return <div className="text-center p-4">Checking authentication...</div>;
+    return <PageLoader />;
   }
 
   if (!isAuthenticated) {
