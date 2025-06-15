@@ -9,6 +9,7 @@ import (
 	"github.com/hansbala/myncer/core"
 	"github.com/hansbala/myncer/datasources"
 	"github.com/hansbala/myncer/handlers"
+	myncer_pb "github.com/hansbala/myncer/proto"
 )
 
 var (
@@ -23,6 +24,7 @@ var (
 		"/api/v1/auth/{datasource}/exchange": handlers.NewAuthExchangeHandler(
 			datasources.NewSpotifyClient(),
 		),
+		"api/v1/datasources/list": handlers.NewListDatasourcesHandler(),
 	}
 )
 
@@ -105,4 +107,21 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 			}
 		}
 	}
+}
+
+func testListPlaylists(ctx context.Context) {
+	oauthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
+		ctx,
+		"05172310-af34-4135-90d2-75d4e649f12f", /*userId*/
+		myncer_pb.Datasource_SPOTIFY,
+	)
+	if err != nil {
+		panic(err)
+	}
+	spotifyClient := datasources.NewSpotifyClient()
+	playlists, err := spotifyClient.GetPlaylists(ctx, oauthToken)
+	if err != nil {
+		panic(err)
+	}
+	core.Printf("playlists: %v", playlists)
 }

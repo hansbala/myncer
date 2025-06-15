@@ -35,5 +35,5 @@ func (thi *templateHandlerImpl) ProcessRequest(
 	req *http.Request, /*const*/
 	resp http.ResponseWriter,
 ) *core.ProcessRequestResponse /*const*/ {
-	return nil
+	return core.NewProcessRequestResponse_OK()
 }

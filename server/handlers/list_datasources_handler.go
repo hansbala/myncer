@@ -4,8 +4,10 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/hansbala/myncer/api"
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto"
+	"github.com/hansbala/myncer/rest_helpers"
 )
 
 func NewListDatasourcesHandler() core.Handler {
@@ -38,6 +40,32 @@ func (ld *listDatasourcesHandlerImpl) ProcessRequest(
 	req *http.Request, /*const*/
 	resp http.ResponseWriter,
 ) *core.ProcessRequestResponse /*const*/ {
+	tokens, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetTokens(ctx, userInfo.GetId())
+	if err != nil {
+		return core.NewProcessRequestResponse_InternalServerError(
+			core.NewError("failed to get auth tokens for user"),
+		)
+	}
 
-	return nil
+	connectedDatasources := []api.Datasource{}
+	for _, token := range tokens {
+		protoDs := token.GetDatasource()
+		restDs, err := rest_helpers.ProtoDatasourceToRest(protoDs)
+		if err != nil {
+			return core.NewProcessRequestResponse_InternalServerError(
+				core.WrappedError(err, "failed to get rest datasource from %d", protoDs),
+			)
+		}
+		connectedDatasources = append(connectedDatasources, restDs)
+	}
+
+	r := api.NewListDatasourcesResponse()
+	r.SetConnectedDatasources(connectedDatasources)
+	if err := WriteJSONOk(resp, r); err != nil {
+		return core.NewProcessRequestResponse_InternalServerError(
+			core.NewError("failed to write connected datasources response"),
+		)
+	}
+
+	return core.NewProcessRequestResponse_OK()
 }
