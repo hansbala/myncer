@@ -1,0 +1,21 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args: [
+      "build", "-f", "server/server.Dockerfile", "-t",
+      "gcr.io/$PROJECT_ID/myncer-server:$COMMIT_SHA", "server"
+    ]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/myncer-server:$COMMIT_SHA"]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: [
+      "build", "-f", "myncer-web/web.Dockerfile", "-t",
+      "gcr.io/$PROJECT_ID/myncer-web:$COMMIT_SHA", "web"
+    ]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/myncer-web:$COMMIT_SHA"]
+
+images:
+  - "gcr.io/$PROJECT_ID/myncer-server:$COMMIT_SHA"
+  - "gcr.io/$PROJECT_ID/myncer-web:$COMMIT_SHA"
+

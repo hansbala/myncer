@@ -18,5 +18,14 @@ services:
     restart: unless-stopped
     env_file:
       - ./server/.env
+  web:
+    build:
+      context: ./myncer-web
+      dockerfile: web.Dockerfile
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    env_file:
+      - ./myncer-web/.env
 volumes:
   pgdata:
