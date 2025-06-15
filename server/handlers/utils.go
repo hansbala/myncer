@@ -104,7 +104,6 @@ func buildOAuthToken(
 	accessToken string,
 	refreshToken string,
 	tokenType string,
-	scope string,
 	expiresAt time.Time,
 	datasource myncer_pb.Datasource,
 ) *myncer_pb.OAuthToken {
@@ -114,7 +113,6 @@ func buildOAuthToken(
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 		TokenType:    tokenType,
-		Scope:        scope,
 		ExpiresAt:    timestamppb.New(expiresAt),
 		Datasource:   datasource,
 	}

@@ -69,7 +69,7 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 	var oAuthToken *myncer_pb.OAuthToken
 	switch datasource {
 	case myncer_pb.Datasource_SPOTIFY:
-		tokenResponse, err := aeh.spotifyClient.ExchangeCodeForToken(ctx, restReq.GetCode())
+		token, err := aeh.spotifyClient.ExchangeCodeForToken(ctx, restReq.GetCode())
 		if err != nil {
 			return core.NewProcessRequestResponse_InternalServerError(
 				core.WrappedError(err, "failed to exchange oauth code"),
@@ -78,11 +78,10 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 		oAuthToken = buildOAuthToken(
 			uuid.New().String(),
 			userInfo.GetId(),
-			tokenResponse.AccessToken,
-			tokenResponse.RefreshToken,
-			tokenResponse.TokenType,
-			tokenResponse.Scope,
-			time.Now().Add(time.Duration(tokenResponse.ExpiresIn)),
+			token.AccessToken,
+			token.RefreshToken,
+			token.TokenType,
+			time.Now().Add(time.Second * time.Duration(token.ExpiresIn)),
 			datasource,
 		)
 	default:
