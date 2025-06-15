@@ -9,11 +9,13 @@ option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
 
 // Represents an OAuth token issued by a datasource.
 message OAuthToken {
-  string access_token = 1;
-  string refresh_token = 2;
-  string token_type = 3;
-  string scope = 4;
+  // google/uuid generated UUID.
+  string id = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+  string token_type = 4;
+  string scope = 5;
 
-  google.protobuf.Timestamp expires_at = 5;
-  myncer.Datasource datasource = 6;
+  google.protobuf.Timestamp expires_at = 6;
+  myncer.Datasource datasource = 7;
 }
