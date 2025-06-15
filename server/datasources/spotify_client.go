@@ -8,26 +8,27 @@ import (
 	"net/http"
 	"net/url"
 
+	spotify "github.com/zmb3/spotify/v2"
+	spotifyauth "github.com/zmb3/spotify/v2/auth"
+
 	"github.com/hansbala/myncer/core"
+	myncer_pb "github.com/hansbala/myncer/proto"
+)
+
+const (
+	cPageLimit = 50
 )
 
 func NewSpotifyClient() *SpotifyClient {
 	return &SpotifyClient{}
 }
 
-type SpotifyClient struct {}
-
-type SpotifyTokenResponse struct {
-	AccessToken  string `json:"access_token"`
-	TokenType    string `json:"token_type"`
-	Scope        string `json:"scope"`
-	ExpiresIn    int    `json:"expires_in"`
-	RefreshToken string `json:"refresh_token"`
-}
+type SpotifyClient struct{}
 
 // ExchangeCodeForToken makes an API request to spotify to to retrieve the access and refresh token.
+// TODO: We can use the SDK's `Exchange` function to simplify this function.
 func (s *SpotifyClient) ExchangeCodeForToken(
-	ctx context.Context, 
+	ctx context.Context,
 	authCode string,
 ) (*SpotifyTokenResponse, error) {
 	config := core.ToMyncerCtx(ctx).Config
@@ -38,8 +39,8 @@ func (s *SpotifyClient) ExchangeCodeForToken(
 
 	req, err := http.NewRequestWithContext(
 		ctx,
-		http.MethodPost, 
-		"https://accounts.spotify.com/api/token", 
+		http.MethodPost,
+		"https://accounts.spotify.com/api/token",
 		bytes.NewBufferString(form.Encode()),
 	)
 	if err != nil {
@@ -68,4 +69,46 @@ func (s *SpotifyClient) ExchangeCodeForToken(
 	}
 
 	return tokenResponse, nil
+}
+
+func (s *SpotifyClient) GetPlaylists(
+	ctx context.Context,
+	oAuthToken *myncer_pb.OAuthToken, /*const*/
+) ([]*Playlist, error) {
+	token := core.ProtoOAuthTokenToOAuth2(oAuthToken)
+	client := spotify.New(spotifyauth.New().Client(ctx, token))
+
+	r := []*Playlist{}
+	for offset := 0; ; offset += cPageLimit {
+		page, err := client.CurrentUsersPlaylists(
+			ctx,
+			spotify.Limit(cPageLimit),
+			spotify.Offset(offset),
+		)
+		if err != nil {
+			return nil, core.WrappedError(
+				err,
+				"failed to get current user playlists at offset %d",
+				offset,
+			)
+		}
+
+		for _, p := range page.Playlists {
+			r = append(
+				r,
+				&Playlist{
+					ID:   p.ID.String(),
+					Name: p.Name,
+					URI:  string(p.URI),
+				},
+			)
+		}
+
+		if len(page.Playlists) < cPageLimit {
+			// No more pages left to get.
+			break
+		}
+	}
+
+	return r, nil
 }

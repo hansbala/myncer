@@ -10,7 +10,9 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.8.1
+	github.com/zmb3/spotify/v2 v2.4.3
 	golang.org/x/crypto v0.37.0
+	golang.org/x/oauth2 v0.30.0
 	google.golang.org/protobuf v1.36.6
 )
 
