@@ -1,16 +1,21 @@
 import { Datasource } from "@/generated_api/src"
 import { useApiClient } from "@/hooks/useApiClient"
-import { useEffect, useState } from "react"
-import { useNavigate, useSearchParams, useParams } from "react-router-dom"
+import { useEffect, useRef, useState } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 export const DatasourceAuthPage = () => {
   const apiClient = useApiClient()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [error, setError] = useState<string | null>(null)
+  // Used to make sure we only make one API call to the backend. In production, this is never an
+  // issue but React strict mode always runs two useEffects so this guards against double calls.
+  const didExchangeRef = useRef(false)
 
   useEffect(() => {
     const exchangeToken = async () => {
+      if (didExchangeRef.current) return
+      didExchangeRef.current = true
       const code = searchParams.get("code")
       const state = searchParams.get("state")
 
