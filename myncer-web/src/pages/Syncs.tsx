@@ -4,7 +4,7 @@ import { PageWrapper } from "@/components/PageWrapper"
 export const Syncs = () => {
   return (
     <PageWrapper>
-      <div className="min-w-xl px-4 py-8 space-y-8">
+      <div className="max-w-5xl px-4 py-8 space-y-8">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Syncs</h1>
