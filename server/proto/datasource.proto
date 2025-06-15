@@ -7,4 +7,5 @@ option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
 enum Datasource {
   DATASOURCE_UNSPECIFIED = 0;
   SPOTIFY = 1;
+  YOUTUBE = 2;
 }
