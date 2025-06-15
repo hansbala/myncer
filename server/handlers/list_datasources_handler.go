@@ -53,7 +53,7 @@ func (ld *listDatasourcesHandlerImpl) ProcessRequest(
 		restDs, err := rest_helpers.ProtoDatasourceToRest(protoDs)
 		if err != nil {
 			return core.NewProcessRequestResponse_InternalServerError(
-				core.WrappedError(err, "failed to get rest datasource from %d", protoDs),
+				core.WrappedError(err, "failed to get rest datasource from %v", protoDs),
 			)
 		}
 		connectedDatasources = append(connectedDatasources, restDs)
