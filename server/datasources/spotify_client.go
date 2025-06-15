@@ -12,7 +12,9 @@ import (
 )
 
 const (
-	cPageLimit = 50
+	cPageLimit       = 50
+	cSpotifyAuthUrl  = "https://accounts.spotify.com/authorize"
+	cSpotifyTokenUrl = "https://accounts.spotify.com/api/token"
 )
 
 func NewSpotifyClient() *SpotifyClient {
@@ -38,7 +40,7 @@ func (s *SpotifyClient) GetPlaylists(
 	ctx context.Context,
 	oAuthToken *myncer_pb.OAuthToken, /*const*/
 ) ([]*Playlist, error) {
-	clientSDK := s.getSDK(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
+	clientSDK := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
 
 	r := []*Playlist{}
 	for offset := 0; ; offset += cPageLimit {
@@ -75,9 +77,10 @@ func (s *SpotifyClient) GetPlaylists(
 	return r, nil
 }
 
-func (s *SpotifyClient) getSDK(ctx context.Context, token *oauth2.Token /*const*/) *spotify.Client {
-	authenticator := s.getAuthenticator(ctx)
-	return spotify.New(authenticator.Client(ctx, token))
+func (s *SpotifyClient) getClient(ctx context.Context, token *oauth2.Token /*const*/) *spotify.Client {
+	tokenSource := s.getOAuthConfig(ctx).TokenSource(ctx, token)
+	httpClient := oauth2.NewClient(ctx, tokenSource)
+	return spotify.New(httpClient)
 }
 
 func (s *SpotifyClient) getAuthenticator(ctx context.Context) *spotifyauth.Authenticator {
@@ -87,4 +90,17 @@ func (s *SpotifyClient) getAuthenticator(ctx context.Context) *spotifyauth.Authe
 		spotifyauth.WithClientSecret(spotifyConfig.ClientSecret),
 		spotifyauth.WithRedirectURL(spotifyConfig.RedirectUri),
 	)
+}
+
+func (s *SpotifyClient) getOAuthConfig(ctx context.Context) *oauth2.Config {
+	spotifyConfig := core.ToMyncerCtx(ctx).Config.SpotifyConfig
+	return &oauth2.Config{
+		ClientID:     spotifyConfig.ClientId,
+		ClientSecret: spotifyConfig.ClientSecret,
+		Endpoint: oauth2.Endpoint{
+			AuthURL:  cSpotifyAuthUrl,
+			TokenURL: cSpotifyTokenUrl,
+		},
+		RedirectURL: spotifyConfig.RedirectUri,
+	}
 }
