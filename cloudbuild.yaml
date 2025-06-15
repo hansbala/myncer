@@ -1,4 +1,5 @@
 steps:
+  # Build and push the server image
   - name: "gcr.io/cloud-builders/docker"
     args: [
       "build", "-f", "server/server.Dockerfile", "-t",
@@ -7,6 +8,7 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/$PROJECT_ID/myncer-server:$COMMIT_SHA"]
 
+  # Build and push the web app image
   - name: "gcr.io/cloud-builders/docker"
     args: [
       "build", "-f", "myncer-web/web.Dockerfile", "-t",
@@ -14,6 +16,30 @@ steps:
     ]
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/$PROJECT_ID/myncer-web:$COMMIT_SHA"]
+
+  # Deploy the server to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run", "deploy", "myncer-server",
+        "--image=gcr.io/$PROJECT_ID/myncer-server:$COMMIT_SHA",
+        "--region=us-central1",
+        "--platform=managed",
+        "--allow-unauthenticated",
+      ]
+
+  # Deploy the web app to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run", "deploy", "myncer-web",
+        "--image=gcr.io/$PROJECT_ID/myncer-web:$COMMIT_SHA",
+        "--region=us-central1",
+        "--platform=managed",
+        "--allow-unauthenticated",
+      ]
 images:
   - "gcr.io/$PROJECT_ID/myncer-server:$COMMIT_SHA"
   - "gcr.io/$PROJECT_ID/myncer-web:$COMMIT_SHA"
