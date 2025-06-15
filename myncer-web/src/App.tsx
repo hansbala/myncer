@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { RequireAuth } from './RequireAuth';
 import { NotFound } from './pages/NotFound';
@@ -7,6 +6,7 @@ import { Root } from './layouts/Root';
 import { SignUp } from './pages/SignUp';
 import { Datasources } from './pages/Datasources';
 import { DatasourceAuthPage } from './pages/DatasourceAuthPage';
+import { Syncs } from './pages/Syncs';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +25,16 @@ const router = createBrowserRouter([
         index: true,
         element: (
           <RequireAuth>
-            <Home />
+            <Syncs />
+          </RequireAuth>
+        ),
+      },
+      {
+        index: true,
+        path: "syncs",
+        element: (
+          <RequireAuth>
+            <Syncs />
           </RequireAuth>
         ),
       },

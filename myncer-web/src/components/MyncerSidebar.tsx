@@ -1,4 +1,4 @@
-import { User, LogOut, Database } from "lucide-react"
+import { User, LogOut, Database, FolderSync } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -11,6 +11,11 @@ import {
 import { useAuth } from "@/hooks/useAuth"
 
 const menuItems = [
+  {
+    title: "Syncs",
+    url: "/syncs",
+    icon: FolderSync,
+  },
   {
     title: "Datasources",
     url: "/datasources",
