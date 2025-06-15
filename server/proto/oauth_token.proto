@@ -11,11 +11,14 @@ option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
 message OAuthToken {
   // google/uuid generated UUID.
   string id = 1;
-  string access_token = 2;
-  string refresh_token = 3;
-  string token_type = 4;
-  string scope = 5;
+  // Myncer user id.
+  string user_id = 2;
 
-  google.protobuf.Timestamp expires_at = 6;
-  myncer.Datasource datasource = 7;
+  string access_token = 3;
+  string refresh_token = 4;
+  string token_type = 5;
+  string scope = 6;
+
+  google.protobuf.Timestamp expires_at = 7;
+  myncer.Datasource datasource = 8;
 }
