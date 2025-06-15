@@ -12,189 +12,86 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
+	"gopkg.in/validator.v2"
 )
 
-// checks if the CreateSyncRequest type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &CreateSyncRequest{}
-
-// CreateSyncRequest struct for CreateSyncRequest
+// CreateSyncRequest - struct for CreateSyncRequest
 type CreateSyncRequest struct {
-	SourceDatasource *Datasource `json:"sourceDatasource,omitempty"`
-	// The ID of the source playlist to sync from.
-	SourcePlaylistId *string `json:"sourcePlaylistId,omitempty"`
-	TargetDatasource *Datasource `json:"targetDatasource,omitempty"`
-	// The ID of the target playlist to sync to.
-	TargetPlaylistId *string `json:"targetPlaylistId,omitempty"`
+	OneWaySync *OneWaySync
 }
 
-// NewCreateSyncRequest instantiates a new CreateSyncRequest object
-// This constructor will assign default values to properties that have it defined,
-// and makes sure properties required by API are set, but the set of arguments
-// will change when the set of required properties is changed
-func NewCreateSyncRequest() *CreateSyncRequest {
-	this := CreateSyncRequest{}
-	return &this
-}
-
-// NewCreateSyncRequestWithDefaults instantiates a new CreateSyncRequest object
-// This constructor will only assign default values to properties that have it defined,
-// but it doesn't guarantee that properties required by API are set
-func NewCreateSyncRequestWithDefaults() *CreateSyncRequest {
-	this := CreateSyncRequest{}
-	return &this
-}
-
-// GetSourceDatasource returns the SourceDatasource field value if set, zero value otherwise.
-func (o *CreateSyncRequest) GetSourceDatasource() Datasource {
-	if o == nil || IsNil(o.SourceDatasource) {
-		var ret Datasource
-		return ret
+// OneWaySyncAsCreateSyncRequest is a convenience function that returns OneWaySync wrapped in CreateSyncRequest
+func OneWaySyncAsCreateSyncRequest(v *OneWaySync) CreateSyncRequest {
+	return CreateSyncRequest{
+		OneWaySync: v,
 	}
-	return *o.SourceDatasource
 }
 
-// GetSourceDatasourceOk returns a tuple with the SourceDatasource field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CreateSyncRequest) GetSourceDatasourceOk() (*Datasource, bool) {
-	if o == nil || IsNil(o.SourceDatasource) {
-		return nil, false
-	}
-	return o.SourceDatasource, true
-}
 
-// HasSourceDatasource returns a boolean if a field has been set.
-func (o *CreateSyncRequest) HasSourceDatasource() bool {
-	if o != nil && !IsNil(o.SourceDatasource) {
-		return true
+// Unmarshal JSON data into one of the pointers in the struct
+func (dst *CreateSyncRequest) UnmarshalJSON(data []byte) error {
+	var err error
+	match := 0
+	// try to unmarshal data into OneWaySync
+	err = newStrictDecoder(data).Decode(&dst.OneWaySync)
+	if err == nil {
+		jsonOneWaySync, _ := json.Marshal(dst.OneWaySync)
+		if string(jsonOneWaySync) == "{}" { // empty struct
+			dst.OneWaySync = nil
+		} else {
+			if err = validator.Validate(dst.OneWaySync); err != nil {
+				dst.OneWaySync = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.OneWaySync = nil
 	}
 
-	return false
-}
+	if match > 1 { // more than 1 match
+		// reset to nil
+		dst.OneWaySync = nil
 
-// SetSourceDatasource gets a reference to the given Datasource and assigns it to the SourceDatasource field.
-func (o *CreateSyncRequest) SetSourceDatasource(v Datasource) {
-	o.SourceDatasource = &v
-}
-
-// GetSourcePlaylistId returns the SourcePlaylistId field value if set, zero value otherwise.
-func (o *CreateSyncRequest) GetSourcePlaylistId() string {
-	if o == nil || IsNil(o.SourcePlaylistId) {
-		var ret string
-		return ret
+		return fmt.Errorf("data matches more than one schema in oneOf(CreateSyncRequest)")
+	} else if match == 1 {
+		return nil // exactly one match
+	} else { // no match
+		return fmt.Errorf("data failed to match schemas in oneOf(CreateSyncRequest)")
 	}
-	return *o.SourcePlaylistId
 }
 
-// GetSourcePlaylistIdOk returns a tuple with the SourcePlaylistId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CreateSyncRequest) GetSourcePlaylistIdOk() (*string, bool) {
-	if o == nil || IsNil(o.SourcePlaylistId) {
-		return nil, false
-	}
-	return o.SourcePlaylistId, true
-}
-
-// HasSourcePlaylistId returns a boolean if a field has been set.
-func (o *CreateSyncRequest) HasSourcePlaylistId() bool {
-	if o != nil && !IsNil(o.SourcePlaylistId) {
-		return true
+// Marshal data from the first non-nil pointers in the struct to JSON
+func (src CreateSyncRequest) MarshalJSON() ([]byte, error) {
+	if src.OneWaySync != nil {
+		return json.Marshal(&src.OneWaySync)
 	}
 
-	return false
+	return nil, nil // no data in oneOf schemas
 }
 
-// SetSourcePlaylistId gets a reference to the given string and assigns it to the SourcePlaylistId field.
-func (o *CreateSyncRequest) SetSourcePlaylistId(v string) {
-	o.SourcePlaylistId = &v
+// Get the actual instance
+func (obj *CreateSyncRequest) GetActualInstance() (interface{}) {
+	if obj == nil {
+		return nil
+	}
+	if obj.OneWaySync != nil {
+		return obj.OneWaySync
+	}
+
+	// all schemas are nil
+	return nil
 }
 
-// GetTargetDatasource returns the TargetDatasource field value if set, zero value otherwise.
-func (o *CreateSyncRequest) GetTargetDatasource() Datasource {
-	if o == nil || IsNil(o.TargetDatasource) {
-		var ret Datasource
-		return ret
-	}
-	return *o.TargetDatasource
-}
-
-// GetTargetDatasourceOk returns a tuple with the TargetDatasource field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CreateSyncRequest) GetTargetDatasourceOk() (*Datasource, bool) {
-	if o == nil || IsNil(o.TargetDatasource) {
-		return nil, false
-	}
-	return o.TargetDatasource, true
-}
-
-// HasTargetDatasource returns a boolean if a field has been set.
-func (o *CreateSyncRequest) HasTargetDatasource() bool {
-	if o != nil && !IsNil(o.TargetDatasource) {
-		return true
+// Get the actual instance value
+func (obj CreateSyncRequest) GetActualInstanceValue() (interface{}) {
+	if obj.OneWaySync != nil {
+		return *obj.OneWaySync
 	}
 
-	return false
-}
-
-// SetTargetDatasource gets a reference to the given Datasource and assigns it to the TargetDatasource field.
-func (o *CreateSyncRequest) SetTargetDatasource(v Datasource) {
-	o.TargetDatasource = &v
-}
-
-// GetTargetPlaylistId returns the TargetPlaylistId field value if set, zero value otherwise.
-func (o *CreateSyncRequest) GetTargetPlaylistId() string {
-	if o == nil || IsNil(o.TargetPlaylistId) {
-		var ret string
-		return ret
-	}
-	return *o.TargetPlaylistId
-}
-
-// GetTargetPlaylistIdOk returns a tuple with the TargetPlaylistId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CreateSyncRequest) GetTargetPlaylistIdOk() (*string, bool) {
-	if o == nil || IsNil(o.TargetPlaylistId) {
-		return nil, false
-	}
-	return o.TargetPlaylistId, true
-}
-
-// HasTargetPlaylistId returns a boolean if a field has been set.
-func (o *CreateSyncRequest) HasTargetPlaylistId() bool {
-	if o != nil && !IsNil(o.TargetPlaylistId) {
-		return true
-	}
-
-	return false
-}
-
-// SetTargetPlaylistId gets a reference to the given string and assigns it to the TargetPlaylistId field.
-func (o *CreateSyncRequest) SetTargetPlaylistId(v string) {
-	o.TargetPlaylistId = &v
-}
-
-func (o CreateSyncRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
-	if err != nil {
-		return []byte{}, err
-	}
-	return json.Marshal(toSerialize)
-}
-
-func (o CreateSyncRequest) ToMap() (map[string]interface{}, error) {
-	toSerialize := map[string]interface{}{}
-	if !IsNil(o.SourceDatasource) {
-		toSerialize["sourceDatasource"] = o.SourceDatasource
-	}
-	if !IsNil(o.SourcePlaylistId) {
-		toSerialize["sourcePlaylistId"] = o.SourcePlaylistId
-	}
-	if !IsNil(o.TargetDatasource) {
-		toSerialize["targetDatasource"] = o.TargetDatasource
-	}
-	if !IsNil(o.TargetPlaylistId) {
-		toSerialize["targetPlaylistId"] = o.TargetPlaylistId
-	}
-	return toSerialize, nil
+	// all schemas are nil
+	return nil
 }
 
 type NullableCreateSyncRequest struct {

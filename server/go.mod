@@ -15,6 +15,7 @@ require (
 	golang.org/x/oauth2 v0.30.0
 	google.golang.org/api v0.110.0
 	google.golang.org/protobuf v1.36.6
+	gopkg.in/validator.v2 v2.0.1
 )
 
 require (

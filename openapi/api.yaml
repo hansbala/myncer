@@ -266,14 +266,37 @@ components:
             $ref: "#/components/schemas/Datasource"
     CreateSyncRequest:
       type: object
+      required:
+        - syncVariant
+      discriminator:
+        propertyName: syncVariant
+        mapping:
+          ONE_WAY: "#/components/schemas/OneWaySync"
+      oneOf:
+        - $ref: "#/components/schemas/OneWaySync"
+    OneWaySync:
+      description: Representative of source -> destination.
+      type: object
+      required:
+        - syncVariant
+        - source
+        - destination
       properties:
-        sourceDatasource:
-          $ref: "#/components/schemas/Datasource"
-        sourcePlaylistId:
+        syncVariant:
           type: string
-          description: The ID of the source playlist to sync from.
-        targetDatasource:
+          enum: [ONE_WAY]
+        source:
+          $ref: "#/components/schemas/MusicSource"
+        destination:
+          $ref: "#/components/schemas/MusicSource"
+    MusicSource:
+      type: object
+      required:
+        - datasource
+        - playlistId
+      properties:
+        datasource:
           $ref: "#/components/schemas/Datasource"
-        targetPlaylistId:
+        playlistId:
           type: string
-          description: The ID of the target playlist to sync to.
+          description: Unique, stable playlist identifier for the datasource.

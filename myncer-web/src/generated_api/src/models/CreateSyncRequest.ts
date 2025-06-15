@@ -12,55 +12,20 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
-import type { Datasource } from './Datasource';
+import type { OneWaySync } from './OneWaySync';
 import {
-    DatasourceFromJSON,
-    DatasourceFromJSONTyped,
-    DatasourceToJSON,
-    DatasourceToJSONTyped,
-} from './Datasource';
+    instanceOfOneWaySync,
+    OneWaySyncFromJSON,
+    OneWaySyncFromJSONTyped,
+    OneWaySyncToJSON,
+} from './OneWaySync';
 
 /**
+ * @type CreateSyncRequest
  * 
  * @export
- * @interface CreateSyncRequest
  */
-export interface CreateSyncRequest {
-    /**
-     * 
-     * @type {Datasource}
-     * @memberof CreateSyncRequest
-     */
-    sourceDatasource?: Datasource;
-    /**
-     * The ID of the source playlist to sync from.
-     * @type {string}
-     * @memberof CreateSyncRequest
-     */
-    sourcePlaylistId?: string;
-    /**
-     * 
-     * @type {Datasource}
-     * @memberof CreateSyncRequest
-     */
-    targetDatasource?: Datasource;
-    /**
-     * The ID of the target playlist to sync to.
-     * @type {string}
-     * @memberof CreateSyncRequest
-     */
-    targetPlaylistId?: string;
-}
-
-
-
-/**
- * Check if a given object implements the CreateSyncRequest interface.
- */
-export function instanceOfCreateSyncRequest(value: object): value is CreateSyncRequest {
-    return true;
-}
+export type CreateSyncRequest = { syncVariant: 'ONE_WAY' } & OneWaySync;
 
 export function CreateSyncRequestFromJSON(json: any): CreateSyncRequest {
     return CreateSyncRequestFromJSONTyped(json, false);
@@ -70,16 +35,15 @@ export function CreateSyncRequestFromJSONTyped(json: any, ignoreDiscriminator: b
     if (json == null) {
         return json;
     }
-    return {
-        
-        'sourceDatasource': json['sourceDatasource'] == null ? undefined : DatasourceFromJSON(json['sourceDatasource']),
-        'sourcePlaylistId': json['sourcePlaylistId'] == null ? undefined : json['sourcePlaylistId'],
-        'targetDatasource': json['targetDatasource'] == null ? undefined : DatasourceFromJSON(json['targetDatasource']),
-        'targetPlaylistId': json['targetPlaylistId'] == null ? undefined : json['targetPlaylistId'],
-    };
+    switch (json['syncVariant']) {
+        case 'ONE_WAY':
+            return Object.assign({}, OneWaySyncFromJSONTyped(json, true), { syncVariant: 'ONE_WAY' } as const);
+        default:
+            throw new Error(`No variant of CreateSyncRequest exists with 'syncVariant=${json['syncVariant']}'`);
+    }
 }
 
-export function CreateSyncRequestToJSON(json: any): CreateSyncRequest {
+export function CreateSyncRequestToJSON(json: any): any {
     return CreateSyncRequestToJSONTyped(json, false);
 }
 
@@ -87,13 +51,12 @@ export function CreateSyncRequestToJSONTyped(value?: CreateSyncRequest | null, i
     if (value == null) {
         return value;
     }
+    switch (value['syncVariant']) {
+        case 'ONE_WAY':
+            return Object.assign({}, OneWaySyncToJSON(value), { syncVariant: 'ONE_WAY' } as const);
+        default:
+            throw new Error(`No variant of CreateSyncRequest exists with 'syncVariant=${value['syncVariant']}'`);
+    }
 
-    return {
-        
-        'sourceDatasource': DatasourceToJSON(value['sourceDatasource']),
-        'sourcePlaylistId': value['sourcePlaylistId'],
-        'targetDatasource': DatasourceToJSON(value['targetDatasource']),
-        'targetPlaylistId': value['targetPlaylistId'],
-    };
 }
 
