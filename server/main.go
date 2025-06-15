@@ -112,6 +112,7 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 func testListPlaylists(ctx context.Context) {
 	oauthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
 		ctx,
+		// This is a local test id for me so do whatever you want with it.
 		"05172310-af34-4135-90d2-75d4e649f12f", /*userId*/
 		myncer_pb.Datasource_SPOTIFY,
 	)
