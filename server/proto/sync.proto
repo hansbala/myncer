@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package myncer;
+
+import "google/protobuf/timestamp.proto";
+import "datasource.proto";
+
+option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
+
+message Sync {
+  // google/uuid generated UUID.
+  string id = 1;
+  // Myncer user id.
+  string user_id = 2;
+  // Metadata which is fetched from SQL (for it's ACID compliance).
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  // Holds the actual sync data.
+  oneof sync_variant {
+    OneWaySync one_way_sync = 5;
+  }
+  // next: 6
+}
+
+// Representative of source -> destination.
+message OneWaySync {
+  MusicSource source = 1;
+  MusicSource destination = 2;
+  // When true, it overwrites the destination songs.
+  // If a song exists in source but not in destination, the song will be lost from destination.
+  bool overwrite_existing = 3;
+  // next: 4
+}
+
+message MusicSource {
+  myncer.Datasource datasource = 1;
+  // Unique, stable playlist identifier for the datasource.
+  string playlist_id = 2;
+  // next: 3
+}
