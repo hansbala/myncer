@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './CreateSyncRequest';
 export * from './CreateUserRequest';
 export * from './CreateUserResponse';
 export * from './Datasource';

@@ -5,6 +5,7 @@ package.json
 src/apis/DefaultApi.ts
 src/apis/index.ts
 src/index.ts
+src/models/CreateSyncRequest.ts
 src/models/CreateUserRequest.ts
 src/models/CreateUserResponse.ts
 src/models/Datasource.ts

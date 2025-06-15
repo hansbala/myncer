@@ -1,3 +1,4 @@
+model_create_sync_request.go
 model_create_user_request.go
 model_create_user_response.go
 model_datasource.go

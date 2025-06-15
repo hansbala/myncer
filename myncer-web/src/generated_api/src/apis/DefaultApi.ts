@@ -15,6 +15,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  CreateSyncRequest,
   CreateUserRequest,
   CreateUserResponse,
   Datasource,
@@ -26,6 +27,8 @@ import type {
   UserLoginRequest,
 } from '../models/index';
 import {
+    CreateSyncRequestFromJSON,
+    CreateSyncRequestToJSON,
     CreateUserRequestFromJSON,
     CreateUserRequestToJSON,
     CreateUserResponseFromJSON,
@@ -45,6 +48,10 @@ import {
     UserLoginRequestFromJSON,
     UserLoginRequestToJSON,
 } from '../models/index';
+
+export interface CreateSyncOperationRequest {
+    createSyncRequest: CreateSyncRequest;
+}
 
 export interface CreateUserOperationRequest {
     createUserRequest: CreateUserRequest;
@@ -67,6 +74,43 @@ export interface LoginUserRequest {
  * 
  */
 export class DefaultApi extends runtime.BaseAPI {
+
+    /**
+     * Creates a sync job for the current user between a (datasource, playlist tuple). 
+     * Create a sync for the current user between two (datasource, playlist) tuples.
+     */
+    async createSyncRaw(requestParameters: CreateSyncOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['createSyncRequest'] == null) {
+            throw new runtime.RequiredError(
+                'createSyncRequest',
+                'Required parameter "createSyncRequest" was null or undefined when calling createSync().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/syncs/create`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateSyncRequestToJSON(requestParameters['createSyncRequest']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Creates a sync job for the current user between a (datasource, playlist tuple). 
+     * Create a sync for the current user between two (datasource, playlist) tuples.
+     */
+    async createSync(requestParameters: CreateSyncOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.createSyncRaw(requestParameters, initOverrides);
+    }
 
     /**
      * Create a user
