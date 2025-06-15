@@ -25,7 +25,7 @@ export const Datasources = () => {
         <div>
           <h1 className="text-3xl font-bold">Datasources</h1>
           <p className="text-muted-foreground mt-1 text-sm">
-            Manage integrations with third-party services like Spotify.
+            Manage integrations with third-party services.
           </p>
         </div>
 
