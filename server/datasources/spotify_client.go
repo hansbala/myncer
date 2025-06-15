@@ -10,6 +10,7 @@ import (
 
 	spotify "github.com/zmb3/spotify/v2"
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
+	"golang.org/x/oauth2"
 
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto"
@@ -75,12 +76,11 @@ func (s *SpotifyClient) GetPlaylists(
 	ctx context.Context,
 	oAuthToken *myncer_pb.OAuthToken, /*const*/
 ) ([]*Playlist, error) {
-	token := core.ProtoOAuthTokenToOAuth2(oAuthToken)
-	client := spotify.New(spotifyauth.New().Client(ctx, token))
+	clientSDK := s.getSDK(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
 
 	r := []*Playlist{}
 	for offset := 0; ; offset += cPageLimit {
-		page, err := client.CurrentUsersPlaylists(
+		page, err := clientSDK.CurrentUsersPlaylists(
 			ctx,
 			spotify.Limit(cPageLimit),
 			spotify.Offset(offset),
@@ -111,4 +111,13 @@ func (s *SpotifyClient) GetPlaylists(
 	}
 
 	return r, nil
+}
+
+func (s *SpotifyClient) getSDK(ctx context.Context, token *oauth2.Token /*const*/) *spotify.Client {
+	spotifyConfig := core.ToMyncerCtx(ctx).Config.SpotifyConfig
+	authenticator := spotifyauth.New(
+		spotifyauth.WithClientID(spotifyConfig.ClientId),
+		spotifyauth.WithClientSecret(spotifyConfig.ClientSecret),
+	)
+	return spotify.New(authenticator.Client(ctx, token))
 }

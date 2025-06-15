@@ -17,7 +17,6 @@ message OAuthToken {
   string access_token = 3;
   string refresh_token = 4;
   string token_type = 5;
-  string scope = 6;
 
   google.protobuf.Timestamp expires_at = 7;
   myncer.Datasource datasource = 8;
@@ -25,4 +24,6 @@ message OAuthToken {
   // Metadata which is fetched from SQL (for it's ACID compliance).
   google.protobuf.Timestamp created_at = 9;
   google.protobuf.Timestamp updated_at = 10;
+
+  reserved 6;
 }
