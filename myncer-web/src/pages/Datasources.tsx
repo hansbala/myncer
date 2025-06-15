@@ -21,7 +21,7 @@ export const Datasources = () => {
 
   return (
     <PageWrapper>
-      <div className="min-w-xl px-4 py-8 space-y-8">
+      <div className="max-w-5xl px-4 py-8 space-y-8">
         <div>
           <h1 className="text-3xl font-bold">Datasources</h1>
           <p className="text-muted-foreground mt-1 text-sm">
