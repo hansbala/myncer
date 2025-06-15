@@ -91,6 +91,7 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 	}
 
 	// Save token to DB so we can use it later.
+	// TODO: We should wipe the old token too (probably in a transaction too).
 	if err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.AddToken(ctx, oAuthToken); err != nil {
 		return core.NewProcessRequestResponse_InternalServerError(
 			core.WrappedError(err, "failed to store oauth token to database"),
