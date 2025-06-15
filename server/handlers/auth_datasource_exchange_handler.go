@@ -145,6 +145,8 @@ func (aeh *authExchangeHandlerImpl) getDatasource(
 	switch datasource {
 	case string(api.SPOTIFY):
 		return myncer_pb.Datasource_SPOTIFY, nil
+	case string(api.YOUTUBE):
+		return myncer_pb.Datasource_YOUTUBE, nil
 	default:
 		return myncer_pb.Datasource_DATASOURCE_UNSPECIFIED, core.NewError(
 			"unknown datasource %s",

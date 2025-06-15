@@ -23,6 +23,7 @@ var (
 		// Datasource handlers.
 		"/api/v1/auth/{datasource}/exchange": handlers.NewAuthExchangeHandler(
 			datasources.NewSpotifyClient(),
+			datasources.NewYouTubeClient(),
 		),
 		"/api/v1/datasources/list": handlers.NewListDatasourcesHandler(),
 	}

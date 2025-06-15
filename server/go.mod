@@ -43,5 +43,3 @@ require (
 	google.golang.org/grpc v1.53.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace cloud.google.com/go/compute/metadata => cloud.google.com/go v0.110.0
