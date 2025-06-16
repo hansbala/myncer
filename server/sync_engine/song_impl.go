@@ -41,7 +41,7 @@ func (s *songImpl) GetId() string {
 	return s.spec.GetDatasourceSongId()
 }
 
-func (s *songImpl) GetDatasourceId(datasource myncer_pb.Datasource) (string, error) {
+func (s *songImpl) GetIdByDatasource(datasource myncer_pb.Datasource) (string, error) {
 	switch datasource {
 	case myncer_pb.Datasource_SPOTIFY:
 		return s.getSpotifyId()

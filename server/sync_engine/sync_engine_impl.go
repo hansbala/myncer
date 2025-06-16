@@ -129,7 +129,7 @@ func (s *syncEngineImpl) getSearchedSongs(
 ) ([]core.Song, error) {
 	r := []core.Song{}
 	for _, song := range songs {
-		newDatasourceSongId, err := song.GetDatasourceId(datasource)
+		newDatasourceSongId, err := song.GetIdByDatasource(datasource)
 		if err != nil {
 			return nil, core.WrappedError(err, "failed to get datasource ID for song %s", song.GetName())
 		}

@@ -7,5 +7,5 @@ type Song interface {
 	GetArtistNames() []string
 	GetAlbum() string
 	GetId() string
-	GetDatasourceId(datasource myncer_pb.Datasource) (string, error)
+	GetIdByDatasource(datasource myncer_pb.Datasource) (string, error)
 }
