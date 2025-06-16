@@ -1,6 +1,8 @@
 package sync_engine
 
 import (
+	"context"
+
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto"
 )
@@ -41,10 +43,14 @@ func (s *songImpl) GetId() string {
 	return s.spec.GetDatasourceSongId()
 }
 
-func (s *songImpl) GetIdByDatasource(datasource myncer_pb.Datasource) (string, error) {
+func (s *songImpl) GetIdByDatasource(
+	ctx context.Context,
+	userInfo *myncer_pb.User, /*const*/
+	datasource myncer_pb.Datasource,
+) (string, error) {
 	switch datasource {
 	case myncer_pb.Datasource_SPOTIFY:
-		return s.getSpotifyId()
+		return s.getSpotifyId(ctx, userInfo)
 	case myncer_pb.Datasource_YOUTUBE:
 		return s.getYoutubeId()
 	default:
@@ -52,8 +58,33 @@ func (s *songImpl) GetIdByDatasource(datasource myncer_pb.Datasource) (string, e
 	}
 }
 
-func (s *songImpl) getSpotifyId() (string, error) {
-	return "", core.NewError("Spotify ID not implemented")
+func (s *songImpl) getSpotifyId(
+	ctx context.Context,
+	userInfo *myncer_pb.User, /*const*/
+) (string, error) {
+	if s.spec.GetDatasource() == myncer_pb.Datasource_SPOTIFY {
+		return s.spec.GetDatasourceSongId(), nil
+	}
+	oAuthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
+		ctx,
+		userInfo.GetId(),
+		myncer_pb.Datasource_SPOTIFY,
+	)
+	if err != nil {
+		return "", core.WrappedError(err, "failed to get OAuth token for Spotify")
+	}
+	// Otherwise, try searching Spotify
+	result, err := s.spotifyClient.Search(
+		ctx,
+		oAuthToken,
+		core.NewSet(s.GetName()),
+		core.NewSet(s.GetArtistNames()...),
+		core.NewSet(s.GetAlbum()),
+	)
+	if err != nil {
+		return "", core.WrappedError(err, "spotify search failed for song: %s", s.GetName())
+	}
+	return result.GetId(), nil
 }
 
 func (s *songImpl) getYoutubeId() (string, error) {

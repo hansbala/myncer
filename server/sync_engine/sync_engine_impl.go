@@ -82,6 +82,7 @@ func (s *syncEngineImpl) runOneWaySync(
 
 	searchedSongs, err := s.getSearchedSongs(
 		ctx,
+		userInfo,
 		sourceSongs,
 		sync.GetDestination().GetDatasource(),
 	)
@@ -124,12 +125,13 @@ func (s *syncEngineImpl) runOneWaySync(
 
 func (s *syncEngineImpl) getSearchedSongs(
 	ctx context.Context,
+	userInfo *myncer_pb.User, /*const*/
 	songs []core.Song, /*const*/
 	datasource myncer_pb.Datasource, /*const*/
 ) ([]core.Song, error) {
 	r := []core.Song{}
 	for _, song := range songs {
-		newDatasourceSongId, err := song.GetIdByDatasource(datasource)
+		newDatasourceSongId, err := song.GetIdByDatasource(ctx, userInfo, datasource)
 		if err != nil {
 			return nil, core.WrappedError(err, "failed to get datasource ID for song %s", song.GetName())
 		}
