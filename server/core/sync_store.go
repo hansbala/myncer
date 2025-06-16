@@ -8,6 +8,7 @@ import (
 
 	myncer_pb "github.com/hansbala/myncer/proto"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type SyncStore interface {
@@ -89,6 +90,8 @@ func (s *syncStoreImpl) getSyncsInternal(
 		if err := proto.Unmarshal(protoBytes, &sync); err != nil {
 			return nil, WrappedError(err, "failed to unmarshal sync proto")
 		}
+		sync.CreatedAt = timestamppb.New(createdAt)
+		sync.UpdatedAt = timestamppb.New(updatedAt)
 		r.Add(&sync)
 	}
 	return r, nil
