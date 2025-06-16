@@ -28,17 +28,17 @@ import {
 } from './OneWaySync';
 
 /**
- * @type CreateSyncRequest
+ * @type SyncSyncData
  * 
  * @export
  */
-export type CreateSyncRequest = { syncVariant: 'MERGE' } & MergeSync | { syncVariant: 'ONE_WAY' } & OneWaySync;
+export type SyncSyncData = { syncVariant: 'MERGE' } & MergeSync | { syncVariant: 'ONE_WAY' } & OneWaySync;
 
-export function CreateSyncRequestFromJSON(json: any): CreateSyncRequest {
-    return CreateSyncRequestFromJSONTyped(json, false);
+export function SyncSyncDataFromJSON(json: any): SyncSyncData {
+    return SyncSyncDataFromJSONTyped(json, false);
 }
 
-export function CreateSyncRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateSyncRequest {
+export function SyncSyncDataFromJSONTyped(json: any, ignoreDiscriminator: boolean): SyncSyncData {
     if (json == null) {
         return json;
     }
@@ -48,15 +48,15 @@ export function CreateSyncRequestFromJSONTyped(json: any, ignoreDiscriminator: b
         case 'ONE_WAY':
             return Object.assign({}, OneWaySyncFromJSONTyped(json, true), { syncVariant: 'ONE_WAY' } as const);
         default:
-            throw new Error(`No variant of CreateSyncRequest exists with 'syncVariant=${json['syncVariant']}'`);
+            throw new Error(`No variant of SyncSyncData exists with 'syncVariant=${json['syncVariant']}'`);
     }
 }
 
-export function CreateSyncRequestToJSON(json: any): any {
-    return CreateSyncRequestToJSONTyped(json, false);
+export function SyncSyncDataToJSON(json: any): any {
+    return SyncSyncDataToJSONTyped(json, false);
 }
 
-export function CreateSyncRequestToJSONTyped(value?: CreateSyncRequest | null, ignoreDiscriminator: boolean = false): any {
+export function SyncSyncDataToJSONTyped(value?: SyncSyncData | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
@@ -66,7 +66,7 @@ export function CreateSyncRequestToJSONTyped(value?: CreateSyncRequest | null, i
         case 'ONE_WAY':
             return Object.assign({}, OneWaySyncToJSON(value), { syncVariant: 'ONE_WAY' } as const);
         default:
-            throw new Error(`No variant of CreateSyncRequest exists with 'syncVariant=${value['syncVariant']}'`);
+            throw new Error(`No variant of SyncSyncData exists with 'syncVariant=${value['syncVariant']}'`);
     }
 
 }

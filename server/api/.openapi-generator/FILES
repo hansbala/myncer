@@ -6,10 +6,12 @@ model_edit_user_request.go
 model_list_datasources_response.go
 model_list_syncs_response.go
 model_list_users_response.go
+model_merge_sync.go
 model_music_source.go
 model_o_auth_exchange_request.go
 model_one_way_sync.go
 model_sync.go
+model_sync_sync_data.go
 model_sync_variant.go
 model_user.go
 model_user_login_request.go

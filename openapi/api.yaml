@@ -295,20 +295,24 @@ components:
         propertyName: syncVariant
         mapping:
           ONE_WAY: "#/components/schemas/OneWaySync"
+          MERGE: "#/components/schemas/MergeSync"
       oneOf:
         - $ref: "#/components/schemas/OneWaySync"
+        - $ref: "#/components/schemas/MergeSync"
     Sync:
       type: object
       required:
+        - id
+        - createdAt
+        - updatedAt
         # This object includes fields of it's own (createdAt, updatedAt) so we need to define the
         # variant explicitly on the object.
         - syncVariant
-        - createdAt
-        - updatedAt
+        - syncData
       properties:
-        syncVariant:
+        id:
           type: string
-          description: The variant of the sync
+          description: Unique id of the sync.
         createdAt:
           description: The timestamp this sync was created at.
           type: string
@@ -317,12 +321,17 @@ components:
           description: The timestamp this sync was updated at.
           type: string
           format: date-time
-      discriminator:
-        propertyName: syncVariant
-        mapping:
-          ONE_WAY: "#/components/schemas/OneWaySync"
-      oneOf:
-        - $ref: "#/components/schemas/OneWaySync"
+        syncVariant:
+          $ref: "#/components/schemas/SyncVariant"
+        syncData:
+          oneOf:
+            - $ref: "#/components/schemas/OneWaySync"
+            - $ref: "#/components/schemas/MergeSync"
+          discriminator:
+            propertyName: syncVariant
+            mapping:
+              ONE_WAY: "#/components/schemas/OneWaySync"
+              MERGE: "#/components/schemas/MergeSync"
     OneWaySync:
       description: Representative of source -> destination.
       type: object
@@ -343,6 +352,20 @@ components:
             If a song exists in source but not in destination, 
             the song will be lost from destination.
           type: boolean
+    MergeSync:
+      description: Representative of merging sources into a master source and writing to all.
+      type: object
+      required:
+        - syncVariant
+        - sources
+      properties:
+        syncVariant:
+          $ref: "#/components/schemas/SyncVariant"
+        sources:
+          description: All sources that will be merged into one and written back to sources.
+          type: array
+          items:
+            $ref: "#/components/schemas/MusicSource"
     MusicSource:
       type: object
       required:
@@ -368,3 +391,4 @@ components:
       type: string
       enum:
         - ONE_WAY
+        - MERGE

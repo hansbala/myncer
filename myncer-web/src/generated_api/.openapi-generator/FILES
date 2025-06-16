@@ -13,10 +13,12 @@ src/models/EditUserRequest.ts
 src/models/ListDatasourcesResponse.ts
 src/models/ListSyncsResponse.ts
 src/models/ListUsersResponse.ts
+src/models/MergeSync.ts
 src/models/MusicSource.ts
 src/models/OAuthExchangeRequest.ts
 src/models/OneWaySync.ts
 src/models/Sync.ts
+src/models/SyncSyncData.ts
 src/models/SyncVariant.ts
 src/models/User.ts
 src/models/UserLoginRequest.ts

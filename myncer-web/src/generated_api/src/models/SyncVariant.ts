@@ -18,7 +18,8 @@
  * @export
  */
 export const SyncVariant = {
-    OneWay: 'ONE_WAY'
+    OneWay: 'ONE_WAY',
+    Merge: 'MERGE'
 } as const;
 export type SyncVariant = typeof SyncVariant[keyof typeof SyncVariant];
 

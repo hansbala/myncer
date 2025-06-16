@@ -12,86 +12,227 @@ package api
 
 import (
 	"encoding/json"
+	"time"
+	"bytes"
 	"fmt"
-	"gopkg.in/validator.v2"
 )
 
-// Sync - struct for Sync
+// checks if the Sync type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Sync{}
+
+// Sync struct for Sync
 type Sync struct {
-	OneWaySync *OneWaySync
+	// Unique id of the sync.
+	Id string `json:"id"`
+	// The timestamp this sync was created at.
+	CreatedAt time.Time `json:"createdAt"`
+	// The timestamp this sync was updated at.
+	UpdatedAt time.Time `json:"updatedAt"`
+	SyncVariant SyncVariant `json:"syncVariant"`
+	SyncData SyncSyncData `json:"syncData"`
 }
 
-// OneWaySyncAsSync is a convenience function that returns OneWaySync wrapped in Sync
-func OneWaySyncAsSync(v *OneWaySync) Sync {
-	return Sync{
-		OneWaySync: v,
+type _Sync Sync
+
+// NewSync instantiates a new Sync object
+// This constructor will assign default values to properties that have it defined,
+// and makes sure properties required by API are set, but the set of arguments
+// will change when the set of required properties is changed
+func NewSync(id string, createdAt time.Time, updatedAt time.Time, syncVariant SyncVariant, syncData SyncSyncData) *Sync {
+	this := Sync{}
+	this.Id = id
+	this.CreatedAt = createdAt
+	this.UpdatedAt = updatedAt
+	this.SyncVariant = syncVariant
+	this.SyncData = syncData
+	return &this
+}
+
+// NewSyncWithDefaults instantiates a new Sync object
+// This constructor will only assign default values to properties that have it defined,
+// but it doesn't guarantee that properties required by API are set
+func NewSyncWithDefaults() *Sync {
+	this := Sync{}
+	return &this
+}
+
+// GetId returns the Id field value
+func (o *Sync) GetId() string {
+	if o == nil {
+		var ret string
+		return ret
 	}
+
+	return o.Id
 }
 
+// GetIdOk returns a tuple with the Id field value
+// and a boolean to check if the value has been set.
+func (o *Sync) GetIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Id, true
+}
 
-// Unmarshal JSON data into one of the pointers in the struct
-func (dst *Sync) UnmarshalJSON(data []byte) error {
-	var err error
-	match := 0
-	// try to unmarshal data into OneWaySync
-	err = newStrictDecoder(data).Decode(&dst.OneWaySync)
-	if err == nil {
-		jsonOneWaySync, _ := json.Marshal(dst.OneWaySync)
-		if string(jsonOneWaySync) == "{}" { // empty struct
-			dst.OneWaySync = nil
-		} else {
-			if err = validator.Validate(dst.OneWaySync); err != nil {
-				dst.OneWaySync = nil
-			} else {
-				match++
-			}
+// SetId sets field value
+func (o *Sync) SetId(v string) {
+	o.Id = v
+}
+
+// GetCreatedAt returns the CreatedAt field value
+func (o *Sync) GetCreatedAt() time.Time {
+	if o == nil {
+		var ret time.Time
+		return ret
+	}
+
+	return o.CreatedAt
+}
+
+// GetCreatedAtOk returns a tuple with the CreatedAt field value
+// and a boolean to check if the value has been set.
+func (o *Sync) GetCreatedAtOk() (*time.Time, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.CreatedAt, true
+}
+
+// SetCreatedAt sets field value
+func (o *Sync) SetCreatedAt(v time.Time) {
+	o.CreatedAt = v
+}
+
+// GetUpdatedAt returns the UpdatedAt field value
+func (o *Sync) GetUpdatedAt() time.Time {
+	if o == nil {
+		var ret time.Time
+		return ret
+	}
+
+	return o.UpdatedAt
+}
+
+// GetUpdatedAtOk returns a tuple with the UpdatedAt field value
+// and a boolean to check if the value has been set.
+func (o *Sync) GetUpdatedAtOk() (*time.Time, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.UpdatedAt, true
+}
+
+// SetUpdatedAt sets field value
+func (o *Sync) SetUpdatedAt(v time.Time) {
+	o.UpdatedAt = v
+}
+
+// GetSyncVariant returns the SyncVariant field value
+func (o *Sync) GetSyncVariant() SyncVariant {
+	if o == nil {
+		var ret SyncVariant
+		return ret
+	}
+
+	return o.SyncVariant
+}
+
+// GetSyncVariantOk returns a tuple with the SyncVariant field value
+// and a boolean to check if the value has been set.
+func (o *Sync) GetSyncVariantOk() (*SyncVariant, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.SyncVariant, true
+}
+
+// SetSyncVariant sets field value
+func (o *Sync) SetSyncVariant(v SyncVariant) {
+	o.SyncVariant = v
+}
+
+// GetSyncData returns the SyncData field value
+func (o *Sync) GetSyncData() SyncSyncData {
+	if o == nil {
+		var ret SyncSyncData
+		return ret
+	}
+
+	return o.SyncData
+}
+
+// GetSyncDataOk returns a tuple with the SyncData field value
+// and a boolean to check if the value has been set.
+func (o *Sync) GetSyncDataOk() (*SyncSyncData, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.SyncData, true
+}
+
+// SetSyncData sets field value
+func (o *Sync) SetSyncData(v SyncSyncData) {
+	o.SyncData = v
+}
+
+func (o Sync) MarshalJSON() ([]byte, error) {
+	toSerialize,err := o.ToMap()
+	if err != nil {
+		return []byte{}, err
+	}
+	return json.Marshal(toSerialize)
+}
+
+func (o Sync) ToMap() (map[string]interface{}, error) {
+	toSerialize := map[string]interface{}{}
+	toSerialize["id"] = o.Id
+	toSerialize["createdAt"] = o.CreatedAt
+	toSerialize["updatedAt"] = o.UpdatedAt
+	toSerialize["syncVariant"] = o.SyncVariant
+	toSerialize["syncData"] = o.SyncData
+	return toSerialize, nil
+}
+
+func (o *Sync) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"id",
+		"createdAt",
+		"updatedAt",
+		"syncVariant",
+		"syncData",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
-	} else {
-		dst.OneWaySync = nil
 	}
 
-	if match > 1 { // more than 1 match
-		// reset to nil
-		dst.OneWaySync = nil
+	varSync := _Sync{}
 
-		return fmt.Errorf("data matches more than one schema in oneOf(Sync)")
-	} else if match == 1 {
-		return nil // exactly one match
-	} else { // no match
-		return fmt.Errorf("data failed to match schemas in oneOf(Sync)")
-	}
-}
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varSync)
 
-// Marshal data from the first non-nil pointers in the struct to JSON
-func (src Sync) MarshalJSON() ([]byte, error) {
-	if src.OneWaySync != nil {
-		return json.Marshal(&src.OneWaySync)
+	if err != nil {
+		return err
 	}
 
-	return nil, nil // no data in oneOf schemas
-}
+	*o = Sync(varSync)
 
-// Get the actual instance
-func (obj *Sync) GetActualInstance() (interface{}) {
-	if obj == nil {
-		return nil
-	}
-	if obj.OneWaySync != nil {
-		return obj.OneWaySync
-	}
-
-	// all schemas are nil
-	return nil
-}
-
-// Get the actual instance value
-func (obj Sync) GetActualInstanceValue() (interface{}) {
-	if obj.OneWaySync != nil {
-		return *obj.OneWaySync
-	}
-
-	// all schemas are nil
-	return nil
+	return err
 }
 
 type NullableSync struct {

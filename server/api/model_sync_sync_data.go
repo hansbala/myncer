@@ -16,29 +16,29 @@ import (
 	"gopkg.in/validator.v2"
 )
 
-// CreateSyncRequest - struct for CreateSyncRequest
-type CreateSyncRequest struct {
+// SyncSyncData - struct for SyncSyncData
+type SyncSyncData struct {
 	MergeSync *MergeSync
 	OneWaySync *OneWaySync
 }
 
-// MergeSyncAsCreateSyncRequest is a convenience function that returns MergeSync wrapped in CreateSyncRequest
-func MergeSyncAsCreateSyncRequest(v *MergeSync) CreateSyncRequest {
-	return CreateSyncRequest{
+// MergeSyncAsSyncSyncData is a convenience function that returns MergeSync wrapped in SyncSyncData
+func MergeSyncAsSyncSyncData(v *MergeSync) SyncSyncData {
+	return SyncSyncData{
 		MergeSync: v,
 	}
 }
 
-// OneWaySyncAsCreateSyncRequest is a convenience function that returns OneWaySync wrapped in CreateSyncRequest
-func OneWaySyncAsCreateSyncRequest(v *OneWaySync) CreateSyncRequest {
-	return CreateSyncRequest{
+// OneWaySyncAsSyncSyncData is a convenience function that returns OneWaySync wrapped in SyncSyncData
+func OneWaySyncAsSyncSyncData(v *OneWaySync) SyncSyncData {
+	return SyncSyncData{
 		OneWaySync: v,
 	}
 }
 
 
 // Unmarshal JSON data into one of the pointers in the struct
-func (dst *CreateSyncRequest) UnmarshalJSON(data []byte) error {
+func (dst *SyncSyncData) UnmarshalJSON(data []byte) error {
 	var err error
 	match := 0
 	// try to unmarshal data into MergeSync
@@ -80,16 +80,16 @@ func (dst *CreateSyncRequest) UnmarshalJSON(data []byte) error {
 		dst.MergeSync = nil
 		dst.OneWaySync = nil
 
-		return fmt.Errorf("data matches more than one schema in oneOf(CreateSyncRequest)")
+		return fmt.Errorf("data matches more than one schema in oneOf(SyncSyncData)")
 	} else if match == 1 {
 		return nil // exactly one match
 	} else { // no match
-		return fmt.Errorf("data failed to match schemas in oneOf(CreateSyncRequest)")
+		return fmt.Errorf("data failed to match schemas in oneOf(SyncSyncData)")
 	}
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON
-func (src CreateSyncRequest) MarshalJSON() ([]byte, error) {
+func (src SyncSyncData) MarshalJSON() ([]byte, error) {
 	if src.MergeSync != nil {
 		return json.Marshal(&src.MergeSync)
 	}
@@ -102,7 +102,7 @@ func (src CreateSyncRequest) MarshalJSON() ([]byte, error) {
 }
 
 // Get the actual instance
-func (obj *CreateSyncRequest) GetActualInstance() (interface{}) {
+func (obj *SyncSyncData) GetActualInstance() (interface{}) {
 	if obj == nil {
 		return nil
 	}
@@ -119,7 +119,7 @@ func (obj *CreateSyncRequest) GetActualInstance() (interface{}) {
 }
 
 // Get the actual instance value
-func (obj CreateSyncRequest) GetActualInstanceValue() (interface{}) {
+func (obj SyncSyncData) GetActualInstanceValue() (interface{}) {
 	if obj.MergeSync != nil {
 		return *obj.MergeSync
 	}
@@ -132,38 +132,38 @@ func (obj CreateSyncRequest) GetActualInstanceValue() (interface{}) {
 	return nil
 }
 
-type NullableCreateSyncRequest struct {
-	value *CreateSyncRequest
+type NullableSyncSyncData struct {
+	value *SyncSyncData
 	isSet bool
 }
 
-func (v NullableCreateSyncRequest) Get() *CreateSyncRequest {
+func (v NullableSyncSyncData) Get() *SyncSyncData {
 	return v.value
 }
 
-func (v *NullableCreateSyncRequest) Set(val *CreateSyncRequest) {
+func (v *NullableSyncSyncData) Set(val *SyncSyncData) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableCreateSyncRequest) IsSet() bool {
+func (v NullableSyncSyncData) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableCreateSyncRequest) Unset() {
+func (v *NullableSyncSyncData) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableCreateSyncRequest(val *CreateSyncRequest) *NullableCreateSyncRequest {
-	return &NullableCreateSyncRequest{value: val, isSet: true}
+func NewNullableSyncSyncData(val *SyncSyncData) *NullableSyncSyncData {
+	return &NullableSyncSyncData{value: val, isSet: true}
 }
 
-func (v NullableCreateSyncRequest) MarshalJSON() ([]byte, error) {
+func (v NullableSyncSyncData) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableCreateSyncRequest) UnmarshalJSON(src []byte) error {
+func (v *NullableSyncSyncData) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

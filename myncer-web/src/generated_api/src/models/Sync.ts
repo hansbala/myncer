@@ -12,20 +12,73 @@
  * Do not edit the class manually.
  */
 
-import type { OneWaySync } from './OneWaySync';
+import { mapValues } from '../runtime';
+import type { SyncSyncData } from './SyncSyncData';
 import {
-    instanceOfOneWaySync,
-    OneWaySyncFromJSON,
-    OneWaySyncFromJSONTyped,
-    OneWaySyncToJSON,
-} from './OneWaySync';
+    SyncSyncDataFromJSON,
+    SyncSyncDataFromJSONTyped,
+    SyncSyncDataToJSON,
+    SyncSyncDataToJSONTyped,
+} from './SyncSyncData';
+import type { SyncVariant } from './SyncVariant';
+import {
+    SyncVariantFromJSON,
+    SyncVariantFromJSONTyped,
+    SyncVariantToJSON,
+    SyncVariantToJSONTyped,
+} from './SyncVariant';
 
 /**
- * @type Sync
  * 
  * @export
+ * @interface Sync
  */
-export type Sync = { syncVariant: 'ONE_WAY' } & OneWaySync;
+export interface Sync {
+    /**
+     * Unique id of the sync.
+     * @type {string}
+     * @memberof Sync
+     */
+    id: string;
+    /**
+     * The timestamp this sync was created at.
+     * @type {Date}
+     * @memberof Sync
+     */
+    createdAt: Date;
+    /**
+     * The timestamp this sync was updated at.
+     * @type {Date}
+     * @memberof Sync
+     */
+    updatedAt: Date;
+    /**
+     * 
+     * @type {SyncVariant}
+     * @memberof Sync
+     */
+    syncVariant: SyncVariant;
+    /**
+     * 
+     * @type {SyncSyncData}
+     * @memberof Sync
+     */
+    syncData: SyncSyncData;
+}
+
+
+
+/**
+ * Check if a given object implements the Sync interface.
+ */
+export function instanceOfSync(value: object): value is Sync {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
+    if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
+    if (!('syncVariant' in value) || value['syncVariant'] === undefined) return false;
+    if (!('syncData' in value) || value['syncData'] === undefined) return false;
+    return true;
+}
 
 export function SyncFromJSON(json: any): Sync {
     return SyncFromJSONTyped(json, false);
@@ -35,15 +88,17 @@ export function SyncFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sync
     if (json == null) {
         return json;
     }
-    switch (json['syncVariant']) {
-        case 'ONE_WAY':
-            return Object.assign({}, OneWaySyncFromJSONTyped(json, true), { syncVariant: 'ONE_WAY' } as const);
-        default:
-            throw new Error(`No variant of Sync exists with 'syncVariant=${json['syncVariant']}'`);
-    }
+    return {
+        
+        'id': json['id'],
+        'createdAt': (new Date(json['createdAt'])),
+        'updatedAt': (new Date(json['updatedAt'])),
+        'syncVariant': SyncVariantFromJSON(json['syncVariant']),
+        'syncData': SyncSyncDataFromJSON(json['syncData']),
+    };
 }
 
-export function SyncToJSON(json: any): any {
+export function SyncToJSON(json: any): Sync {
     return SyncToJSONTyped(json, false);
 }
 
@@ -51,12 +106,14 @@ export function SyncToJSONTyped(value?: Sync | null, ignoreDiscriminator: boolea
     if (value == null) {
         return value;
     }
-    switch (value['syncVariant']) {
-        case 'ONE_WAY':
-            return Object.assign({}, OneWaySyncToJSON(value), { syncVariant: 'ONE_WAY' } as const);
-        default:
-            throw new Error(`No variant of Sync exists with 'syncVariant=${value['syncVariant']}'`);
-    }
 
+    return {
+        
+        'id': value['id'],
+        'createdAt': ((value['createdAt']).toISOString()),
+        'updatedAt': ((value['updatedAt']).toISOString()),
+        'syncVariant': SyncVariantToJSON(value['syncVariant']),
+        'syncData': SyncSyncDataToJSON(value['syncData']),
+    };
 }
 

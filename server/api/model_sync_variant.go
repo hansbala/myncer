@@ -21,11 +21,13 @@ type SyncVariant string
 // List of SyncVariant
 const (
 	ONE_WAY SyncVariant = "ONE_WAY"
+	MERGE SyncVariant = "MERGE"
 )
 
 // All allowed values of SyncVariant enum
 var AllowedSyncVariantEnumValues = []SyncVariant{
 	"ONE_WAY",
+	"MERGE",
 }
 
 func (v *SyncVariant) UnmarshalJSON(src []byte) error {
