@@ -10,6 +10,7 @@ src/models/CreateUserRequest.ts
 src/models/CreateUserResponse.ts
 src/models/Datasource.ts
 src/models/EditUserRequest.ts
+src/models/ListDatasourcePlaylistsResponse.ts
 src/models/ListDatasourcesResponse.ts
 src/models/ListSyncsResponse.ts
 src/models/ListUsersResponse.ts
@@ -17,6 +18,7 @@ src/models/MergeSync.ts
 src/models/MusicSource.ts
 src/models/OAuthExchangeRequest.ts
 src/models/OneWaySync.ts
+src/models/Playlist.ts
 src/models/Sync.ts
 src/models/SyncSyncData.ts
 src/models/SyncVariant.ts

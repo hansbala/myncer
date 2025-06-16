@@ -20,6 +20,7 @@ import type {
   CreateUserResponse,
   Datasource,
   EditUserRequest,
+  ListDatasourcePlaylistsResponse,
   ListDatasourcesResponse,
   ListSyncsResponse,
   ListUsersResponse,
@@ -38,6 +39,8 @@ import {
     DatasourceToJSON,
     EditUserRequestFromJSON,
     EditUserRequestToJSON,
+    ListDatasourcePlaylistsResponseFromJSON,
+    ListDatasourcePlaylistsResponseToJSON,
     ListDatasourcesResponseFromJSON,
     ListDatasourcesResponseToJSON,
     ListSyncsResponseFromJSON,
@@ -67,6 +70,10 @@ export interface EditUserOperationRequest {
 export interface ExchangeOAuthCodeRequest {
     datasource: Datasource;
     oAuthExchangeRequest: OAuthExchangeRequest;
+}
+
+export interface ListDatasourcePlaylistsRequest {
+    datasource: Datasource;
 }
 
 export interface LoginUserRequest {
@@ -275,6 +282,41 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async listConnectedDatasources(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListDatasourcesResponse> {
         const response = await this.listConnectedDatasourcesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Lists all playlists for a given datasource for the current user.
+     * List playlists for a datasource
+     */
+    async listDatasourcePlaylistsRaw(requestParameters: ListDatasourcePlaylistsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListDatasourcePlaylistsResponse>> {
+        if (requestParameters['datasource'] == null) {
+            throw new runtime.RequiredError(
+                'datasource',
+                'Required parameter "datasource" was null or undefined when calling listDatasourcePlaylists().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/datasources/{datasource}/playlists/list`.replace(`{${"datasource"}}`, encodeURIComponent(String(requestParameters['datasource']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListDatasourcePlaylistsResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Lists all playlists for a given datasource for the current user.
+     * List playlists for a datasource
+     */
+    async listDatasourcePlaylists(requestParameters: ListDatasourcePlaylistsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListDatasourcePlaylistsResponse> {
+        const response = await this.listDatasourcePlaylistsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

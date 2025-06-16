@@ -3,6 +3,7 @@ model_create_user_request.go
 model_create_user_response.go
 model_datasource.go
 model_edit_user_request.go
+model_list_datasource_playlists_response.go
 model_list_datasources_response.go
 model_list_syncs_response.go
 model_list_users_response.go
@@ -10,6 +11,7 @@ model_merge_sync.go
 model_music_source.go
 model_o_auth_exchange_request.go
 model_one_way_sync.go
+model_playlist.go
 model_sync.go
 model_sync_sync_data.go
 model_sync_variant.go
