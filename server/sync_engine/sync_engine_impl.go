@@ -5,7 +5,10 @@ import (
 	myncer_pb "github.com/hansbala/myncer/proto"
 )
 
-func NewSyncEngine(spotifyClient, youtubeClient core.DatasourceClient) core.SyncEngine {
+func NewSyncEngine(
+	spotifyClient core.DatasourceClient,
+	youtubeClient core.DatasourceClient,
+) core.SyncEngine {
 	return &syncEngineImpl{
 		spotifyClient: spotifyClient,
 		youtubeClient: youtubeClient,
