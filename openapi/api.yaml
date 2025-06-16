@@ -168,7 +168,7 @@ paths:
               $ref: "#/components/schemas/CreateSyncRequest"
       responses:
         201:
-          description: Sync job created successfully.
+          description: Sync created successfully.
         400:
           description: Bad Request
         401:
@@ -289,6 +289,12 @@ components:
           $ref: "#/components/schemas/MusicSource"
         destination:
           $ref: "#/components/schemas/MusicSource"
+        overwriteExisting:
+          description: |
+            Overwrites destination songs. 
+            If a song exists in source but not in destination, 
+            the song will be lost from destination.
+          type: boolean
     MusicSource:
       type: object
       required:

@@ -45,6 +45,15 @@ export interface OneWaySync {
      * @memberof OneWaySync
      */
     destination: MusicSource;
+    /**
+     * Overwrites destination songs. 
+     * If a song exists in source but not in destination, 
+     * the song will be lost from destination.
+     * 
+     * @type {boolean}
+     * @memberof OneWaySync
+     */
+    overwriteExisting?: boolean;
 }
 
 
@@ -80,6 +89,7 @@ export function OneWaySyncFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'syncVariant': json['syncVariant'],
         'source': MusicSourceFromJSON(json['source']),
         'destination': MusicSourceFromJSON(json['destination']),
+        'overwriteExisting': json['overwriteExisting'] == null ? undefined : json['overwriteExisting'],
     };
 }
 
@@ -97,6 +107,7 @@ export function OneWaySyncToJSONTyped(value?: OneWaySync | null, ignoreDiscrimin
         'syncVariant': value['syncVariant'],
         'source': MusicSourceToJSON(value['source']),
         'destination': MusicSourceToJSON(value['destination']),
+        'overwriteExisting': value['overwriteExisting'],
     };
 }
 

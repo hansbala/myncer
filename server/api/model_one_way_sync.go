@@ -24,6 +24,8 @@ type OneWaySync struct {
 	SyncVariant string `json:"syncVariant"`
 	Source MusicSource `json:"source"`
 	Destination MusicSource `json:"destination"`
+	// Overwrites destination songs.  If a song exists in source but not in destination,  the song will be lost from destination. 
+	OverwriteExisting *bool `json:"overwriteExisting,omitempty"`
 }
 
 type _OneWaySync OneWaySync
@@ -120,6 +122,38 @@ func (o *OneWaySync) SetDestination(v MusicSource) {
 	o.Destination = v
 }
 
+// GetOverwriteExisting returns the OverwriteExisting field value if set, zero value otherwise.
+func (o *OneWaySync) GetOverwriteExisting() bool {
+	if o == nil || IsNil(o.OverwriteExisting) {
+		var ret bool
+		return ret
+	}
+	return *o.OverwriteExisting
+}
+
+// GetOverwriteExistingOk returns a tuple with the OverwriteExisting field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *OneWaySync) GetOverwriteExistingOk() (*bool, bool) {
+	if o == nil || IsNil(o.OverwriteExisting) {
+		return nil, false
+	}
+	return o.OverwriteExisting, true
+}
+
+// HasOverwriteExisting returns a boolean if a field has been set.
+func (o *OneWaySync) HasOverwriteExisting() bool {
+	if o != nil && !IsNil(o.OverwriteExisting) {
+		return true
+	}
+
+	return false
+}
+
+// SetOverwriteExisting gets a reference to the given bool and assigns it to the OverwriteExisting field.
+func (o *OneWaySync) SetOverwriteExisting(v bool) {
+	o.OverwriteExisting = &v
+}
+
 func (o OneWaySync) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -133,6 +167,9 @@ func (o OneWaySync) ToMap() (map[string]interface{}, error) {
 	toSerialize["syncVariant"] = o.SyncVariant
 	toSerialize["source"] = o.Source
 	toSerialize["destination"] = o.Destination
+	if !IsNil(o.OverwriteExisting) {
+		toSerialize["overwriteExisting"] = o.OverwriteExisting
+	}
 	return toSerialize, nil
 }
 
