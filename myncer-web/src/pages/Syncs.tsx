@@ -28,7 +28,7 @@ export const Syncs = () => {
               <p className="text-muted-foreground">No syncs found.</p>
             </div>
           ) : (
-            syncs.map((sync) => <SyncRender sync={sync} />)
+            syncs.map((sync) => <SyncRender key={sync.id} sync={sync} />)
           )}
         </div>
       </div>

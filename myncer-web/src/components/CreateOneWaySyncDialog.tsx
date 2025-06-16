@@ -84,7 +84,7 @@ export const CreateOneWaySyncDialog = () => {
       <DialogTrigger asChild>
         <Button>Create One-Way Sync</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent aria-describedby="create a one way sync">
         <DialogHeader>
           <DialogTitle>Create One-Way sync</DialogTitle>
         </DialogHeader>
