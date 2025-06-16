@@ -7,15 +7,29 @@ import (
 type myncerCtxType struct{}
 
 type MyncerCtx struct {
-	DB     *Database /*const*/
-	Config *Config   /*const*/
+	DB                *Database          /*const*/
+	DatasourceClients *DatasourceClients /*const*/
+	Config            *Config            /*const*/
 }
 
-func MustGetMyncerCtx(ctx context.Context) *MyncerCtx {
+type DatasourceClients struct {
+	SpotifyClient DatasourceClient
+	YoutubeClient DatasourceClient
+}
+
+func MustGetMyncerCtx(
+	ctx context.Context,
+	spotifyClient DatasourceClient,
+	youtubeClient DatasourceClient,
+) *MyncerCtx {
 	config := MustGetConfig()
 	return &MyncerCtx{
 		Config: config,
 		DB:     MustGetDatabase(ctx, config),
+		DatasourceClients: &DatasourceClients{
+			SpotifyClient: spotifyClient,
+			YoutubeClient: youtubeClient,
+		},
 	}
 }
 

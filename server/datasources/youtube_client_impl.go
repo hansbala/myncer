@@ -2,6 +2,7 @@ package datasources
 
 import (
 	"context"
+	"strings"
 
 	"golang.org/x/oauth2"
 	"google.golang.org/api/option"
@@ -10,6 +11,7 @@ import (
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto"
 	"github.com/hansbala/myncer/rest_helpers"
+	"github.com/hansbala/myncer/sync_engine"
 )
 
 const (
@@ -17,13 +19,15 @@ const (
 	cYouTubeTokenURL = "https://oauth2.googleapis.com/token"
 )
 
-type YouTubeClient struct{}
-
-func NewYouTubeClient() *YouTubeClient {
-	return &YouTubeClient{}
+func NewYouTubeClient() core.DatasourceClient {
+	return &youtubeClientImpl{}
 }
 
-func (c *YouTubeClient) ExchangeCodeForToken(
+type youtubeClientImpl struct{}
+
+var _ core.DatasourceClient = (*youtubeClientImpl)(nil)
+
+func (c *youtubeClientImpl) ExchangeCodeForToken(
 	ctx context.Context,
 	code string,
 ) (*oauth2.Token, error) {
@@ -35,17 +39,13 @@ func (c *YouTubeClient) ExchangeCodeForToken(
 	return tok, nil
 }
 
-func (c *YouTubeClient) GetPlaylists(
+func (c *youtubeClientImpl) GetPlaylists(
 	ctx context.Context,
 	token *myncer_pb.OAuthToken, /*const*/
 ) ([]*myncer_pb.Playlist, error) {
-	httpClient := oauth2.NewClient(
-		ctx,
-		c.getOAuthConfig(ctx).TokenSource(ctx, core.ProtoOAuthTokenToOAuth2(token)),
-	)
-	svc, err := youtube.NewService(ctx, option.WithHTTPClient(httpClient))
+	svc, err := c.getService(ctx, token)
 	if err != nil {
-		return nil, core.WrappedError(err, "failed to create YouTube service")
+		return nil, core.WrappedError(err, "failed to get YouTube service")
 	}
 
 	call := svc.Playlists.List([]string{"snippet"}).Mine(true).MaxResults(50)
@@ -72,7 +72,208 @@ func (c *YouTubeClient) GetPlaylists(
 	return playlists, nil
 }
 
-func (c *YouTubeClient) getOAuthConfig(ctx context.Context) *oauth2.Config {
+func (c *youtubeClientImpl) GetPlaylist(
+	ctx context.Context,
+	id string,
+	oAuthToken *myncer_pb.OAuthToken, /*const*/
+) (*myncer_pb.Playlist, error) {
+	svc, err := c.getService(ctx, oAuthToken)
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to get YouTube service")
+	}
+	call := svc.Playlists.List([]string{"snippet"}).Id(id)
+	resp, err := call.Do()
+	if err != nil || len(resp.Items) == 0 {
+		return nil, core.WrappedError(err, "failed to fetch playlist %s", id)
+	}
+
+	p := resp.Items[0]
+	return &myncer_pb.Playlist{
+		MusicSource: rest_helpers.CreateMusicSource(myncer_pb.Datasource_YOUTUBE, p.Id),
+		Name:        p.Snippet.Title,
+		Description: p.Snippet.Description,
+		ImageUrl:    getBestThumbnailUrl(p.Snippet.Thumbnails),
+	}, nil
+}
+
+func (c *youtubeClientImpl) GetPlaylistSongs(
+	ctx context.Context,
+	playlistId string,
+	oAuthToken *myncer_pb.OAuthToken,
+) ([]core.Song, error) {
+	svc, err := c.getService(ctx, oAuthToken)
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to get YouTube service")
+	}
+
+	songs := []core.Song{}
+	nextPageToken := ""
+	for {
+		call := svc.PlaylistItems.
+			List([]string{"snippet"}).
+			PlaylistId(playlistId).
+			MaxResults(50).
+			PageToken(nextPageToken)
+		resp, err := call.Do()
+		if err != nil {
+			return nil, core.WrappedError(err, "failed to fetch playlist items")
+		}
+
+		for _, item := range resp.Items {
+			videoId := item.Snippet.ResourceId.VideoId
+			if len(videoId) == 0 {
+				continue
+			}
+			songs = append(songs, buildSongFromYouTubePlaylistItem(ctx, item))
+		}
+		if resp.NextPageToken == "" {
+			break
+		}
+		nextPageToken = resp.NextPageToken
+	}
+
+	return songs, nil
+}
+
+func (c *youtubeClientImpl) AddToPlaylist(
+	ctx context.Context,
+	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	playlistId string,
+	songs []core.Song,
+) error {
+	svc, err := c.getService(ctx, oAuthToken)
+	if err != nil {
+		return core.WrappedError(err, "failed to get YouTube service")
+	}
+
+	for _, song := range songs {
+		if _, err := svc.PlaylistItems.Insert(
+			[]string{"snippet"},
+			&youtube.PlaylistItem{
+				Snippet: &youtube.PlaylistItemSnippet{
+					PlaylistId: playlistId,
+					ResourceId: &youtube.ResourceId{
+						Kind:    "youtube#video",
+						VideoId: song.GetId(),
+					},
+				},
+			},
+		).
+			Do(); err != nil {
+			return core.WrappedError(err, "failed to insert video %s", song.GetName())
+		}
+	}
+	return nil
+}
+
+func (c *youtubeClientImpl) ClearPlaylist(
+	ctx context.Context,
+	oAuthToken *myncer_pb.OAuthToken,
+	playlistId string,
+) error {
+	svc, err := c.getService(ctx, oAuthToken)
+	if err != nil {
+		return core.WrappedError(err, "failed to get YouTube service")
+	}
+
+	var nextPageToken string
+	for {
+		resp, err := svc.PlaylistItems.
+			List([]string{"id"}).
+			PlaylistId(playlistId).
+			MaxResults(50).
+			PageToken(nextPageToken).
+			Do()
+		if err != nil {
+			return core.WrappedError(err, "failed to list playlist items")
+		}
+
+		for _, item := range resp.Items {
+			if err := svc.PlaylistItems.Delete(item.Id).Do(); err != nil {
+				return core.WrappedError(err, "failed to delete playlist item %s", item.Id)
+			}
+		}
+
+		if resp.NextPageToken == "" {
+			break
+		}
+		nextPageToken = resp.NextPageToken
+	}
+
+	return nil
+}
+
+func (s *youtubeClientImpl) Search(
+	ctx context.Context,
+	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	names core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
+	artistNames core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
+	albumNames core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
+) (core.Song, error) {
+	// Build query string
+	var queryParts []string
+	if names != nil && !names.IsEmpty() {
+		for name := range names {
+			queryParts = append(queryParts, name)
+		}
+	}
+	if artistNames != nil && !artistNames.IsEmpty() {
+		for artist := range artistNames {
+			queryParts = append(queryParts, artist)
+		}
+	}
+	if albumNames != nil && !albumNames.IsEmpty() {
+		for album := range albumNames {
+			queryParts = append(queryParts, album)
+		}
+	}
+	if len(queryParts) == 0 {
+		return nil, core.NewError("at least one of name, artist, or album must be provided")
+	}
+	query := strings.Join(queryParts, " ")
+
+	svc, err := s.getService(ctx, oAuthToken)
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to get YouTube service")
+	}
+	call := svc.Search.List([]string{"snippet"}).
+		Q(query).
+		Type("video").
+		MaxResults(1)
+
+	resp, err := call.Do()
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to perform YouTube search for query %q", query)
+	}
+
+	if len(resp.Items) == 0 {
+		return nil, core.NewError("no video found for query %q", query)
+	}
+
+	item := resp.Items[0]
+	song, err := buildSongFormYoutubeSearchResultItem(ctx, item)
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to build song from YouTube search result")
+	}
+	return song, nil
+}
+
+func (c *youtubeClientImpl) getService(
+	ctx context.Context,
+	oAuthToken *myncer_pb.OAuthToken, /*const*/
+) (*youtube.Service, error) {
+	httpClient := oauth2.NewClient(
+		ctx,
+		c.getOAuthConfig(ctx).TokenSource(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken)),
+	)
+	svc, err := youtube.NewService(ctx, option.WithHTTPClient(httpClient))
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to create YouTube service")
+	}
+	return svc, nil
+}
+
+func (c *youtubeClientImpl) getOAuthConfig(ctx context.Context) *oauth2.Config {
 	youtubeCfg := core.ToMyncerCtx(ctx).Config.YoutubeConfig
 	return &oauth2.Config{
 		ClientID:     youtubeCfg.ClientId,
@@ -83,6 +284,47 @@ func (c *YouTubeClient) getOAuthConfig(ctx context.Context) *oauth2.Config {
 			TokenURL: "https://oauth2.googleapis.com/token",
 		},
 	}
+}
+
+func buildSongFromYouTubePlaylistItem(
+	ctx context.Context,
+	pi *youtube.PlaylistItem, /*const*/
+) core.Song {
+	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
+	return sync_engine.NewSong(
+		&myncer_pb.Song{
+			Name:             pi.Snippet.Title,
+			ArtistName:       []string{pi.Snippet.ChannelTitle},
+			Datasource:       myncer_pb.Datasource_YOUTUBE,
+			DatasourceSongId: pi.Id,
+		},
+		dsClients.SpotifyClient,
+		dsClients.YoutubeClient,
+	)
+}
+
+func buildSongFormYoutubeSearchResultItem(
+	ctx context.Context,
+	item *youtube.SearchResult, /*const*/
+) (core.Song, error) {
+	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
+	videoId := ""
+	if item.Id != nil && item.Id.VideoId != "" {
+		videoId = item.Id.VideoId
+	} else {
+		return nil, core.NewError("missing video ID in YouTube search result")
+	}
+	return sync_engine.NewSong(
+		&myncer_pb.Song{
+			Name: strings.TrimSpace(item.Snippet.Title),
+			// best-effort: channel title often includes artist
+			ArtistName:       []string{item.Snippet.ChannelTitle},
+			Datasource:       myncer_pb.Datasource_YOUTUBE,
+			DatasourceSongId: videoId,
+		},
+		dsClients.SpotifyClient,
+		dsClients.YoutubeClient,
+	), nil
 }
 
 // Helper to get the first available thumbnail URL from the YouTube API response.

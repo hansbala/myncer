@@ -1,7 +1,15 @@
 package core
 
-import myncer_pb "github.com/hansbala/myncer/proto"
+import (
+	"context"
+
+	myncer_pb "github.com/hansbala/myncer/proto"
+)
 
 type SyncEngine interface {
-	RunSync(sync *myncer_pb.Sync /*const*/) error
+	RunSync(
+		ctx context.Context,
+		userInfo *myncer_pb.User, /*const*/
+		sync *myncer_pb.Sync, /*const*/
+	) error
 }

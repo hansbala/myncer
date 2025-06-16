@@ -15,9 +15,11 @@ import (
 
 func main() {
 	ctx := context.Background()
-	myncerCtx := core.MustGetMyncerCtx(ctx)
+	spotifyClient := datasources.NewSpotifyClient()
+	youtubeClient := datasources.NewYouTubeClient()
+	myncerCtx := core.MustGetMyncerCtx(ctx, spotifyClient, youtubeClient)
 
-	for pattern, handler := range GetHandlersMap() {
+	for pattern, handler := range GetHandlersMap(myncerCtx) {
 		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx), myncerCtx))
 	}
 	core.Printf("Myncer listening on port 8080")
@@ -26,9 +28,9 @@ func main() {
 	}
 }
 
-func GetHandlersMap() map[string]core.Handler {
-	spotifyClient := datasources.NewSpotifyClient()
-	youtubeClient := datasources.NewYouTubeClient()
+func GetHandlersMap(
+	myncerCtx *core.MyncerCtx, /*const*/
+) map[string]core.Handler {
 	return map[string]core.Handler{
 		// User handlers.
 		"/api/v1/users/create": handlers.NewCreateUserHandler(),
@@ -38,21 +40,24 @@ func GetHandlersMap() map[string]core.Handler {
 		"/api/v1/users/edit":   handlers.NewEditUserHandler(),
 		// Datasource handlers.
 		"/api/v1/auth/{datasource}/exchange": handlers.NewAuthExchangeHandler(
-			datasources.NewSpotifyClient(),
-			datasources.NewYouTubeClient(),
+			myncerCtx.DatasourceClients.SpotifyClient,
+			myncerCtx.DatasourceClients.YoutubeClient,
 		),
 		"/api/v1/datasources/list": handlers.NewListDatasourcesHandler(),
 		"/api/v1/datasources/{datasource}/playlists/list": handlers.NewListDatasourcePlaylistsHandler(
-			spotifyClient,
-			youtubeClient,
+			myncerCtx.DatasourceClients.SpotifyClient,
+			myncerCtx.DatasourceClients.YoutubeClient,
 		),
 		// Syncs handlers.
 		"/api/v1/syncs/create": handlers.NewCreateSyncHandler(),
 		"/api/v1/syncs/list":   handlers.NewListSyncsHandler(),
 		"/api/v1/syncs/run": handlers.NewRunSyncHandler(
-			spotifyClient,
-			youtubeClient,
-			sync_engine.NewSyncEngine(spotifyClient, youtubeClient),
+			myncerCtx.DatasourceClients.SpotifyClient,
+			myncerCtx.DatasourceClients.YoutubeClient,
+			sync_engine.NewSyncEngine(
+				myncerCtx.DatasourceClients.SpotifyClient,
+				myncerCtx.DatasourceClients.YoutubeClient,
+			),
 		),
 	}
 }

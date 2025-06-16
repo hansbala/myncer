@@ -66,7 +66,7 @@ func (rs *runSyncHandlerImpl) ProcessRequest(
 			core.WrappedError(err, "could not get sync by id"),
 		)
 	}
-	if err := rs.syncEngine.RunSync(sync); err != nil {
+	if err := rs.syncEngine.RunSync(ctx, userInfo, sync); err != nil {
 		return core.NewProcessRequestResponse_InternalServerError(
 			core.WrappedError(err, "failed to run sync job"),
 		)

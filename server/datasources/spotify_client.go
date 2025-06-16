@@ -2,6 +2,8 @@ package datasources
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	spotify "github.com/zmb3/spotify/v2"
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
@@ -10,6 +12,7 @@ import (
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto"
 	"github.com/hansbala/myncer/rest_helpers"
+	"github.com/hansbala/myncer/sync_engine"
 )
 
 const (
@@ -37,6 +40,59 @@ func (s *spotifyClientImpl) ExchangeCodeForToken(
 		return nil, core.WrappedError(err, "failed to exchange auth code with spotify")
 	}
 	return token, nil
+}
+
+func (s *spotifyClientImpl) GetPlaylist(
+	ctx context.Context,
+	playlistId string,
+	oAuthToken *myncer_pb.OAuthToken, /*const*/
+) (*myncer_pb.Playlist, error) {
+	client := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
+	if len(playlistId) == 0 {
+		return nil, core.NewError("invalid playlist id")
+	}
+	playlist, err := client.GetPlaylist(ctx, spotify.ID(playlistId))
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to get spotify playlist with id %s", playlistId)
+	}
+	return rest_helpers.SpotifyPlaylistToProto(playlist), nil
+}
+
+func (s *spotifyClientImpl) GetPlaylistSongs(
+	ctx context.Context,
+	playlistId string,
+	oAuthToken *myncer_pb.OAuthToken, /*const*/
+) ([]core.Song, error) {
+	client := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
+
+	// Use GetPlaylistItems to fetch all songs in the playlist.
+	if len(playlistId) == 0 {
+		return nil, core.NewError("invalid playlist id")
+	}
+	allSongs := []core.Song{}
+	offset := 0
+	for {
+		playlistTracks, err := client.GetPlaylistItems(ctx, spotify.ID(playlistId))
+		if err != nil {
+			return nil, core.WrappedError(
+				err,
+				"failed to get playlist items for playlist %s at offset",
+				playlistId,
+				offset,
+			)
+		}
+		for _, item := range playlistTracks.Items {
+			if item.Track.Track != nil {
+				allSongs = append(allSongs, buildSongFromSpotifyTrack(ctx, item.Track.Track))
+			}
+		}
+		if len(playlistTracks.Items) < cPageLimit {
+			// No more items left to fetch.
+			break
+		}
+		offset += cPageLimit
+	}
+	return allSongs, nil
 }
 
 func (s *spotifyClientImpl) GetPlaylists(
@@ -70,7 +126,7 @@ func (s *spotifyClientImpl) GetPlaylists(
 					),
 					Name:        p.Name,
 					Description: p.Description,
-					ImageUrl:    getBestSpotifyImageURL(p.Images),
+					ImageUrl:    rest_helpers.GetBestSpotifyImageURL(p.Images),
 				},
 			)
 		}
@@ -82,6 +138,99 @@ func (s *spotifyClientImpl) GetPlaylists(
 	}
 
 	return r, nil
+}
+
+func (s *spotifyClientImpl) AddToPlaylist(
+	ctx context.Context,
+	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	playlistId string, /*const*/
+	songs []core.Song, /*const*/
+) error {
+	client := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
+
+	trackIds := []spotify.ID{}
+	for _, song := range songs {
+		trackIds = append(trackIds, spotify.ID(song.GetId()))
+	}
+	if _, err := client.AddTracksToPlaylist(ctx, spotify.ID(playlistId), trackIds...); err != nil {
+		return core.WrappedError(err, "failed to add tracks to playlist %s", playlistId)
+	}
+	return nil
+}
+
+func (s *spotifyClientImpl) ClearPlaylist(
+	ctx context.Context,
+	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	playlistId string, /*const*/
+) error {
+	client := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
+
+	// Fetch all track URIs to remove
+	playlistTracks, err := client.GetPlaylistItems(ctx, spotify.ID(playlistId))
+	if err != nil {
+		return core.WrappedError(err, "failed to fetch playlist items")
+	}
+
+	trackIDs := []spotify.ID{}
+	for _, item := range playlistTracks.Items {
+		if item.Track.Track != nil {
+			trackIDs = append(trackIDs, item.Track.Track.ID)
+		}
+	}
+
+	if len(trackIDs) == 0 {
+		return nil
+	}
+	_, err = client.RemoveTracksFromPlaylist(ctx, spotify.ID(playlistId), trackIDs...)
+	if err != nil {
+		return core.WrappedError(err, "failed to clear playlist")
+	}
+	return nil
+}
+
+func (s *spotifyClientImpl) Search(
+	ctx context.Context,
+	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	names core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
+	artistNames core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
+	albumNames core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
+) (core.Song, error) {
+	// Build search query.
+	var queries []string
+	if names != nil && !names.IsEmpty() {
+		for name := range names {
+			queries = append(queries, fmt.Sprintf("track:\"%s\"", name))
+		}
+	}
+	if artistNames != nil && !artistNames.IsEmpty() {
+		for artist := range artistNames {
+			queries = append(queries, fmt.Sprintf("artist:\"%s\"", artist))
+		}
+	}
+	if albumNames != nil && !albumNames.IsEmpty() {
+		for album := range albumNames {
+			queries = append(queries, fmt.Sprintf("album:\"%s\"", album))
+		}
+	}
+	if len(queries) == 0 {
+		return nil, core.NewError("at least one of name, artist, or album must be provided")
+	}
+	query := strings.Join(queries, " ")
+
+	// Execute search query.
+	client := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
+	searchResult, err := client.Search(ctx, query, spotify.SearchTypeTrack, spotify.Limit(1))
+	if err != nil {
+		return nil, core.WrappedError(err, "spotify search failed for query %q", query)
+	}
+
+	// Check if any tracks were found.
+	if searchResult.Tracks == nil || len(searchResult.Tracks.Tracks) == 0 {
+		return nil, core.NewError("no track found for query %q", query)
+	}
+
+	// Return the first track found.
+	return buildSongFromSpotifyTrack(ctx, &searchResult.Tracks.Tracks[0]), nil
 }
 
 func (s *spotifyClientImpl) getClient(ctx context.Context, token *oauth2.Token /*const*/) *spotify.Client {
@@ -112,10 +261,20 @@ func (s *spotifyClientImpl) getOAuthConfig(ctx context.Context) *oauth2.Config {
 	}
 }
 
-// getBestSpotifyImageURL returns the URL of the first available image from the provided images.
-func getBestSpotifyImageURL(images []spotify.Image /*const*/) string {
-	if len(images) > 0 {
-		return images[0].URL
-	}
-	return ""
+func buildSongFromSpotifyTrack(
+	ctx context.Context,
+	track *spotify.FullTrack, /*const*/
+) core.Song {
+	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
+	return sync_engine.NewSong(
+		&myncer_pb.Song{
+			Name:             track.Name,
+			ArtistName:       []string{track.Artists[0].Name},
+			AlbumName:        track.Album.Name,
+			Datasource:       myncer_pb.Datasource_SPOTIFY,
+			DatasourceSongId: track.ID.String(),
+		},
+		dsClients.SpotifyClient,
+		dsClients.YoutubeClient,
+	)
 }
