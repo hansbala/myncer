@@ -10,6 +10,7 @@ import (
 	"github.com/hansbala/myncer/api"
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto"
+	"github.com/hansbala/myncer/rest_helpers"
 )
 
 func NewAuthExchangeHandler(
@@ -139,18 +140,18 @@ func (aeh *authExchangeHandlerImpl) getDatasource(
 	// so we extract this                                  ^ portion out.
 	pathParts := strings.Split(strings.Trim(req.URL.Path, "/"), "/")
 	if len(pathParts) < 4 {
-		return myncer_pb.Datasource_DATASOURCE_UNSPECIFIED, core.NewError("malformed path")
+		return myncer_pb.Datasource_DATASOURCE_UNSPECIFIED, core.NewError(
+			"malformed path: %s",
+			req.URL.Path,
+		)
 	}
 	datasource := pathParts[len(pathParts)-2]
-	switch datasource {
-	case string(api.SPOTIFY):
-		return myncer_pb.Datasource_SPOTIFY, nil
-	case string(api.YOUTUBE):
-		return myncer_pb.Datasource_YOUTUBE, nil
-	default:
+	protoDs := rest_helpers.RestDatasourceToProto(api.Datasource(datasource))
+	if protoDs == myncer_pb.Datasource_DATASOURCE_UNSPECIFIED {
 		return myncer_pb.Datasource_DATASOURCE_UNSPECIFIED, core.NewError(
 			"unknown datasource %s",
 			datasource,
 		)
 	}
+	return protoDs, nil
 }

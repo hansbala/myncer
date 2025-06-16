@@ -9,6 +9,7 @@ import (
 
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto"
+	"github.com/hansbala/myncer/rest_helpers"
 )
 
 const (
@@ -41,10 +42,10 @@ func (s *spotifyClientImpl) ExchangeCodeForToken(
 func (s *spotifyClientImpl) GetPlaylists(
 	ctx context.Context,
 	oAuthToken *myncer_pb.OAuthToken, /*const*/
-) ([]*core.Playlist, error) {
+) ([]*myncer_pb.Playlist, error) {
 	clientSDK := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
 
-	r := []*core.Playlist{}
+	r := []*myncer_pb.Playlist{}
 	for offset := 0; ; offset += cPageLimit {
 		page, err := clientSDK.CurrentUsersPlaylists(
 			ctx,
@@ -62,10 +63,14 @@ func (s *spotifyClientImpl) GetPlaylists(
 		for _, p := range page.Playlists {
 			r = append(
 				r,
-				&core.Playlist{
-					ID:   p.ID.String(),
-					Name: p.Name,
-					URI:  string(p.URI),
+				&myncer_pb.Playlist{
+					MusicSource: rest_helpers.CreateMusicSource(
+						myncer_pb.Datasource_SPOTIFY,
+						p.ID.String(),
+					),
+					Name:        p.Name,
+					Description: p.Description,
+					ImageUrl:    getBestSpotifyImageURL(p.Images),
 				},
 			)
 		}
@@ -105,4 +110,12 @@ func (s *spotifyClientImpl) getOAuthConfig(ctx context.Context) *oauth2.Config {
 		},
 		RedirectURL: spotifyConfig.RedirectUri,
 	}
+}
+
+// getBestSpotifyImageURL returns the URL of the first available image from the provided images.
+func getBestSpotifyImageURL(images []spotify.Image /*const*/) string {
+	if len(images) > 0 {
+		return images[0].URL
+	}
+	return ""
 }

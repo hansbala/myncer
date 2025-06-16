@@ -26,9 +26,13 @@ var (
 			datasources.NewYouTubeClient(),
 		),
 		"/api/v1/datasources/list": handlers.NewListDatasourcesHandler(),
+		"/api/v1/datasources/{datasource}/playlists": handlers.NewListDatasourcePlaylistsHandler(
+			datasources.NewSpotifyClient(),
+			datasources.NewYouTubeClient(),
+		),
 		// Syncs handlers.
 		"/api/v1/syncs/create": handlers.NewCreateSyncHandler(),
-		"/api/v1/syncs/list": handlers.NewListSyncsHandler(),
+		"/api/v1/syncs/list":   handlers.NewListSyncsHandler(),
 	}
 )
 

@@ -13,5 +13,5 @@ type DatasourceClient interface {
 	GetPlaylists(
 		ctx context.Context,
 		oAuthToken *myncer_pb.OAuthToken, /*const*/
-	) ([]*Playlist, error)
+	) ([]*myncer_pb.Playlist, error)
 }
