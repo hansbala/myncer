@@ -210,6 +210,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListSyncsResponse"
+  /syncs/runs:
+    post:
+      summary: Run a sync for the current user.
+      description: |
+        Runs a sync job for the current user. This will execute the sync job immediately.
+      operationId: runSync
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RunSyncRequest"
+      responses:
+        200:
+          description: Status of the sync run.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunSyncResponse"
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        500:
+          description: Internal Server Error
 components:
   schemas:
     CreateUserRequest:
@@ -443,3 +468,29 @@ components:
               type: string
               format: uri
               description: URL to the playlist's cover image.
+    RunSyncRequest:
+      type: object
+      required:
+        - syncId
+      properties:
+        syncId:
+          type: string
+          description: The ID of the sync to run.
+    RunSyncResponse:
+      type: object
+      required:
+        - syncId
+        - status
+      properties:
+        syncId:
+          type: string
+          description: The ID of the sync that was run
+        status:
+          type: string
+          description: The status of the sync run.
+          enum:
+            - PENDING
+            - RUNNING
+            - COMPLETED
+            - FAILED
+            - CANCELLED

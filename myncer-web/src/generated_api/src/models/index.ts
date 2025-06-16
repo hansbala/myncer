@@ -14,6 +14,8 @@ export * from './MusicSource';
 export * from './OAuthExchangeRequest';
 export * from './OneWaySync';
 export * from './Playlist';
+export * from './RunSyncRequest';
+export * from './RunSyncResponse';
 export * from './Sync';
 export * from './SyncSyncData';
 export * from './SyncVariant';

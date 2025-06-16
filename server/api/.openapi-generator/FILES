@@ -12,6 +12,8 @@ model_music_source.go
 model_o_auth_exchange_request.go
 model_one_way_sync.go
 model_playlist.go
+model_run_sync_request.go
+model_run_sync_response.go
 model_sync.go
 model_sync_sync_data.go
 model_sync_variant.go

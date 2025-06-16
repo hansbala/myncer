@@ -25,6 +25,8 @@ import type {
   ListSyncsResponse,
   ListUsersResponse,
   OAuthExchangeRequest,
+  RunSyncRequest,
+  RunSyncResponse,
   User,
   UserLoginRequest,
 } from '../models/index';
@@ -49,6 +51,10 @@ import {
     ListUsersResponseToJSON,
     OAuthExchangeRequestFromJSON,
     OAuthExchangeRequestToJSON,
+    RunSyncRequestFromJSON,
+    RunSyncRequestToJSON,
+    RunSyncResponseFromJSON,
+    RunSyncResponseToJSON,
     UserFromJSON,
     UserToJSON,
     UserLoginRequestFromJSON,
@@ -78,6 +84,10 @@ export interface ListDatasourcePlaylistsRequest {
 
 export interface LoginUserRequest {
     userLoginRequest?: UserLoginRequest;
+}
+
+export interface RunSyncOperationRequest {
+    runSyncRequest: RunSyncRequest;
 }
 
 /**
@@ -425,6 +435,44 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async logoutUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.logoutUserRaw(initOverrides);
+    }
+
+    /**
+     * Runs a sync job for the current user. This will execute the sync job immediately. 
+     * Run a sync for the current user.
+     */
+    async runSyncRaw(requestParameters: RunSyncOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RunSyncResponse>> {
+        if (requestParameters['runSyncRequest'] == null) {
+            throw new runtime.RequiredError(
+                'runSyncRequest',
+                'Required parameter "runSyncRequest" was null or undefined when calling runSync().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/syncs/runs`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: RunSyncRequestToJSON(requestParameters['runSyncRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RunSyncResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Runs a sync job for the current user. This will execute the sync job immediately. 
+     * Run a sync for the current user.
+     */
+    async runSync(requestParameters: RunSyncOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RunSyncResponse> {
+        const response = await this.runSyncRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }
