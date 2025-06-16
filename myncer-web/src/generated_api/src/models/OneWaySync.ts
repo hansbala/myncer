@@ -20,6 +20,13 @@ import {
     MusicSourceToJSON,
     MusicSourceToJSONTyped,
 } from './MusicSource';
+import type { SyncVariant } from './SyncVariant';
+import {
+    SyncVariantFromJSON,
+    SyncVariantFromJSONTyped,
+    SyncVariantToJSON,
+    SyncVariantToJSONTyped,
+} from './SyncVariant';
 
 /**
  * Representative of source -> destination.
@@ -29,10 +36,10 @@ import {
 export interface OneWaySync {
     /**
      * 
-     * @type {string}
+     * @type {SyncVariant}
      * @memberof OneWaySync
      */
-    syncVariant: OneWaySyncSyncVariantEnum;
+    syncVariant: SyncVariant;
     /**
      * 
      * @type {MusicSource}
@@ -57,14 +64,6 @@ export interface OneWaySync {
 }
 
 
-/**
- * @export
- */
-export const OneWaySyncSyncVariantEnum = {
-    OneWay: 'ONE_WAY'
-} as const;
-export type OneWaySyncSyncVariantEnum = typeof OneWaySyncSyncVariantEnum[keyof typeof OneWaySyncSyncVariantEnum];
-
 
 /**
  * Check if a given object implements the OneWaySync interface.
@@ -86,7 +85,7 @@ export function OneWaySyncFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'syncVariant': json['syncVariant'],
+        'syncVariant': SyncVariantFromJSON(json['syncVariant']),
         'source': MusicSourceFromJSON(json['source']),
         'destination': MusicSourceFromJSON(json['destination']),
         'overwriteExisting': json['overwriteExisting'] == null ? undefined : json['overwriteExisting'],
@@ -104,7 +103,7 @@ export function OneWaySyncToJSONTyped(value?: OneWaySync | null, ignoreDiscrimin
 
     return {
         
-        'syncVariant': value['syncVariant'],
+        'syncVariant': SyncVariantToJSON(value['syncVariant']),
         'source': MusicSourceToJSON(value['source']),
         'destination': MusicSourceToJSON(value['destination']),
         'overwriteExisting': value['overwriteExisting'],

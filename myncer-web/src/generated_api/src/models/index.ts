@@ -12,5 +12,6 @@ export * from './MusicSource';
 export * from './OAuthExchangeRequest';
 export * from './OneWaySync';
 export * from './Sync';
+export * from './SyncVariant';
 export * from './User';
 export * from './UserLoginRequest';

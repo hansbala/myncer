@@ -21,7 +21,7 @@ var _ MappedNullable = &OneWaySync{}
 
 // OneWaySync Representative of source -> destination.
 type OneWaySync struct {
-	SyncVariant string `json:"syncVariant"`
+	SyncVariant SyncVariant `json:"syncVariant"`
 	Source MusicSource `json:"source"`
 	Destination MusicSource `json:"destination"`
 	// Overwrites destination songs.  If a song exists in source but not in destination,  the song will be lost from destination. 
@@ -34,7 +34,7 @@ type _OneWaySync OneWaySync
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewOneWaySync(syncVariant string, source MusicSource, destination MusicSource) *OneWaySync {
+func NewOneWaySync(syncVariant SyncVariant, source MusicSource, destination MusicSource) *OneWaySync {
 	this := OneWaySync{}
 	this.SyncVariant = syncVariant
 	this.Source = source
@@ -51,9 +51,9 @@ func NewOneWaySyncWithDefaults() *OneWaySync {
 }
 
 // GetSyncVariant returns the SyncVariant field value
-func (o *OneWaySync) GetSyncVariant() string {
+func (o *OneWaySync) GetSyncVariant() SyncVariant {
 	if o == nil {
-		var ret string
+		var ret SyncVariant
 		return ret
 	}
 
@@ -62,7 +62,7 @@ func (o *OneWaySync) GetSyncVariant() string {
 
 // GetSyncVariantOk returns a tuple with the SyncVariant field value
 // and a boolean to check if the value has been set.
-func (o *OneWaySync) GetSyncVariantOk() (*string, bool) {
+func (o *OneWaySync) GetSyncVariantOk() (*SyncVariant, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -70,7 +70,7 @@ func (o *OneWaySync) GetSyncVariantOk() (*string, bool) {
 }
 
 // SetSyncVariant sets field value
-func (o *OneWaySync) SetSyncVariant(v string) {
+func (o *OneWaySync) SetSyncVariant(v SyncVariant) {
 	o.SyncVariant = v
 }
 

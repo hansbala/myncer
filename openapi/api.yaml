@@ -332,8 +332,7 @@ components:
         - destination
       properties:
         syncVariant:
-          type: string
-          enum: [ONE_WAY]
+          $ref: "#/components/schemas/SyncVariant"
         source:
           $ref: "#/components/schemas/MusicSource"
         destination:
@@ -364,3 +363,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Sync"
+    SyncVariant:
+      description: The variant type of the sync.
+      type: string
+      enum:
+        - ONE_WAY
