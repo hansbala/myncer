@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package myncer;
+
+import "datasource.proto";
+
+option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
+
+message Song {
+  string name = 1;
+  repeated string artist_name = 2;
+  string album_name = 3;
+  myncer.Datasource datasource = 4;
+}
