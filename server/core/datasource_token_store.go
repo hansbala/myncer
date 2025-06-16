@@ -24,6 +24,7 @@ type DatasourceTokenStore interface {
 		userId string,
 		datasource myncer_pb.Datasource,
 	) (*myncer_pb.OAuthToken, error)
+	GetConnectedDatasources(ctx context.Context, userId string) (Set[myncer_pb.Datasource], error)
 }
 
 func NewDatasourceTokenStore(db *sql.DB) DatasourceTokenStore {
@@ -84,6 +85,21 @@ func (d *datasourceTokenStoreImpl) GetToken(
 	default:
 		return nil, NewError("expected to have found one token but multiple were found")
 	}
+}
+
+func (d *datasourceTokenStoreImpl) GetConnectedDatasources(
+	ctx context.Context,
+	userId string,
+) (Set[myncer_pb.Datasource], error) {
+	tokens, err := d.getTokensInternal(ctx, userId, nil /*datasources*/)
+	if err != nil {
+		return nil, WrappedError(err, "failed to get tokens for user")
+	}
+	r := NewSet[myncer_pb.Datasource]()
+	for _, token := range tokens {
+		r.Add(token.GetDatasource())
+	}
+	return r, nil
 }
 
 func (d *datasourceTokenStoreImpl) getTokensInternal(

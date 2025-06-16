@@ -16,3 +16,14 @@ func ProtoDatasourceToRest(ds myncer_pb.Datasource) (api.Datasource, error) {
 		return "", core.NewError("unknown datasource")
 	}
 }
+
+func RestDatasourceToProto(ds api.Datasource) myncer_pb.Datasource {
+	switch ds {
+	case api.SPOTIFY:
+		return myncer_pb.Datasource_SPOTIFY
+	case api.YOUTUBE:
+		return myncer_pb.Datasource_YOUTUBE
+	default:
+		return myncer_pb.Datasource_DATASOURCE_UNSPECIFIED
+	}
+}
