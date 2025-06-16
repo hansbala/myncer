@@ -15,10 +15,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { useConnectedDatasources } from "@/hooks/useConnectedDatasources"
 import { usePlaylists } from "@/hooks/usePlaylists"
 import type { Datasource } from "@/generated_api/src"
+import { DatasourceSelector } from "./DatasourceSelector"
+import { PlaylistSelector } from "./PlaylistSelector"
 
 type FormValues = {
   sourceDatasource: Datasource
@@ -27,11 +29,12 @@ type FormValues = {
   targetPlaylistId: string
 }
 
-export const CreateSyncDialog = () => {
+export const CreateOneWaySyncDialog = () => {
   const [open, setOpen] = useState(false)
   const { datasources: connectedDatasources, loading: datasourcesLoading } = useConnectedDatasources()
 
   const {
+    control,
     watch,
     handleSubmit,
     setValue,
@@ -73,7 +76,7 @@ export const CreateSyncDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Create Sync</Button>
+        <Button>Create One-Way Sync</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -83,64 +86,40 @@ export const CreateSyncDialog = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-6 py-2">
           {/* Source */}
           <div>
-            <Label className="text-sm text-center">Source</Label>
             <div className="grid grid-cols-2 gap-4 mt-1">
-              <Select onValueChange={(val) => setValue("sourceDatasource", val as Datasource)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Datasource" />
-                </SelectTrigger>
-                <SelectContent>
-                  {connectedDatasources.map((ds) => (
-                    <SelectItem key={ds} value={ds}>
-                      {ds}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select onValueChange={(val) => setValue("sourcePlaylistId", val)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Playlist" />
-                </SelectTrigger>
-                <SelectContent>
-                  {sourcePlaylists.map((p) => (
-                    <SelectItem key={p.playlistId} value={p.playlistId}>
-                      {p.name || p.playlistId}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <DatasourceSelector
+                name="sourceDatasource"
+                control={control}
+                datasources={connectedDatasources}
+                label="Source Datasource"
+              />
+              <PlaylistSelector
+                name="sourcePlaylistId"
+                control={control}
+                playlists={sourcePlaylists}
+                label="Source Playlist"
+                disabled={!sourceDatasource}
+              />
             </div>
           </div>
 
           {/* Target */}
           <div>
-            <Label className="text-sm text-center">Target</Label>
             <div className="grid grid-cols-2 gap-4 mt-1">
-              <Select onValueChange={(val) => setValue("targetDatasource", val as Datasource)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Datasource" />
-                </SelectTrigger>
-                <SelectContent>
-                  {connectedDatasources.map((ds) => (
-                    <SelectItem key={ds} value={ds}>
-                      {ds}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select onValueChange={(val) => setValue("targetPlaylistId", val)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Playlist" />
-                </SelectTrigger>
-                <SelectContent>
-                  {targetPlaylists.map((p) => (
-                    <SelectItem key={p.playlistId} value={p.playlistId || ""}>
-                      {p.name || p.playlistId}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+              <DatasourceSelector
+                name="targetDatasource"
+                control={control}
+                datasources={connectedDatasources}
+                label="Target Datasource"
+              />
+              <PlaylistSelector
+                name="targetPlaylistId"
+                control={control}
+                playlists={targetPlaylists}
+                label="Target Playlist"
+                disabled={!targetDatasource}
+              />
+              <Select onValueChange={(val) => setValue("targetPlaylistId", val)} disabled={!targetDatasource}>
               </Select>
             </div>
           </div>

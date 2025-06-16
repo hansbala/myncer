@@ -1,4 +1,4 @@
-import { CreateSyncDialog } from "@/components/CreateSyncDialog"
+import { CreateOneWaySyncDialog } from "@/components/CreateOneWaySyncDialog"
 import { PageWrapper } from "@/components/PageWrapper"
 import { PageLoader } from "@/components/ui/page-loader"
 import { useSyncs } from "@/hooks/useSyncs"
@@ -18,7 +18,7 @@ export const Syncs = () => {
               Manage your data synchronization settings.
             </p>
           </div>
-          <CreateSyncDialog />
+          <CreateOneWaySyncDialog />
         </div>
 
         <div className="rounded-xl border bg-card p-6 shadow-sm">
