@@ -24,7 +24,7 @@ export const getSpotifyAuthUrl = () => {
   const scope = encodeURIComponent(spotifyScopes)
   const state = crypto.randomUUID() // CSRF protection.
 
-  return `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`
+  return `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scope}&state=${state}&prompt=consent`
 }
 
 export const getYoutubeAuthUrl = () => {
