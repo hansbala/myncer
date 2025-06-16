@@ -118,6 +118,9 @@ func (d *datasourceTokenStoreImpl) getTokensInternal(
 			conditions,
 			fmt.Sprintf("datasource IN (%s)", makePlaceholders(len(args), datasources.ToArray())),
 		)
+		for _, ds := range datasources.ToArray() {
+			args = append(args, ds.String())
+		}
 	}
 
 	query := `SELECT data, created_at, updated_at FROM datasource_tokens`
