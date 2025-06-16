@@ -24,19 +24,21 @@ export interface UserLoginRequest {
      * @type {string}
      * @memberof UserLoginRequest
      */
-    email?: string;
+    email: string;
     /**
      * Password of the user.
      * @type {string}
      * @memberof UserLoginRequest
      */
-    password?: string;
+    password: string;
 }
 
 /**
  * Check if a given object implements the UserLoginRequest interface.
  */
 export function instanceOfUserLoginRequest(value: object): value is UserLoginRequest {
+    if (!('email' in value) || value['email'] === undefined) return false;
+    if (!('password' in value) || value['password'] === undefined) return false;
     return true;
 }
 
@@ -50,8 +52,8 @@ export function UserLoginRequestFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'email': json['email'] == null ? undefined : json['email'],
-        'password': json['password'] == null ? undefined : json['password'],
+        'email': json['email'],
+        'password': json['password'],
     };
 }
 

@@ -6,10 +6,10 @@ import (
 )
 
 func UserProtoToRest(up *myncer_pb.User /*const*/) *api.User {
-	restUser := api.NewUser()
-	restUser.SetId(up.GetId())
-	restUser.SetFirstName(up.GetFirstName())
-	restUser.SetLastName(up.GetLastName())
-	restUser.SetEmail(up.GetEmail())
-	return restUser
+	return api.NewUser(
+		up.GetId(),
+		up.GetFirstName(),
+		up.GetLastName(),
+		up.GetEmail(),
+	)
 }

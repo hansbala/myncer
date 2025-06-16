@@ -32,13 +32,14 @@ export interface ListDatasourcesResponse {
      * @type {Array<Datasource>}
      * @memberof ListDatasourcesResponse
      */
-    connectedDatasources?: Array<Datasource>;
+    connectedDatasources: Array<Datasource>;
 }
 
 /**
  * Check if a given object implements the ListDatasourcesResponse interface.
  */
 export function instanceOfListDatasourcesResponse(value: object): value is ListDatasourcesResponse {
+    if (!('connectedDatasources' in value) || value['connectedDatasources'] === undefined) return false;
     return true;
 }
 
@@ -52,7 +53,7 @@ export function ListDatasourcesResponseFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'connectedDatasources': json['connectedDatasources'] == null ? undefined : ((json['connectedDatasources'] as Array<any>).map(DatasourceFromJSON)),
+        'connectedDatasources': ((json['connectedDatasources'] as Array<any>).map(DatasourceFromJSON)),
     };
 }
 
@@ -67,7 +68,7 @@ export function ListDatasourcesResponseToJSONTyped(value?: ListDatasourcesRespon
 
     return {
         
-        'connectedDatasources': value['connectedDatasources'] == null ? undefined : ((value['connectedDatasources'] as Array<any>).map(DatasourceToJSON)),
+        'connectedDatasources': ((value['connectedDatasources'] as Array<any>).map(DatasourceToJSON)),
     };
 }
 

@@ -32,13 +32,14 @@ export interface ListSyncsResponse {
      * @type {Array<Sync>}
      * @memberof ListSyncsResponse
      */
-    syncs?: Array<Sync>;
+    syncs: Array<Sync>;
 }
 
 /**
  * Check if a given object implements the ListSyncsResponse interface.
  */
 export function instanceOfListSyncsResponse(value: object): value is ListSyncsResponse {
+    if (!('syncs' in value) || value['syncs'] === undefined) return false;
     return true;
 }
 
@@ -52,7 +53,7 @@ export function ListSyncsResponseFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'syncs': json['syncs'] == null ? undefined : ((json['syncs'] as Array<any>).map(SyncFromJSON)),
+        'syncs': ((json['syncs'] as Array<any>).map(SyncFromJSON)),
     };
 }
 
@@ -67,7 +68,7 @@ export function ListSyncsResponseToJSONTyped(value?: ListSyncsResponse | null, i
 
     return {
         
-        'syncs': value['syncs'] == null ? undefined : ((value['syncs'] as Array<any>).map(SyncToJSON)),
+        'syncs': ((value['syncs'] as Array<any>).map(SyncToJSON)),
     };
 }
 

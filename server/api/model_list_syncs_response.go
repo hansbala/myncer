@@ -12,6 +12,8 @@ package api
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ListSyncsResponse type satisfies the MappedNullable interface at compile time
@@ -19,15 +21,18 @@ var _ MappedNullable = &ListSyncsResponse{}
 
 // ListSyncsResponse struct for ListSyncsResponse
 type ListSyncsResponse struct {
-	Syncs []Sync `json:"syncs,omitempty"`
+	Syncs []Sync `json:"syncs"`
 }
+
+type _ListSyncsResponse ListSyncsResponse
 
 // NewListSyncsResponse instantiates a new ListSyncsResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewListSyncsResponse() *ListSyncsResponse {
+func NewListSyncsResponse(syncs []Sync) *ListSyncsResponse {
 	this := ListSyncsResponse{}
+	this.Syncs = syncs
 	return &this
 }
 
@@ -39,34 +44,26 @@ func NewListSyncsResponseWithDefaults() *ListSyncsResponse {
 	return &this
 }
 
-// GetSyncs returns the Syncs field value if set, zero value otherwise.
+// GetSyncs returns the Syncs field value
 func (o *ListSyncsResponse) GetSyncs() []Sync {
-	if o == nil || IsNil(o.Syncs) {
+	if o == nil {
 		var ret []Sync
 		return ret
 	}
+
 	return o.Syncs
 }
 
-// GetSyncsOk returns a tuple with the Syncs field value if set, nil otherwise
+// GetSyncsOk returns a tuple with the Syncs field value
 // and a boolean to check if the value has been set.
 func (o *ListSyncsResponse) GetSyncsOk() ([]Sync, bool) {
-	if o == nil || IsNil(o.Syncs) {
+	if o == nil {
 		return nil, false
 	}
 	return o.Syncs, true
 }
 
-// HasSyncs returns a boolean if a field has been set.
-func (o *ListSyncsResponse) HasSyncs() bool {
-	if o != nil && !IsNil(o.Syncs) {
-		return true
-	}
-
-	return false
-}
-
-// SetSyncs gets a reference to the given []Sync and assigns it to the Syncs field.
+// SetSyncs sets field value
 func (o *ListSyncsResponse) SetSyncs(v []Sync) {
 	o.Syncs = v
 }
@@ -81,10 +78,45 @@ func (o ListSyncsResponse) MarshalJSON() ([]byte, error) {
 
 func (o ListSyncsResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Syncs) {
-		toSerialize["syncs"] = o.Syncs
-	}
+	toSerialize["syncs"] = o.Syncs
 	return toSerialize, nil
+}
+
+func (o *ListSyncsResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"syncs",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varListSyncsResponse := _ListSyncsResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varListSyncsResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ListSyncsResponse(varListSyncsResponse)
+
+	return err
 }
 
 type NullableListSyncsResponse struct {

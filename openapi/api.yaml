@@ -223,6 +223,11 @@ components:
             $ref: "#/components/schemas/User"
     User:
       type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
       properties:
         id:
           description: The unique ID of the user.
@@ -240,6 +245,9 @@ components:
           format: email
     UserLoginRequest:
       type: object
+      required:
+        - email
+        - password
       properties:
         email:
           description: Email of the user trying to login.
@@ -260,6 +268,8 @@ components:
         - TIDAL
     OAuthExchangeRequest:
       type: object
+      required:
+        - code
       properties:
         code:
           type: string
@@ -267,10 +277,10 @@ components:
         state:
           type: string
           description: Optional CSRF protection token returned from the datasource.
-      required:
-        - code
     ListDatasourcesResponse:
       type: object
+      required:
+        - connectedDatasources
       properties:
         connectedDatasources:
           type: array
@@ -300,9 +310,11 @@ components:
           type: string
           description: The variant of the sync
         createdAt:
+          description: The timestamp this sync was created at.
           type: string
           format: date-time
         updatedAt:
+          description: The timestamp this sync was updated at.
           type: string
           format: date-time
       discriminator:
@@ -345,6 +357,8 @@ components:
           description: Unique, stable playlist identifier for the datasource.
     ListSyncsResponse:
       type: object
+      required:
+        - syncs
       properties:
         syncs:
           type: array

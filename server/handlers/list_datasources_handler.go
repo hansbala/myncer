@@ -59,9 +59,7 @@ func (ld *listDatasourcesHandlerImpl) ProcessRequest(
 		connectedDatasources = append(connectedDatasources, restDs)
 	}
 
-	r := api.NewListDatasourcesResponse()
-	r.SetConnectedDatasources(connectedDatasources)
-	if err := WriteJSONOk(resp, r); err != nil {
+	if err := WriteJSONOk(resp, api.NewListDatasourcesResponse(connectedDatasources)); err != nil {
 		return core.NewProcessRequestResponse_InternalServerError(
 			core.NewError("failed to write connected datasources response"),
 		)

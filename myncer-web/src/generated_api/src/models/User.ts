@@ -24,31 +24,35 @@ export interface User {
      * @type {string}
      * @memberof User
      */
-    id?: string;
+    id: string;
     /**
      * First name of the user.
      * @type {string}
      * @memberof User
      */
-    firstName?: string;
+    firstName: string;
     /**
      * Last name of the user.
      * @type {string}
      * @memberof User
      */
-    lastName?: string;
+    lastName: string;
     /**
      * Email of the user.
      * @type {string}
      * @memberof User
      */
-    email?: string;
+    email: string;
 }
 
 /**
  * Check if a given object implements the User interface.
  */
 export function instanceOfUser(value: object): value is User {
+    if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('firstName' in value) || value['firstName'] === undefined) return false;
+    if (!('lastName' in value) || value['lastName'] === undefined) return false;
+    if (!('email' in value) || value['email'] === undefined) return false;
     return true;
 }
 
@@ -62,10 +66,10 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
     }
     return {
         
-        'id': json['id'] == null ? undefined : json['id'],
-        'firstName': json['firstName'] == null ? undefined : json['firstName'],
-        'lastName': json['lastName'] == null ? undefined : json['lastName'],
-        'email': json['email'] == null ? undefined : json['email'],
+        'id': json['id'],
+        'firstName': json['firstName'],
+        'lastName': json['lastName'],
+        'email': json['email'],
     };
 }
 

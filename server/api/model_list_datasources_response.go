@@ -12,6 +12,8 @@ package api
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the ListDatasourcesResponse type satisfies the MappedNullable interface at compile time
@@ -19,15 +21,18 @@ var _ MappedNullable = &ListDatasourcesResponse{}
 
 // ListDatasourcesResponse struct for ListDatasourcesResponse
 type ListDatasourcesResponse struct {
-	ConnectedDatasources []Datasource `json:"connectedDatasources,omitempty"`
+	ConnectedDatasources []Datasource `json:"connectedDatasources"`
 }
+
+type _ListDatasourcesResponse ListDatasourcesResponse
 
 // NewListDatasourcesResponse instantiates a new ListDatasourcesResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewListDatasourcesResponse() *ListDatasourcesResponse {
+func NewListDatasourcesResponse(connectedDatasources []Datasource) *ListDatasourcesResponse {
 	this := ListDatasourcesResponse{}
+	this.ConnectedDatasources = connectedDatasources
 	return &this
 }
 
@@ -39,34 +44,26 @@ func NewListDatasourcesResponseWithDefaults() *ListDatasourcesResponse {
 	return &this
 }
 
-// GetConnectedDatasources returns the ConnectedDatasources field value if set, zero value otherwise.
+// GetConnectedDatasources returns the ConnectedDatasources field value
 func (o *ListDatasourcesResponse) GetConnectedDatasources() []Datasource {
-	if o == nil || IsNil(o.ConnectedDatasources) {
+	if o == nil {
 		var ret []Datasource
 		return ret
 	}
+
 	return o.ConnectedDatasources
 }
 
-// GetConnectedDatasourcesOk returns a tuple with the ConnectedDatasources field value if set, nil otherwise
+// GetConnectedDatasourcesOk returns a tuple with the ConnectedDatasources field value
 // and a boolean to check if the value has been set.
 func (o *ListDatasourcesResponse) GetConnectedDatasourcesOk() ([]Datasource, bool) {
-	if o == nil || IsNil(o.ConnectedDatasources) {
+	if o == nil {
 		return nil, false
 	}
 	return o.ConnectedDatasources, true
 }
 
-// HasConnectedDatasources returns a boolean if a field has been set.
-func (o *ListDatasourcesResponse) HasConnectedDatasources() bool {
-	if o != nil && !IsNil(o.ConnectedDatasources) {
-		return true
-	}
-
-	return false
-}
-
-// SetConnectedDatasources gets a reference to the given []Datasource and assigns it to the ConnectedDatasources field.
+// SetConnectedDatasources sets field value
 func (o *ListDatasourcesResponse) SetConnectedDatasources(v []Datasource) {
 	o.ConnectedDatasources = v
 }
@@ -81,10 +78,45 @@ func (o ListDatasourcesResponse) MarshalJSON() ([]byte, error) {
 
 func (o ListDatasourcesResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.ConnectedDatasources) {
-		toSerialize["connectedDatasources"] = o.ConnectedDatasources
-	}
+	toSerialize["connectedDatasources"] = o.ConnectedDatasources
 	return toSerialize, nil
+}
+
+func (o *ListDatasourcesResponse) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"connectedDatasources",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varListDatasourcesResponse := _ListDatasourcesResponse{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varListDatasourcesResponse)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ListDatasourcesResponse(varListDatasourcesResponse)
+
+	return err
 }
 
 type NullableListDatasourcesResponse struct {
