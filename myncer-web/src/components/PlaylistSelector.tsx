@@ -25,13 +25,19 @@ export function PlaylistSelector<T extends FieldValues>({
       {...controllerProps}
       render={({ field }) => (
         <Select value={field.value} onValueChange={field.onChange} disabled={disabled}>
-          <SelectTrigger>
-            <SelectValue placeholder={label} />
+          <SelectTrigger className="w-full max-w-full">
+            <SelectValue placeholder={label} title={field.value} />
           </SelectTrigger>
           <SelectContent>
             {playlists.map((p) => (
-              <SelectItem key={p.playlistId} value={p.playlistId}>
-                {p.name || p.playlistId}
+              <SelectItem
+                key={p.playlistId}
+                value={p.playlistId}
+                title={p.name || p.playlistId} // Tooltip on hover
+              >
+                <div className="truncate max-w-full">
+                  {p.name || p.playlistId}
+                </div>
               </SelectItem>
             ))}
           </SelectContent>

@@ -80,47 +80,49 @@ export const CreateOneWaySyncDialog = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create a new sync</DialogTitle>
+          <DialogTitle>Create One-Way sync</DialogTitle>
         </DialogHeader>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 py-2">
+          <div className="flex flex-col space-y-2">
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+              {/* Source */}
+              <div className="w-[200px] flex flex-col space-y-2">
+                <DatasourceSelector<FormValues>
+                  name="sourceDatasource"
+                  control={control}
+                  datasources={connectedDatasources}
+                  label="Source Datasource"
+                />
+                <PlaylistSelector<FormValues>
+                  name="sourcePlaylistId"
+                  control={control}
+                  playlists={sourcePlaylists}
+                  label="Source Playlist"
+                  disabled={!sourceDatasource}
+                />
+              </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-6 py-2">
-          {/* Source */}
-          <div>
-            <div className="grid grid-cols-2 gap-4 mt-1">
-              <DatasourceSelector
-                name="sourceDatasource"
-                control={control}
-                datasources={connectedDatasources}
-                label="Source Datasource"
-              />
-              <PlaylistSelector
-                name="sourcePlaylistId"
-                control={control}
-                playlists={sourcePlaylists}
-                label="Source Playlist"
-                disabled={!sourceDatasource}
-              />
-            </div>
-          </div>
+              {/* Arrow */}
+              <div className="text-center text-2xl text-muted-foreground">
+                →
+              </div>
 
-          {/* Target */}
-          <div>
-            <div className="grid grid-cols-2 gap-4 mt-1">
-              <DatasourceSelector
-                name="targetDatasource"
-                control={control}
-                datasources={connectedDatasources}
-                label="Target Datasource"
-              />
-              <PlaylistSelector
-                name="targetPlaylistId"
-                control={control}
-                playlists={targetPlaylists}
-                label="Target Playlist"
-                disabled={!targetDatasource}
-              />
-              <Select onValueChange={(val) => setValue("targetPlaylistId", val)} disabled={!targetDatasource}>
-              </Select>
+              {/* Target */}
+              <div className="w-[200px] flex flex-col space-y-2">
+                <DatasourceSelector<FormValues>
+                  name="targetDatasource"
+                  control={control}
+                  datasources={connectedDatasources}
+                  label="Target Datasource"
+                />
+                <PlaylistSelector<FormValues>
+                  name="targetPlaylistId"
+                  control={control}
+                  playlists={targetPlaylists}
+                  label="Target Playlist"
+                  disabled={!targetDatasource}
+                />
+              </div>
             </div>
           </div>
 

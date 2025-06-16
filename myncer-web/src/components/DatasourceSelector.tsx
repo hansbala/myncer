@@ -19,7 +19,7 @@ export function DatasourceSelector<T extends FieldValues>({ datasources, label, 
       {...controllerProps}
       render={({ field }) => (
         <Select value={field.value} onValueChange={field.onChange}>
-          <SelectTrigger>
+          <SelectTrigger className="w-full max-w-full">
             <SelectValue placeholder={label} />
           </SelectTrigger>
           <SelectContent>
