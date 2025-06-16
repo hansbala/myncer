@@ -9,20 +9,14 @@ import (
 
 func NewSong(
 	spec *myncer_pb.Song, /*const*/
-	spotifyClient core.DatasourceClient,
-	youtubeClient core.DatasourceClient,
 ) core.Song {
 	return &songImpl{
 		spec:          spec,
-		spotifyClient: spotifyClient,
-		youtubeClient: youtubeClient,
 	}
 }
 
 type songImpl struct {
 	spec          *myncer_pb.Song
-	spotifyClient core.DatasourceClient
-	youtubeClient core.DatasourceClient
 }
 
 var _ core.Song = (*songImpl)(nil)
@@ -52,7 +46,7 @@ func (s *songImpl) GetIdByDatasource(
 	case myncer_pb.Datasource_SPOTIFY:
 		return s.getSpotifyId(ctx, userInfo)
 	case myncer_pb.Datasource_YOUTUBE:
-		return s.getYoutubeId()
+		return s.getYoutubeId(ctx, userInfo)
 	default:
 		return "", core.NewError("Unknown datasource: %v", datasource)
 	}
@@ -65,7 +59,8 @@ func (s *songImpl) getSpotifyId(
 	if s.spec.GetDatasource() == myncer_pb.Datasource_SPOTIFY {
 		return s.spec.GetDatasourceSongId(), nil
 	}
-	oAuthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
+	myncerCtx := core.ToMyncerCtx(ctx)
+	oAuthToken, err := myncerCtx.DB.DatasourceTokenStore.GetToken(
 		ctx,
 		userInfo.GetId(),
 		myncer_pb.Datasource_SPOTIFY,
@@ -74,7 +69,7 @@ func (s *songImpl) getSpotifyId(
 		return "", core.WrappedError(err, "failed to get OAuth token for Spotify")
 	}
 	// Otherwise, try searching Spotify
-	result, err := s.spotifyClient.Search(
+	result, err := myncerCtx.DatasourceClients.SpotifyClient.Search(
 		ctx,
 		oAuthToken,
 		core.NewSet(s.GetName()),
@@ -87,6 +82,32 @@ func (s *songImpl) getSpotifyId(
 	return result.GetId(), nil
 }
 
-func (s *songImpl) getYoutubeId() (string, error) {
-	return "", core.NewError("YouTube ID not implemented")
+func (s *songImpl) getYoutubeId(
+	ctx context.Context,
+	userInfo *myncer_pb.User, /*const*/
+) (string, error) {
+	if s.spec.GetDatasource() == myncer_pb.Datasource_YOUTUBE {
+		return s.spec.GetDatasourceSongId(), nil
+	}
+	myncerCtx := core.ToMyncerCtx(ctx)
+	oAuthToken, err := myncerCtx.DB.DatasourceTokenStore.GetToken(
+		ctx,
+		userInfo.GetId(),
+		myncer_pb.Datasource_YOUTUBE,
+	)
+	if err != nil {
+		return "", core.WrappedError(err, "failed to get OAuth token for Youtube")
+	}
+	// Otherwise, try searching Youtube.
+	result, err := myncerCtx.DatasourceClients.YoutubeClient.Search(
+		ctx,
+		oAuthToken,
+		core.NewSet(s.GetName()),
+		core.NewSet(s.GetArtistNames()...),
+		core.NewSet(s.GetAlbum()),
+	)
+	if err != nil {
+		return "", core.WrappedError(err, "youtube search failed for song: %s", s.GetName())
+	}
+	return result.GetId(), nil
 }

@@ -10,20 +10,14 @@ import (
 )
 
 func NewRunSyncHandler(
-	spotifyClient core.DatasourceClient,
-	youtubeClient core.DatasourceClient,
 	syncEngine core.SyncEngine,
 ) core.Handler {
 	return &runSyncHandlerImpl{
-		spotifyClient: spotifyClient,
-		youtubeClient: youtubeClient,
 		syncEngine:    syncEngine,
 	}
 }
 
 type runSyncHandlerImpl struct {
-	spotifyClient core.DatasourceClient
-	youtubeClient core.DatasourceClient
 	syncEngine    core.SyncEngine
 }
 

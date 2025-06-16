@@ -11,20 +11,11 @@ import (
 	"github.com/hansbala/myncer/rest_helpers"
 )
 
-func NewListDatasourcePlaylistsHandler(
-	spotifyClient core.DatasourceClient,
-	youtubeClient core.DatasourceClient,
-) core.Handler {
-	return &listDsPlaylistsHandlerImpl{
-		spotifyClient: spotifyClient,
-		youtubeClient: youtubeClient,
-	}
+func NewListDatasourcePlaylistsHandler() core.Handler {
+	return &listDsPlaylistsHandlerImpl{}
 }
 
-type listDsPlaylistsHandlerImpl struct {
-	spotifyClient core.DatasourceClient
-	youtubeClient core.DatasourceClient
-}
+type listDsPlaylistsHandlerImpl struct{}
 
 var _ core.Handler = (*listDsPlaylistsHandlerImpl)(nil)
 
@@ -56,7 +47,7 @@ func (ldp *listDsPlaylistsHandlerImpl) ProcessRequest(
 			core.WrappedError(err, "failed to get datasource from request path"),
 		)
 	}
-	dsClient, err := ldp.getClientFromDatasource(ds)
+	dsClient, err := ldp.getClientFromDatasource(ctx, ds)
 	if err != nil {
 		return core.NewProcessRequestResponse_BadRequest(
 			core.WrappedError(err, "failed to get datasource client from request path"),
@@ -116,14 +107,16 @@ func (ldp *listDsPlaylistsHandlerImpl) getDatasource(
 }
 
 func (ldp *listDsPlaylistsHandlerImpl) getClientFromDatasource(
+	ctx context.Context,
 	ds myncer_pb.Datasource,
 ) (core.DatasourceClient, error) {
+	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
 	switch ds {
-		case myncer_pb.Datasource_SPOTIFY:
-			return ldp.spotifyClient, nil
-		case myncer_pb.Datasource_YOUTUBE:
-			return ldp.youtubeClient, nil
-		default:
-			return nil, core.NewError("unsupported datasource: %v", ds)
+	case myncer_pb.Datasource_SPOTIFY:
+		return dsClients.SpotifyClient, nil
+	case myncer_pb.Datasource_YOUTUBE:
+		return dsClients.YoutubeClient, nil
+	default:
+		return nil, core.NewError("unsupported datasource: %v", ds)
 	}
 }

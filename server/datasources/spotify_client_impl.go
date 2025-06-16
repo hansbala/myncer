@@ -265,7 +265,6 @@ func buildSongFromSpotifyTrack(
 	ctx context.Context,
 	track *spotify.FullTrack, /*const*/
 ) core.Song {
-	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
 	return sync_engine.NewSong(
 		&myncer_pb.Song{
 			Name:             track.Name,
@@ -274,7 +273,5 @@ func buildSongFromSpotifyTrack(
 			Datasource:       myncer_pb.Datasource_SPOTIFY,
 			DatasourceSongId: track.ID.String(),
 		},
-		dsClients.SpotifyClient,
-		dsClients.YoutubeClient,
 	)
 }

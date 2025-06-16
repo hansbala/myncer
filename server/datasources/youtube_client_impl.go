@@ -124,7 +124,7 @@ func (c *youtubeClientImpl) GetPlaylistSongs(
 			if len(videoId) == 0 {
 				continue
 			}
-			songs = append(songs, buildSongFromYouTubePlaylistItem(ctx, item))
+			songs = append(songs, buildSongFromYouTubePlaylistItem(item))
 		}
 		if resp.NextPageToken == "" {
 			break
@@ -251,7 +251,7 @@ func (s *youtubeClientImpl) Search(
 	}
 
 	item := resp.Items[0]
-	song, err := buildSongFormYoutubeSearchResultItem(ctx, item)
+	song, err := buildSongFormYoutubeSearchResultItem(item)
 	if err != nil {
 		return nil, core.WrappedError(err, "failed to build song from YouTube search result")
 	}
@@ -287,10 +287,8 @@ func (c *youtubeClientImpl) getOAuthConfig(ctx context.Context) *oauth2.Config {
 }
 
 func buildSongFromYouTubePlaylistItem(
-	ctx context.Context,
 	pi *youtube.PlaylistItem, /*const*/
 ) core.Song {
-	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
 	return sync_engine.NewSong(
 		&myncer_pb.Song{
 			Name:             pi.Snippet.Title,
@@ -298,16 +296,12 @@ func buildSongFromYouTubePlaylistItem(
 			Datasource:       myncer_pb.Datasource_YOUTUBE,
 			DatasourceSongId: pi.Id,
 		},
-		dsClients.SpotifyClient,
-		dsClients.YoutubeClient,
 	)
 }
 
 func buildSongFormYoutubeSearchResultItem(
-	ctx context.Context,
 	item *youtube.SearchResult, /*const*/
 ) (core.Song, error) {
-	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
 	videoId := ""
 	if item.Id != nil && item.Id.VideoId != "" {
 		videoId = item.Id.VideoId
@@ -322,8 +316,6 @@ func buildSongFormYoutubeSearchResultItem(
 			Datasource:       myncer_pb.Datasource_YOUTUBE,
 			DatasourceSongId: videoId,
 		},
-		dsClients.SpotifyClient,
-		dsClients.YoutubeClient,
 	), nil
 }
 

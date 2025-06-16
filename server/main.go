@@ -9,7 +9,6 @@ import (
 	"github.com/hansbala/myncer/core"
 	"github.com/hansbala/myncer/datasources"
 	"github.com/hansbala/myncer/handlers"
-	myncer_pb "github.com/hansbala/myncer/proto"
 	"github.com/hansbala/myncer/sync_engine"
 )
 
@@ -39,26 +38,13 @@ func GetHandlersMap(
 		"/api/v1/users/me":     handlers.NewCurrentUserHandler(),
 		"/api/v1/users/edit":   handlers.NewEditUserHandler(),
 		// Datasource handlers.
-		"/api/v1/auth/{datasource}/exchange": handlers.NewAuthExchangeHandler(
-			myncerCtx.DatasourceClients.SpotifyClient,
-			myncerCtx.DatasourceClients.YoutubeClient,
-		),
-		"/api/v1/datasources/list": handlers.NewListDatasourcesHandler(),
-		"/api/v1/datasources/{datasource}/playlists/list": handlers.NewListDatasourcePlaylistsHandler(
-			myncerCtx.DatasourceClients.SpotifyClient,
-			myncerCtx.DatasourceClients.YoutubeClient,
-		),
+		"/api/v1/auth/{datasource}/exchange":              handlers.NewAuthExchangeHandler(),
+		"/api/v1/datasources/list":                        handlers.NewListDatasourcesHandler(),
+		"/api/v1/datasources/{datasource}/playlists/list": handlers.NewListDatasourcePlaylistsHandler(),
 		// Syncs handlers.
 		"/api/v1/syncs/create": handlers.NewCreateSyncHandler(),
 		"/api/v1/syncs/list":   handlers.NewListSyncsHandler(),
-		"/api/v1/syncs/run": handlers.NewRunSyncHandler(
-			myncerCtx.DatasourceClients.SpotifyClient,
-			myncerCtx.DatasourceClients.YoutubeClient,
-			sync_engine.NewSyncEngine(
-				myncerCtx.DatasourceClients.SpotifyClient,
-				myncerCtx.DatasourceClients.YoutubeClient,
-			),
-		),
+		"/api/v1/syncs/run":    handlers.NewRunSyncHandler(sync_engine.NewSyncEngine()),
 	}
 }
 
@@ -138,40 +124,4 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 			}
 		}
 	}
-}
-
-func testSpotifyListPlaylists(ctx context.Context) {
-	oauthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
-		ctx,
-		// This is a local test id for me so do whatever you want with it.
-		"05172310-af34-4135-90d2-75d4e649f12f", /*userId*/
-		myncer_pb.Datasource_SPOTIFY,
-	)
-	if err != nil {
-		panic(err)
-	}
-	spotifyClient := datasources.NewSpotifyClient()
-	playlists, err := spotifyClient.GetPlaylists(ctx, oauthToken)
-	if err != nil {
-		panic(err)
-	}
-	core.Printf("playlists: %v", playlists)
-}
-
-func testYoutubeListPlaylists(ctx context.Context) {
-	oauthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
-		ctx,
-		// This is a local test id for me so do whatever you want with it.
-		"05172310-af34-4135-90d2-75d4e649f12f", /*userId*/
-		myncer_pb.Datasource_YOUTUBE,
-	)
-	if err != nil {
-		panic(err)
-	}
-	youtubeClient := datasources.NewYouTubeClient()
-	playlists, err := youtubeClient.GetPlaylists(ctx, oauthToken)
-	if err != nil {
-		panic(err)
-	}
-	core.Printf("playlists: %v", playlists)
 }

@@ -13,20 +13,11 @@ import (
 	"github.com/hansbala/myncer/rest_helpers"
 )
 
-func NewAuthExchangeHandler(
-	spotifyClient core.DatasourceClient,
-	youtubeClient core.DatasourceClient,
-) core.Handler {
-	return &authExchangeHandlerImpl{
-		spotifyClient: spotifyClient,
-		youtubeClient: youtubeClient,
-	}
+func NewAuthExchangeHandler() core.Handler {
+	return &authExchangeHandlerImpl{}
 }
 
-type authExchangeHandlerImpl struct {
-	spotifyClient core.DatasourceClient
-	youtubeClient core.DatasourceClient
-}
+type authExchangeHandlerImpl struct{}
 
 var _ core.Handler = (*authExchangeHandlerImpl)(nil)
 
@@ -73,10 +64,11 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 	}
 
 	// Based on the datasource get the client, authenticate, and build the auth token.
+	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
 	var oAuthToken *myncer_pb.OAuthToken
 	switch datasource {
 	case myncer_pb.Datasource_SPOTIFY:
-		token, err := aeh.spotifyClient.ExchangeCodeForToken(ctx, restReq.GetCode())
+		token, err := dsClients.SpotifyClient.ExchangeCodeForToken(ctx, restReq.GetCode())
 		if err != nil {
 			return core.NewProcessRequestResponse_InternalServerError(
 				core.WrappedError(err, "failed to exchange oauth code"),
@@ -92,7 +84,7 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 			datasource,
 		)
 	case myncer_pb.Datasource_YOUTUBE:
-		token, err := aeh.youtubeClient.ExchangeCodeForToken(ctx, restReq.GetCode())
+		token, err := dsClients.YoutubeClient.ExchangeCodeForToken(ctx, restReq.GetCode())
 		if err != nil {
 			return core.NewProcessRequestResponse_InternalServerError(
 				core.WrappedError(err, "failed to exchange oauth code"),

@@ -8,20 +8,11 @@ import (
 	myncer_pb "github.com/hansbala/myncer/proto"
 )
 
-func NewSyncEngine(
-	spotifyClient core.DatasourceClient,
-	youtubeClient core.DatasourceClient,
-) core.SyncEngine {
-	return &syncEngineImpl{
-		spotifyClient: spotifyClient,
-		youtubeClient: youtubeClient,
-	}
+func NewSyncEngine() core.SyncEngine {
+	return &syncEngineImpl{}
 }
 
-type syncEngineImpl struct {
-	spotifyClient core.DatasourceClient
-	youtubeClient core.DatasourceClient
-}
+type syncEngineImpl struct {}
 
 var _ core.SyncEngine = (*syncEngineImpl)(nil)
 
@@ -53,11 +44,11 @@ func (s *syncEngineImpl) runOneWaySync(
 	userInfo *myncer_pb.User, /*const*/
 	sync *myncer_pb.OneWaySync, /*const*/
 ) error {
-	sourceClient, err := s.getClient(sync.GetSource().GetDatasource())
+	sourceClient, err := s.getClient(ctx, sync.GetSource().GetDatasource())
 	if err != nil {
 		return err
 	}
-	destClient, err := s.getClient(sync.GetDestination().GetDatasource())
+	destClient, err := s.getClient(ctx, sync.GetDestination().GetDatasource())
 	if err != nil {
 		return err
 	}
@@ -144,20 +135,22 @@ func (s *syncEngineImpl) getSearchedSongs(
 					AlbumName:        song.GetAlbum(),
 					DatasourceSongId: newDatasourceSongId,
 				},
-				s.spotifyClient,
-				s.youtubeClient,
 			),
 		)
 	}
 	return r, nil
 }
 
-func (s *syncEngineImpl) getClient(datasource myncer_pb.Datasource) (core.DatasourceClient, error) {
+func (s *syncEngineImpl) getClient(
+	ctx context.Context,
+	datasource myncer_pb.Datasource,
+) (core.DatasourceClient, error) {
+	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
 	switch datasource {
 	case myncer_pb.Datasource_SPOTIFY:
-		return s.spotifyClient, nil
+		return dsClients.SpotifyClient, nil
 	case myncer_pb.Datasource_YOUTUBE:
-		return s.youtubeClient, nil
+		return dsClients.YoutubeClient, nil
 	default:
 		return nil, core.NewError("unsupported datasource: %v", datasource)
 	}
