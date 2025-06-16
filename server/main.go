@@ -28,6 +28,7 @@ var (
 		"/api/v1/datasources/list": handlers.NewListDatasourcesHandler(),
 		// Syncs handlers.
 		"/api/v1/syncs/create": handlers.NewCreateSyncHandler(),
+		"/api/v1/syncs/list": handlers.NewListSyncsHandler(),
 	}
 )
 
