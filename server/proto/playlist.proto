@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package myncer;
+
+import "sync.proto";
+
+option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
+
+message Playlist {
+  MusicSource music_source = 1;
+  // Human readable name of the playlist as stored in the original datasource.
+  string name = 2;
+  // Human readable description of the playlist as stored in the original datasource.
+  string description = 3;
+  // URL to the playlist image as stored in the original datasource.
+  string image_url = 4;
+  // next: 5
+}
