@@ -33,6 +33,10 @@ var (
 		// Syncs handlers.
 		"/api/v1/syncs/create": handlers.NewCreateSyncHandler(),
 		"/api/v1/syncs/list":   handlers.NewListSyncsHandler(),
+		"/api/v1/syncs/run": handlers.NewRunSyncHandler(
+			datasources.NewSpotifyClient(),
+			datasources.NewYouTubeClient(),
+		),
 	}
 )
 

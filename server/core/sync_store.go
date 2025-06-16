@@ -13,6 +13,7 @@ import (
 
 type SyncStore interface {
 	CreateSync(ctx context.Context, sync *myncer_pb.Sync /*const*/) error
+	GetSync(ctx context.Context, id string) (*myncer_pb.Sync, error)
 	GetSyncs(ctx context.Context, userInfo *myncer_pb.User /*const*/) (Set[*myncer_pb.Sync], error)
 }
 
@@ -43,11 +44,25 @@ func (s *syncStoreImpl) CreateSync(ctx context.Context, sync *myncer_pb.Sync /*c
 	return nil
 }
 
+func (s *syncStoreImpl) GetSync(ctx context.Context, id string) (*myncer_pb.Sync, error) {
+	syncs, err := s.getSyncsInternal(ctx, NewSet(id), "" /*userId*/)
+	if err != nil {
+		return nil, WrappedError(err, "failed to get syncs by id")
+	}
+	if syncs.IsEmpty() {
+		return nil, NewError("sync not fond")
+	}
+	if len(syncs) > 1 {
+		return nil, NewError("multiple syncs with same id found")
+	}
+	return syncs.ToArray()[0], nil
+}
+
 func (s *syncStoreImpl) GetSyncs(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const*/
 ) (Set[*myncer_pb.Sync], error) {
-	syncs, err := s.getSyncsInternal(ctx, userInfo.GetId())
+	syncs, err := s.getSyncsInternal(ctx, nil /*ids*/, userInfo.GetId())
 	if err != nil {
 		return nil, WrappedError(err, "failed to get syncs from sql")
 	}
@@ -56,10 +71,20 @@ func (s *syncStoreImpl) GetSyncs(
 
 func (s *syncStoreImpl) getSyncsInternal(
 	ctx context.Context,
+	ids Set[string], /*const,@nullable*/ // nil, empty indicates no filtering
 	userId string, // empty indicates no filtering
 ) (Set[*myncer_pb.Sync], error) {
 	conditions := []string{}
 	args := []any{}
+	if ids != nil && !ids.IsEmpty() {
+		conditions = append(
+			conditions,
+			fmt.Sprintf("id IN (%s)", makePlaceholders(len(args), ids.ToArray())),
+		)
+		for _, id := range ids.ToArray() {
+			args = append(args, id)
+		}
+	}
 	if len(userId) > 0 {
 		conditions = append(conditions, fmt.Sprintf("user_id = $%d", len(args)+1))
 		args = append(args, userId)

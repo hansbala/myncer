@@ -1,6 +1,7 @@
 package core
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"golang.org/x/oauth2"
@@ -25,4 +26,12 @@ func ProtoOAuthTokenToOAuth2(oAuthToken *myncer_pb.OAuthToken /*const*/) *oauth2
 		Expiry:       oAuthToken.GetExpiresAt().AsTime(),
 		// ExpiresIn field is only used for JSON marshal / unmarshal so not required to set.
 	}
+}
+
+func DebugPrintJson(v any) {
+	data, err := json.MarshalIndent(v, "" /*prefix*/, "  " /*indent*/)
+	if err != nil {
+		Errorf("could not debug print json", err)
+	}
+	Printf(string(data))
 }
