@@ -117,6 +117,10 @@ psql:
 web-dev:
 	@cd myncer-web && pnpm dev
 
+.PHONY: web-build
+web-build:
+	@cd myncer-web && pnpm install && pnpm build
+
 ##############################################
 # Nix targets.
 ##############################################
