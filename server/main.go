@@ -10,10 +10,26 @@ import (
 	"github.com/hansbala/myncer/datasources"
 	"github.com/hansbala/myncer/handlers"
 	myncer_pb "github.com/hansbala/myncer/proto"
+	"github.com/hansbala/myncer/sync_engine"
 )
 
-var (
-	cHandlersMap = map[string]core.Handler{
+func main() {
+	ctx := context.Background()
+	myncerCtx := core.MustGetMyncerCtx(ctx)
+
+	for pattern, handler := range GetHandlersMap() {
+		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx), myncerCtx))
+	}
+	core.Printf("Myncer listening on port 8080")
+	if err := http.ListenAndServe(":8080", nil /*handler*/); err != nil {
+		core.Errorf("failed: ", err)
+	}
+}
+
+func GetHandlersMap() map[string]core.Handler {
+	spotifyClient := datasources.NewSpotifyClient()
+	youtubeClient := datasources.NewYouTubeClient()
+	return map[string]core.Handler{
 		// User handlers.
 		"/api/v1/users/create": handlers.NewCreateUserHandler(),
 		"/api/v1/users/login":  handlers.NewLoginUserHandler(),
@@ -27,29 +43,17 @@ var (
 		),
 		"/api/v1/datasources/list": handlers.NewListDatasourcesHandler(),
 		"/api/v1/datasources/{datasource}/playlists/list": handlers.NewListDatasourcePlaylistsHandler(
-			datasources.NewSpotifyClient(),
-			datasources.NewYouTubeClient(),
+			spotifyClient,
+			youtubeClient,
 		),
 		// Syncs handlers.
 		"/api/v1/syncs/create": handlers.NewCreateSyncHandler(),
 		"/api/v1/syncs/list":   handlers.NewListSyncsHandler(),
 		"/api/v1/syncs/run": handlers.NewRunSyncHandler(
-			datasources.NewSpotifyClient(),
-			datasources.NewYouTubeClient(),
+			spotifyClient,
+			youtubeClient,
+			sync_engine.NewSyncEngine(spotifyClient, youtubeClient),
 		),
-	}
-)
-
-func main() {
-	ctx := context.Background()
-	myncerCtx := core.MustGetMyncerCtx(ctx)
-
-	for pattern, handler := range cHandlersMap {
-		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx), myncerCtx))
-	}
-	core.Printf("Myncer listening on port 8080")
-	if err := http.ListenAndServe(":8080", nil /*handler*/); err != nil {
-		core.Errorf("failed: ", err)
 	}
 }
 

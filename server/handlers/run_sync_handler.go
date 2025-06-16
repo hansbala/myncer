@@ -12,13 +12,19 @@ import (
 func NewRunSyncHandler(
 	spotifyClient core.DatasourceClient,
 	youtubeClient core.DatasourceClient,
+	syncEngine core.SyncEngine,
 ) core.Handler {
-	return &runSyncHandlerImpl{}
+	return &runSyncHandlerImpl{
+		spotifyClient: spotifyClient,
+		youtubeClient: youtubeClient,
+		syncEngine:    syncEngine,
+	}
 }
 
-type runSyncHandlerImpl struct{
+type runSyncHandlerImpl struct {
 	spotifyClient core.DatasourceClient
 	youtubeClient core.DatasourceClient
+	syncEngine    core.SyncEngine
 }
 
 var _ core.Handler = (*runSyncHandlerImpl)(nil)
@@ -54,8 +60,17 @@ func (rs *runSyncHandlerImpl) ProcessRequest(
 			core.NewError("expected RunSyncRequest got %T", reqBody),
 		)
 	}
-	core.Printf("running sync: ")
-	core.DebugPrintJson(restReq)
+	sync, err := core.ToMyncerCtx(ctx).DB.SyncStore.GetSync(ctx, restReq.GetSyncId())
+	if err != nil {
+		return core.NewProcessRequestResponse_InternalServerError(
+			core.WrappedError(err, "could not get sync by id"),
+		)
+	}
+	if err := rs.syncEngine.RunSync(sync); err != nil {
+		return core.NewProcessRequestResponse_InternalServerError(
+			core.WrappedError(err, "failed to run sync job"),
+		)
+	}
 	return core.NewProcessRequestResponse_OK()
 }
 
