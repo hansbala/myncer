@@ -7,20 +7,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Controller, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { useConnectedDatasources } from "@/hooks/useConnectedDatasources"
 import { usePlaylists } from "@/hooks/usePlaylists"
 import type { Datasource } from "@/generated_api/src"
 import { DatasourceSelector } from "./DatasourceSelector"
 import { PlaylistSelector } from "./PlaylistSelector"
+import { useCreateSync } from "@/hooks/useCreateSync"
+import { Loader2 } from "lucide-react"
 
 type FormValues = {
   sourceDatasource: Datasource
@@ -37,11 +31,11 @@ export const CreateOneWaySyncDialog = () => {
     control,
     watch,
     handleSubmit,
-    setValue,
     formState: { isValid },
   } = useForm<FormValues>({
     mode: "onChange",
   })
+  const { mutate: createSync, isPending: creating } = useCreateSync()
 
   const sourceDatasource = watch("sourceDatasource")
   const targetDatasource = watch("targetDatasource")
@@ -66,6 +60,18 @@ export const CreateOneWaySyncDialog = () => {
         datasource: data.targetDatasource,
         playlistId: data.targetPlaylistId,
       },
+    })
+    createSync({
+      syncVariant: "ONE_WAY",
+      source: {
+        datasource: data.sourceDatasource,
+        playlistId: data.sourcePlaylistId,
+      },
+      destination: {
+        datasource: data.targetDatasource,
+        playlistId: data.targetPlaylistId,
+      },
+      // TODO: Add overwrite existing? to form and then use here.
     })
     setOpen(false)
   }
@@ -128,10 +134,17 @@ export const CreateOneWaySyncDialog = () => {
 
           <Button
             type="submit"
-            disabled={!isValid || isFormLoading}
+            disabled={!isValid || isFormLoading || creating}
             className="w-full"
           >
-            {isFormLoading ? "Loading..." : "Create Sync"}
+            {(isFormLoading || creating) ? (
+              <div className="flex items-center justify-center space-x-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>{isFormLoading ? "Loading..." : "Creating..."}</span>
+              </div>
+            ) : (
+              "Create Sync"
+            )}
           </Button>
         </form>
       </DialogContent>
