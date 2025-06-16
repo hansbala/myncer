@@ -15,23 +15,60 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useForm } from "react-hook-form"
 import { useConnectedDatasources } from "@/hooks/useConnectedDatasources"
+import { usePlaylists } from "@/hooks/usePlaylists"
+import type { Datasource } from "@/generated_api/src"
+
+type FormValues = {
+  sourceDatasource: Datasource
+  sourcePlaylistId: string
+  targetDatasource: Datasource
+  targetPlaylistId: string
+}
 
 export const CreateSyncDialog = () => {
   const [open, setOpen] = useState(false)
-  const { datasources: connectedDatasources, loading } = useConnectedDatasources()
-  const [sourceDatasource, setSourceDatasource] = useState("")
-  const [sourcePlaylist, setSourcePlaylist] = useState("")
-  const [targetDatasource, setTargetDatasource] = useState("")
-  const [targetPlaylist, setTargetPlaylist] = useState("")
+  const { datasources: connectedDatasources, loading: datasourcesLoading } = useConnectedDatasources()
 
-  const handleCreateSync = () => {
+  const {
+    watch,
+    handleSubmit,
+    setValue,
+    formState: { isValid },
+  } = useForm<FormValues>({
+    mode: "onChange",
+  })
+
+  const sourceDatasource = watch("sourceDatasource")
+  const targetDatasource = watch("targetDatasource")
+
+  const {
+    playlists: sourcePlaylists,
+    loading: sourcePlaylistsLoading,
+  } = usePlaylists({ datasource: sourceDatasource })
+
+  const {
+    playlists: targetPlaylists,
+    loading: targetPlaylistsLoading,
+  } = usePlaylists({ datasource: targetDatasource })
+
+  const onSubmit = (data: FormValues) => {
     console.log("Syncing from:", {
-      source: { datasource: sourceDatasource, playlist: sourcePlaylist },
-      target: { datasource: targetDatasource, playlist: targetPlaylist },
+      source: {
+        datasource: data.sourceDatasource,
+        playlistId: data.sourcePlaylistId,
+      },
+      target: {
+        datasource: data.targetDatasource,
+        playlistId: data.targetPlaylistId,
+      },
     })
     setOpen(false)
   }
+
+  const isFormLoading =
+    datasourcesLoading || sourcePlaylistsLoading || targetPlaylistsLoading
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -43,33 +80,34 @@ export const CreateSyncDialog = () => {
           <DialogTitle>Create a new sync</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col space-y-6 py-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-6 py-2">
           {/* Source */}
           <div>
             <Label className="text-sm text-center">Source</Label>
             <div className="grid grid-cols-2 gap-4 mt-1">
-              <Select onValueChange={setSourceDatasource}>
+              <Select onValueChange={(val) => setValue("sourceDatasource", val as Datasource)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Datasource" />
                 </SelectTrigger>
                 <SelectContent>
-                  {
-                    connectedDatasources.map((ds) => (
-                      <SelectItem key={ds} value={ds.toLowerCase()}>
-                        {ds}
-                      </SelectItem>
-                    ))
-                  }
+                  {connectedDatasources.map((ds) => (
+                    <SelectItem key={ds} value={ds}>
+                      {ds}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 
-              <Select onValueChange={setSourcePlaylist}>
+              <Select onValueChange={(val) => setValue("sourcePlaylistId", val)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Playlist" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="liked">Liked Songs</SelectItem>
-                  <SelectItem value="favorites">Favorites</SelectItem>
+                  {sourcePlaylists.map((p) => (
+                    <SelectItem key={p.playlistId} value={p.playlistId}>
+                      {p.name || p.playlistId}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -77,45 +115,44 @@ export const CreateSyncDialog = () => {
 
           {/* Target */}
           <div>
-            <Label className="text-sm">Target</Label>
+            <Label className="text-sm text-center">Target</Label>
             <div className="grid grid-cols-2 gap-4 mt-1">
-              <Select onValueChange={setTargetDatasource}>
+              <Select onValueChange={(val) => setValue("targetDatasource", val as Datasource)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Datasource" />
                 </SelectTrigger>
                 <SelectContent>
-                  {
-                    connectedDatasources.map((ds) => (
-                      <SelectItem key={ds} value={ds.toLowerCase()}>
-                        {ds}
-                      </SelectItem>
-                    ))
-                  }
+                  {connectedDatasources.map((ds) => (
+                    <SelectItem key={ds} value={ds}>
+                      {ds}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 
-              <Select onValueChange={setTargetPlaylist}>
+              <Select onValueChange={(val) => setValue("targetPlaylistId", val)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Playlist" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="liked">Liked Songs</SelectItem>
-                  <SelectItem value="favorites">Favorites</SelectItem>
+                  {targetPlaylists.map((p) => (
+                    <SelectItem key={p.playlistId} value={p.playlistId || ""}>
+                      {p.name || p.playlistId}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           <Button
-            onClick={handleCreateSync}
-            disabled={
-              !sourceDatasource || !sourcePlaylist || !targetDatasource || !targetPlaylist
-            }
+            type="submit"
+            disabled={!isValid || isFormLoading}
             className="w-full"
           >
-            Create Sync
+            {isFormLoading ? "Loading..." : "Create Sync"}
           </Button>
-        </div>
+        </form>
       </DialogContent>
     </Dialog>
   )

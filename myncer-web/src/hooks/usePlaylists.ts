@@ -2,11 +2,13 @@ import type { Datasource, ListDatasourcePlaylistsResponse } from "@/generated_ap
 import { useApiClient } from "./useApiClient";
 import { useQuery } from "@tanstack/react-query";
 
-export const usePlaylists = ({ datasource }: { datasource: Datasource }) => {
+export const usePlaylists = ({ datasource }: { datasource?: Datasource }) => {
   const apiClient = useApiClient()
   const { data: playlistsResponse, isLoading } = useQuery<ListDatasourcePlaylistsResponse>({
     queryKey: ["playlists", "list", datasource],
-    queryFn: () => apiClient.listDatasourcePlaylists({ datasource: datasource }),
+    queryFn: () => apiClient.listDatasourcePlaylists({ datasource: datasource! }),
+    // Only fetch playlists if a datasource is provided.
+    enabled: !!datasource,
     retry: false,
   })
   return {
