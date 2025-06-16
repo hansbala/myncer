@@ -11,10 +11,12 @@ src/models/CreateUserResponse.ts
 src/models/Datasource.ts
 src/models/EditUserRequest.ts
 src/models/ListDatasourcesResponse.ts
+src/models/ListSyncsResponse.ts
 src/models/ListUsersResponse.ts
 src/models/MusicSource.ts
 src/models/OAuthExchangeRequest.ts
 src/models/OneWaySync.ts
+src/models/Sync.ts
 src/models/User.ts
 src/models/UserLoginRequest.ts
 src/models/index.ts

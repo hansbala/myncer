@@ -175,6 +175,18 @@ paths:
           description: Unauthorized
         500:
           description: Internal Server Error
+  /syncs/list:
+    get:
+      summary: List all syncs.
+      description: List all syncs for the current user.
+      operationId: listSyncs
+      responses:
+        200:
+          description: All syncs for the current user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListSyncsResponse"
 components:
   schemas:
     CreateUserRequest:
@@ -267,7 +279,32 @@ components:
     CreateSyncRequest:
       type: object
       required:
+        # This is just a wrapper type so no need for defining in properties.
         - syncVariant
+      discriminator:
+        propertyName: syncVariant
+        mapping:
+          ONE_WAY: "#/components/schemas/OneWaySync"
+      oneOf:
+        - $ref: "#/components/schemas/OneWaySync"
+    Sync:
+      type: object
+      required:
+        # This object includes fields of it's own (createdAt, updatedAt) so we need to define the
+        # variant explicitly on the object.
+        - syncVariant
+        - createdAt
+        - updatedAt
+      properties:
+        syncVariant:
+          type: string
+          description: The variant of the sync
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
       discriminator:
         propertyName: syncVariant
         mapping:
@@ -306,3 +343,10 @@ components:
         playlistId:
           type: string
           description: Unique, stable playlist identifier for the datasource.
+    ListSyncsResponse:
+      type: object
+      properties:
+        syncs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Sync"
