@@ -210,7 +210,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListSyncsResponse"
-  /syncs/runs:
+  /syncs/run:
     post:
       summary: Run a sync for the current user.
       description: |
