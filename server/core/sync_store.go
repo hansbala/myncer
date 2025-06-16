@@ -78,7 +78,7 @@ func (s *syncStoreImpl) getSyncsInternal(
 	r := NewSet[*myncer_pb.Sync]()
 	for rows.Next() {
 		var (
-			sync       *myncer_pb.Sync
+			sync       myncer_pb.Sync
 			protoBytes []byte
 			createdAt  time.Time
 			updatedAt  time.Time
@@ -86,10 +86,10 @@ func (s *syncStoreImpl) getSyncsInternal(
 		if err := rows.Scan(&protoBytes, &createdAt, &updatedAt); err != nil {
 			return nil, WrappedError(err, "failed to scan sync row")
 		}
-		if err := proto.Unmarshal(protoBytes, sync); err != nil {
+		if err := proto.Unmarshal(protoBytes, &sync); err != nil {
 			return nil, WrappedError(err, "failed to unmarshal sync proto")
 		}
-		r.Add(sync)
+		r.Add(&sync)
 	}
 	return r, nil
 }
