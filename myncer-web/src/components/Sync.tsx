@@ -2,27 +2,24 @@ import type { Sync } from "@/generated_api/src"
 import { useRunSync } from "@/hooks/useRunSync"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
+import { OneWaySyncRender } from "./OneWaySyncRender"
 
 export const SyncRender = ({ sync }: { sync: Sync }) => {
   const { runSync, isRunningSync } = useRunSync()
   const { syncData, id, createdAt } = sync
 
+  const renderVariantLabel = () => {
+    return syncData.syncVariant === "ONE_WAY"
+      ? "One-Way"
+      : syncData.syncVariant === "MERGE"
+        ? "Merge"
+        : "Unknown"
+  }
+
   return (
-    <div className="rounded-lg border bg-muted p-4 shadow-sm space-y-2">
-      <div className="flex items-center justify-between items-center">
-        <div className="space-y-1">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-muted-foreground">Sync ID</span>
-            <span className="text-xs text-muted-foreground ml-2">{id.slice(0, 8)}...</span>
-          </div>
-          <div className="text-xs text-muted-foreground italic">
-            {syncData.syncVariant === "ONE_WAY"
-              ? "One-Way Sync"
-              : syncData.syncVariant === "MERGE"
-                ? "Merge Sync"
-                : "Unknown Variant"}
-          </div>
-        </div>
+    <div className="w-full rounded-lg border bg-muted p-4 shadow-sm space-y-4">
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">{renderVariantLabel()} Sync</span>
 
         <Button
           size="sm"
@@ -41,17 +38,7 @@ export const SyncRender = ({ sync }: { sync: Sync }) => {
       </div>
 
       {syncData.syncVariant === "ONE_WAY" && (
-        <>
-          <div className="text-sm">
-            <span className="font-semibold">{syncData.source.datasource}</span> →{" "}
-            <span className="font-semibold">{syncData.destination.datasource}</span>
-          </div>
-          {syncData.overwriteExisting && (
-            <div className="text-xs text-yellow-800 bg-yellow-100 inline-block px-2 py-0.5 rounded">
-              Overwrites destination
-            </div>
-          )}
-        </>
+        <OneWaySyncRender sync={syncData} />
       )}
 
       {syncData.syncVariant === "MERGE" && (
@@ -60,10 +47,14 @@ export const SyncRender = ({ sync }: { sync: Sync }) => {
         </div>
       )}
 
-      <div className="text-xs text-muted-foreground">
-        Created: {new Date(createdAt).toLocaleString()}
+      <div className="space-y-1">
+        <div className="text-xs text-muted-foreground">
+          Last synced details coming soon...
+        </div>
+        <div className="text-xs text-muted-foreground">
+          Created at {new Date(createdAt).toLocaleString()}
+        </div>
       </div>
     </div>
   )
 }
-
