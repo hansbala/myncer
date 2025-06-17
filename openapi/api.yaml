@@ -177,6 +177,37 @@ paths:
           description: Unauthorized
         500:
           description: Internal Server Error
+  /datasource/{datasource}/playlists/{playlistId}:
+    get:
+      summary: Get details of a specific playlist
+      description: Get details of a specific playlist for the current user.
+      operationId: getPlaylistDetails
+      parameters:
+        - name: datasource
+          in: path
+          required: true
+          description: The datasource of the playlist.
+          schema:
+            $ref: "#/components/schemas/Datasource"
+        - name: playlistId
+          in: path
+          required: true
+          description: The unique, stable identifier of the playlist for the datasource.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Details of the specified playlist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Playlist"
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        500:
+          description: Internal Server Error
   /syncs/create:
     post:
       summary: Create a sync for the current user between two (datasource, playlist) tuples.

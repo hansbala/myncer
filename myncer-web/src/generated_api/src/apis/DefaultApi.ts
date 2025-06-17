@@ -25,6 +25,7 @@ import type {
   ListSyncsResponse,
   ListUsersResponse,
   OAuthExchangeRequest,
+  Playlist,
   RunSyncRequest,
   RunSyncResponse,
   User,
@@ -51,6 +52,8 @@ import {
     ListUsersResponseToJSON,
     OAuthExchangeRequestFromJSON,
     OAuthExchangeRequestToJSON,
+    PlaylistFromJSON,
+    PlaylistToJSON,
     RunSyncRequestFromJSON,
     RunSyncRequestToJSON,
     RunSyncResponseFromJSON,
@@ -76,6 +79,11 @@ export interface EditUserOperationRequest {
 export interface ExchangeOAuthCodeRequest {
     datasource: Datasource;
     oAuthExchangeRequest: OAuthExchangeRequest;
+}
+
+export interface GetPlaylistDetailsRequest {
+    datasource: Datasource;
+    playlistId: string;
 }
 
 export interface ListDatasourcePlaylistsRequest {
@@ -264,6 +272,48 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getCurrentUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
         const response = await this.getCurrentUserRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get details of a specific playlist for the current user.
+     * Get details of a specific playlist
+     */
+    async getPlaylistDetailsRaw(requestParameters: GetPlaylistDetailsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Playlist>> {
+        if (requestParameters['datasource'] == null) {
+            throw new runtime.RequiredError(
+                'datasource',
+                'Required parameter "datasource" was null or undefined when calling getPlaylistDetails().'
+            );
+        }
+
+        if (requestParameters['playlistId'] == null) {
+            throw new runtime.RequiredError(
+                'playlistId',
+                'Required parameter "playlistId" was null or undefined when calling getPlaylistDetails().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/datasource/{datasource}/playlists/{playlistId}`.replace(`{${"datasource"}}`, encodeURIComponent(String(requestParameters['datasource']))).replace(`{${"playlistId"}}`, encodeURIComponent(String(requestParameters['playlistId']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PlaylistFromJSON(jsonValue));
+    }
+
+    /**
+     * Get details of a specific playlist for the current user.
+     * Get details of a specific playlist
+     */
+    async getPlaylistDetails(requestParameters: GetPlaylistDetailsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Playlist> {
+        const response = await this.getPlaylistDetailsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
