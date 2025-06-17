@@ -59,6 +59,7 @@ func (s *syncEngineImpl) runOneWaySync(
 		return core.WrappedError(err, "failed to fetch source playlist")
 	}
 
+	// TODO: Normalize songs.
 	searchedSongs, err := s.getSearchedSongs(
 		ctx,
 		userInfo,
@@ -125,20 +126,4 @@ func (s *syncEngineImpl) getClient(
 	default:
 		return nil, core.NewError("unsupported datasource: %v", datasource)
 	}
-}
-
-func getOAuthTokenForDatasource(
-	ctx context.Context,
-	userId string,
-	datasource myncer_pb.Datasource,
-) (*myncer_pb.OAuthToken, error) {
-	oAuthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
-		ctx,
-		userId,
-		datasource,
-	)
-	if err != nil {
-		return nil, core.WrappedError(err, "failed to get OAuth token for datasource %v", datasource)
-	}
-	return oAuthToken, nil
 }
