@@ -1,16 +1,18 @@
-# Myncer
+# Myncer 
 
-Myncer aims to be an all-in-one solution for keeping your music up-to-date across all streaming platforms.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/hansbala/myncer/master/myncer-web/public/myncer.png" alt="Myncer Logo" width="200"/>
+</p>
 
-- Transfer playlists between music platforms
-- Sync playlists (hourly, weekly, bi-weekly, monthly)
-- Better sync options
-  - one-way sync (ex. Spotify is the master and Tidal just mimics Spotify)
-  - two-way merge (ex. Spotify & Tidal are merged into a master list and the master list is propagated to both). This one's the money.
+Myncer aims to be an universal music sync engine for keeping your music synced and up-to-date across all streaming platforms.
 
-## Motivation
+## Features
 
-I'm a huge audiophile and use Tidal for streaming to my Hi-Fi setup and Spotify to discover music. I'm a create-a-playlist for everything kinda guy and always struggle to keep them in sync. I've gotten tired of using proprietary technologies like Soundiiz.com, tunemymusic.com, and such mostly cause I'm a cheapskate and blew all my dough on Hi-Fi speakers 😥. This aims to be an open-source alternative to these tools. I do plan on hosting this at [myncer.hansbala.com](https://myncer.hansbala.com). It shouldn't be too costly.
+- Transfer playlists between music platforms.
+- Sync playlists on a hourly, weekly, bi-weekly, or monthly schedule.
+- Sync options:
+  - One way syncs: (ex. Spotify is the master and Tidal just mimics Spotify)
+  -  (ex. Spotify & Tidal are merged into a master list and the master list is propagated to both). This one's the money.
 
 ## Datasources Supported
 
@@ -67,14 +69,18 @@ An overview of how myncer is designed
 ### Web app
 
 Simple React app written in Typescript. Uses the following technologies:
-- TailwindCSS
-- shadcn/ui component libraries.
+- `TailwindCSS`
+- `shadcn/ui` component library
 
-### Server
+### Server API
 
-Written fully in Golang.
+A minimal-ish web server written in Golang.
 
 ### Database
 
-In production this uses a Cloud SQL postgres database. In local dev environment, it spins up a dev postgres instance.
+In production this uses a Cloud SQL postgres database.
+
+## Motivation
+
+I'm a huge audiophile and use Tidal for streaming to my Hi-Fi setup and Spotify to discover music. I'm a create-a-playlist for everything kinda guy and always struggle to keep them in sync. I've gotten tired of using proprietary technologies like Soundiiz.com, tunemymusic.com, and such mostly cause I'm a cheapskate and blew all my dough on Hi-Fi speakers 😥. This aims to be an open-source alternative to these tools.
 
