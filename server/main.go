@@ -29,6 +29,8 @@ func main() {
 			OpenAILlmClient: llm.NewOpenAILlmClient(),
 		},
 	)
+	ctx = core.WithMyncerCtx(ctx, myncerCtx)
+	// Any testing stuff here.
 
 	for pattern, handler := range GetHandlersMap() {
 		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx), myncerCtx))
@@ -37,14 +39,6 @@ func main() {
 	if err := http.ListenAndServe(":8080", nil /*handler*/); err != nil {
 		core.Errorf("failed: ", err)
 	}
-}
-
-func MustTestGemini(ctx context.Context) {
-	resp, err := core.ToMyncerCtx(ctx).LlmClient.GetResponse(ctx, "myncer system", "respond with a greeting")
-	if err != nil {
-		panic(err)
-	}
-	core.Printf("LLM response: %s", resp)
 }
 
 func GetHandlersMap() map[string]core.Handler {
@@ -142,4 +136,28 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 			}
 		}
 	}
+}
+
+func TestSongs(ctx context.Context) {
+	n := sync_engine.NewLlmSongsNormalizer()
+	testSongs := []*myncer_pb.Song{
+		{
+			Name:             "Michael Jackson - Billie Jean (Live performance at 1986)",
+			ArtistName:       []string{"VEVO Music"},
+			AlbumName:        "Man in the mirror",
+			Datasource:       myncer_pb.Datasource_YOUTUBE,
+			DatasourceSongId: "abcd-12344727-2762",
+		},
+	}
+	core.Printf("-------------")
+	core.Printf("trying to normalize songs: ")
+	core.DebugPrintJson(testSongs)
+
+	normalizedSongs, err := n.NormalizeSongs(ctx, testSongs)
+	if err != nil {
+		panic(err)
+	}
+	core.Printf("-------------")
+	core.Printf("normalized songs: ")
+	core.DebugPrintJson(normalizedSongs)
 }
