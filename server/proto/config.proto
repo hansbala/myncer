@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package myncer;
+
+option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
+
+message Config {
+  // All database specific config lives in here.
+  DatabaseConfig database_config = 1;
+  // What mode the server is configured to run in.
+  ServerMode server_mode = 2;
+  // Can generate using `openssl rand -hex 32`.
+  string jwt_secret = 3;
+  SpotifyConfig spotify_config = 4;
+  YoutubeConfig youtube_config = 5;
+  LlmConfig llm_config = 6;
+
+  // next: 7
+}
+
+message DatabaseConfig {
+  string database_url = 1;
+}
+
+enum ServerMode {
+  UNSPECIFIED = 0;
+  PROD = 1;
+  DEV = 2;
+}
+
+message SpotifyConfig {
+  // Can be obtained from https://console.developers.google.com/apis/credentials.
+  string client_id = 1;
+  string client_secret = 2;
+  string redirect_uri = 3;
+}
+
+message YoutubeConfig {
+  // Can be obtained from https://console.developers.google.com/apis/credentials.
+  string client_id = 1;
+  string client_secret = 2;
+  string redirect_uri = 3;
+}
+
+message LlmConfig {
+  // Whether LLM has been enabled or not.
+  bool enabled = 1;
+  // The preferred provider to use. We can potentially connect multiple LLMs.
+  LlmProvider preferred_provider = 2;
+  // The LlmConfig holds configurations across all providers.
+  GeminiConfig gemini_config = 3;
+  OpenAIConfig openai_config = 4;
+
+  // next: 5
+}
+
+enum LlmProvider {
+  LLM_PROVIDER_UNSPECIFIED = 0;
+  GEMINI = 1;
+  OPENAI = 2;
+}
+
+message GeminiConfig {
+  string api_key = 1;
+}
+
+message OpenAIConfig {
+  string api_key = 2;
+}
