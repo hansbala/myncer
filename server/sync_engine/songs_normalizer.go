@@ -18,7 +18,7 @@ var cNormalizerSystemPrompt embed.FS
 type SongsNormalizer interface {
 	// Makes an LLM call to normalize details of the song.
 	// Helps subsequent search quality dramatically in datasources.
-	NormalizeSongs(ctx context.Context, songs []*myncer_pb.Song /*const*/) ([]*myncer_pb.Song, error)
+	NormalizeSongs(ctx context.Context, songs *core.SongList) (*core.SongList, error)
 }
 
 func NewLlmSongsNormalizer() SongsNormalizer {
@@ -31,8 +31,8 @@ type llmSongsNormalizerImpl struct{}
 
 func (lsn *llmSongsNormalizerImpl) NormalizeSongs(
 	ctx context.Context,
-	songs []*myncer_pb.Song, /*const*/
-) ([]*myncer_pb.Song, error) {
+	songs *core.SongList,
+) (*core.SongList, error) {
 	// Prompt construction.
 	systemPrompt, err := lsn.getSystemPrompt()
 	if err != nil {
@@ -48,7 +48,6 @@ func (lsn *llmSongsNormalizerImpl) NormalizeSongs(
 	if err != nil {
 		return nil, core.WrappedError(err, "failed to get normalizer llm response")
 	}
-
 	// Parse LLM response.
 	normalizedSongs, err := lsn.parseLlmResponse(llmResponse)
 	if err != nil {
@@ -68,22 +67,26 @@ func (lsn *llmSongsNormalizerImpl) getSystemPrompt() (string, error) {
 }
 
 func (lsn *llmSongsNormalizerImpl) getUserPrompt(
-	songs []*myncer_pb.Song, /*const*/
+	songs *core.SongList,
 ) (string, error) {
-	bytes, err := json.MarshalIndent(songs, "", " ")
+	bytes, err := songs.GetLlmJson()
 	if err != nil {
 		return "", core.WrappedError(err, "failed to marshal songs as JSON")
 	}
 	return string(bytes), nil
 }
 
-func (lsn *llmSongsNormalizerImpl) parseLlmResponse(llmResponse string) ([]*myncer_pb.Song, error) {
+func (lsn *llmSongsNormalizerImpl) parseLlmResponse(llmResponse string) (*core.SongList, error) {
 	llmResponse = cleanseJsonBeginAndEndTags(llmResponse)
 	songs := []*myncer_pb.Song{}
 	if err := json.Unmarshal([]byte(llmResponse), &songs); err != nil {
 		return nil, core.WrappedError(err, "failed to unmarshal json from llm")
 	}
-	return songs, nil
+	parsed := []core.Song{}
+	for _, song := range songs {
+		parsed = append(parsed, NewSong(song))
+	}
+	return &core.SongList{Songs: parsed}, nil
 }
 
 func cleanseJsonBeginAndEndTags(i string) string {

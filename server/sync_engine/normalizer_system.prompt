@@ -29,3 +29,4 @@ Couple of pointers to help you in this task:
 - The song details may be partially missing or incorrect. Make sure to use your best judgement.
 - If a match is not found, include your best guess. Having the same number of object in the response is crucial.
 - The song name, artist, and title may be misplaced in the object so consider this too.
+- Never respond with any fields not included in the request since those may not exist in my representation.

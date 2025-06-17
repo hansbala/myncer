@@ -14,7 +14,7 @@ import (
 
 const (
 	// Referenced from the root of the server/ folder.
-	cDevConfigPath = "config.dev.textpb"
+	cDevConfigPath  = "config.dev.textpb"
 	cProdBucketName = "myncer-config"
 	cProdObjectPath = "config.prod.textpb"
 )
@@ -23,7 +23,7 @@ func MustGetConfig() *myncer_pb.Config {
 	// First try getting the config from local filesystem (for dev).
 	devConfig, err := maybeGetDevConfig()
 	if err == nil {
-		DebugPrintJson(devConfig)
+		Printf("Dev config loaded!")
 		return devConfig
 	}
 	Warningf(

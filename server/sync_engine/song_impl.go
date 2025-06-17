@@ -52,6 +52,10 @@ func (s *songImpl) GetIdByDatasource(
 	}
 }
 
+func (s *songImpl) GetSpec() *myncer_pb.Song {
+	return s.spec
+}
+
 func (s *songImpl) getSpotifyId(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const*/

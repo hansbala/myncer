@@ -113,6 +113,10 @@ func (s *syncEngineImpl) getSearchedSongs(
 	return r, nil
 }
 
+func (s *syncEngineImpl) shouldNormalize(ctx context.Context) bool {
+	return core.ToMyncerCtx(ctx).Config.GetLlmConfig().GetEnabled()
+}
+
 func (s *syncEngineImpl) getClient(
 	ctx context.Context,
 	datasource myncer_pb.Datasource,

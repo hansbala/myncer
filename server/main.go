@@ -31,6 +31,7 @@ func main() {
 	)
 	ctx = core.WithMyncerCtx(ctx, myncerCtx)
 	// Any testing stuff here.
+	// TestSongs(ctx)
 
 	for pattern, handler := range GetHandlersMap() {
 		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx), myncerCtx))
@@ -140,7 +141,7 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 
 func TestSongs(ctx context.Context) {
 	n := sync_engine.NewLlmSongsNormalizer()
-	testSongs := []*myncer_pb.Song{
+	protoSongs := []*myncer_pb.Song{
 		{
 			Name:             "Michael Jackson - Billie Jean (Live performance at 1986)",
 			ArtistName:       []string{"VEVO Music"},
@@ -151,13 +152,22 @@ func TestSongs(ctx context.Context) {
 	}
 	core.Printf("-------------")
 	core.Printf("trying to normalize songs: ")
-	core.DebugPrintJson(testSongs)
+	core.DebugPrintJson(protoSongs)
 
-	normalizedSongs, err := n.NormalizeSongs(ctx, testSongs)
+	testSongs := []core.Song{}
+	for _, ps := range protoSongs {
+		testSongs = append(testSongs, sync_engine.NewSong(ps))
+	}
+
+	normalizedSongs, err := n.NormalizeSongs(ctx, &core.SongList{Songs: testSongs})
 	if err != nil {
 		panic(err)
 	}
 	core.Printf("-------------")
 	core.Printf("normalized songs: ")
-	core.DebugPrintJson(normalizedSongs)
+	b, err := normalizedSongs.GetLlmJson()
+	if err != nil {
+		panic(err)
+	}
+	core.Printf(string(b))
 }
