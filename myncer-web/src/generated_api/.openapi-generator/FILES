@@ -9,6 +9,7 @@ src/models/CreateSyncRequest.ts
 src/models/CreateUserRequest.ts
 src/models/CreateUserResponse.ts
 src/models/Datasource.ts
+src/models/DeleteSyncRequest.ts
 src/models/EditUserRequest.ts
 src/models/ListDatasourcePlaylistsResponse.ts
 src/models/ListDatasourcesResponse.ts

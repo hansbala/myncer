@@ -60,12 +60,19 @@ func (rs *runSyncHandlerImpl) ProcessRequest(
 			core.WrappedError(err, "could not get sync by id"),
 		)
 	}
-	if err := rs.syncEngine.RunSync(ctx, userInfo, sync); err != nil {
-		return core.NewProcessRequestResponse_InternalServerError(
-			core.WrappedError(err, "failed to run sync job"),
-		)
-	}
-	return core.NewProcessRequestResponse_OK()
+	// We want to be able to run syncs in the background.
+	ctx = context.WithoutCancel(ctx)
+	go func() {
+		if err := rs.syncEngine.RunSync(ctx, userInfo, sync); err != nil {
+			core.Errorf(core.WrappedError(err, "failed to run sync job"))
+		}
+	}()
+
+	return core.NewProcessRequestResponse(
+		"Sync job accepted and triggered",
+		nil, /*err*/
+		http.StatusAccepted,
+	)
 }
 
 func (rs *runSyncHandlerImpl) validateRequest(

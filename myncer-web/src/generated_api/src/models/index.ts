@@ -4,6 +4,7 @@ export * from './CreateSyncRequest';
 export * from './CreateUserRequest';
 export * from './CreateUserResponse';
 export * from './Datasource';
+export * from './DeleteSyncRequest';
 export * from './EditUserRequest';
 export * from './ListDatasourcePlaylistsResponse';
 export * from './ListDatasourcesResponse';

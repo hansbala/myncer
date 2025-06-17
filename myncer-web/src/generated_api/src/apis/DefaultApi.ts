@@ -19,6 +19,7 @@ import type {
   CreateUserRequest,
   CreateUserResponse,
   Datasource,
+  DeleteSyncRequest,
   EditUserRequest,
   ListDatasourcePlaylistsResponse,
   ListDatasourcesResponse,
@@ -40,6 +41,8 @@ import {
     CreateUserResponseToJSON,
     DatasourceFromJSON,
     DatasourceToJSON,
+    DeleteSyncRequestFromJSON,
+    DeleteSyncRequestToJSON,
     EditUserRequestFromJSON,
     EditUserRequestToJSON,
     ListDatasourcePlaylistsResponseFromJSON,
@@ -70,6 +73,10 @@ export interface CreateSyncOperationRequest {
 
 export interface CreateUserOperationRequest {
     createUserRequest: CreateUserRequest;
+}
+
+export interface DeleteSyncOperationRequest {
+    deleteSyncRequest: DeleteSyncRequest;
 }
 
 export interface EditUserOperationRequest {
@@ -174,6 +181,43 @@ export class DefaultApi extends runtime.BaseAPI {
     async createUser(requestParameters: CreateUserOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateUserResponse> {
         const response = await this.createUserRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Deletes a sync by id. 
+     * Deletes sync by id.
+     */
+    async deleteSyncRaw(requestParameters: DeleteSyncOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['deleteSyncRequest'] == null) {
+            throw new runtime.RequiredError(
+                'deleteSyncRequest',
+                'Required parameter "deleteSyncRequest" was null or undefined when calling deleteSync().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/syncs/delete`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: DeleteSyncRequestToJSON(requestParameters['deleteSyncRequest']),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Deletes a sync by id. 
+     * Deletes sync by id.
+     */
+    async deleteSync(requestParameters: DeleteSyncOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteSyncRaw(requestParameters, initOverrides);
     }
 
     /**
