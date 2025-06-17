@@ -204,47 +204,46 @@ func (s *spotifyClientImpl) Search(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const*/
 	names core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
-	artistNames core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
-	albumNames core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
+	_ core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
+	_ core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
 ) (core.Song, error) {
 	client, err := s.getClient(ctx, userInfo)
 	if err != nil {
 		return nil, core.WrappedError(err, "failed to get spotify client")
 	}
-	// Build search query.
-	var queries []string
-	if names != nil && !names.IsEmpty() {
-		for _, name := range names.ToArray() {
-			queries = append(queries, fmt.Sprintf("track:%s", name))
+
+	// Build OR-grouped qualifiers
+	var clauses []string
+
+	// track names
+	if names != nil {
+		raw := names.ToArray()
+		filtered := filterEmpty(raw)
+		if len(filtered) > 0 {
+			var terms []string
+			for _, n := range filtered {
+				terms = append(terms, fmt.Sprintf(`track:%q`, n))
+			}
+			clauses = append(clauses, "("+strings.Join(terms, " OR ")+")")
 		}
 	}
-	if artistNames != nil && !artistNames.IsEmpty() {
-		for _, artist := range artistNames.ToArray() {
-			queries = append(queries, fmt.Sprintf("artist:%s", artist))
-		}
-	}
-	if albumNames != nil && !albumNames.IsEmpty() {
-		for _, album := range albumNames.ToArray() {
-			queries = append(queries, fmt.Sprintf("album:%s", album))
-		}
-	}
-	if len(queries) == 0 {
+
+	if len(clauses) == 0 {
 		return nil, core.NewError("at least one of name, artist, or album must be provided")
 	}
-	query := strings.Join(queries, " ")
 
-	// Execute search query.
+	query := strings.Join(clauses, " OR ")
+	// Example result:
+	//   (track:"Pressure") OR (artist:"Martin Garrix" OR artist:"Tove Lo")
+
 	searchResult, err := client.Search(ctx, query, spotify.SearchTypeTrack, spotify.Limit(1))
 	if err != nil {
 		return nil, core.WrappedError(err, "spotify search failed for query %q", query)
 	}
-
-	// Check if any tracks were found.
 	if searchResult.Tracks == nil || len(searchResult.Tracks.Tracks) == 0 {
 		return nil, core.NewError("no track found for query %q", query)
 	}
 
-	// Return the first track found.
 	return buildSongFromSpotifyTrack(ctx, &searchResult.Tracks.Tracks[0]), nil
 }
 
@@ -289,7 +288,7 @@ func (s *spotifyClientImpl) getOAuthConfig(ctx context.Context) *oauth2.Config {
 }
 
 func buildSongFromSpotifyTrack(
-	ctx context.Context,
+	_ context.Context,
 	track *spotify.FullTrack, /*const*/
 ) core.Song {
 	return sync_engine.NewSong(
@@ -301,4 +300,14 @@ func buildSongFromSpotifyTrack(
 			DatasourceSongId: track.ID.String(),
 		},
 	)
+}
+
+func filterEmpty(vals []string) (out []string) {
+	for _, v := range vals {
+		v = strings.TrimSpace(v)
+		if v != "" {
+			out = append(out, v)
+		}
+	}
+	return
 }
