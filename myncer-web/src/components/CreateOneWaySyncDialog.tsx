@@ -51,16 +51,6 @@ export const CreateOneWaySyncDialog = () => {
   } = usePlaylists({ datasource: targetDatasource })
 
   const onSubmit = (data: FormValues) => {
-    console.log("Syncing from:", {
-      source: {
-        datasource: data.sourceDatasource,
-        playlistId: data.sourcePlaylistId,
-      },
-      target: {
-        datasource: data.targetDatasource,
-        playlistId: data.targetPlaylistId,
-      },
-    })
     createSync({
       syncVariant: "ONE_WAY",
       source: {
