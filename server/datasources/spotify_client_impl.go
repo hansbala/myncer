@@ -214,18 +214,18 @@ func (s *spotifyClientImpl) Search(
 	// Build search query.
 	var queries []string
 	if names != nil && !names.IsEmpty() {
-		for name := range names {
-			queries = append(queries, fmt.Sprintf("track:\"%s\"", name))
+		for _, name := range names.ToArray() {
+			queries = append(queries, fmt.Sprintf("track:%s", name))
 		}
 	}
 	if artistNames != nil && !artistNames.IsEmpty() {
-		for artist := range artistNames {
-			queries = append(queries, fmt.Sprintf("artist:\"%s\"", artist))
+		for _, artist := range artistNames.ToArray() {
+			queries = append(queries, fmt.Sprintf("artist:%s", artist))
 		}
 	}
 	if albumNames != nil && !albumNames.IsEmpty() {
-		for album := range albumNames {
-			queries = append(queries, fmt.Sprintf("album:\"%s\"", album))
+		for _, album := range albumNames.ToArray() {
+			queries = append(queries, fmt.Sprintf("album:%s", album))
 		}
 	}
 	if len(queries) == 0 {
