@@ -1,6 +1,6 @@
 import type { OneWaySync } from "@/generated_api/src"
 import { usePlaylist } from "@/hooks/usePlaylist"
-import { YoutubeIcon, Music } from "lucide-react"
+import { YoutubeIcon, Music, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export const OneWaySyncRender = ({ sync }: { sync: OneWaySync }) => {
@@ -47,9 +47,7 @@ export const OneWaySyncRender = ({ sync }: { sync: OneWaySync }) => {
     <div className="space-y-2 text-sm w-full">
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
         {renderDatasource(sync.source.datasource, sourcePlaylist?.name, loadingSource)}
-
-        <div className="text-gray-400 text-lg">→</div>
-
+        <ArrowRight />
         <div className="justify-self-end">
           {renderDatasource(sync.destination.datasource, destinationPlaylist?.name, loadingDest)}
         </div>

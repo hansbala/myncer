@@ -42,7 +42,7 @@ export const SyncRender = ({ sync }: { sync: Sync }) => {
       {/* Footer: Metadata */}
       <div className="flex justify-between items-center">
         <div className="space-y-1 text-xs text-muted-foreground">
-          <div>Last synced details coming soon…</div>
+          <div>Last synced at coming soon…</div>
           <div>Created at {new Date(createdAt).toLocaleString()}</div>
         </div>
         {/* Action Buttons */}
