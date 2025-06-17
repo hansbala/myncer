@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useApiClient } from "./useApiClient"
 import type { CreateSyncRequest } from "@/generated_api/src"
+import { toast } from "sonner"
 
 export const useCreateSync = () => {
   const apiClient = useApiClient()
@@ -13,6 +14,7 @@ export const useCreateSync = () => {
       })
     },
     onSuccess: () => {
+      toast.success("Sync created!")
       // Invalidate the syncs list so the new sync shows up in the UI
       queryClient.invalidateQueries({ queryKey: ["syncs", "list"] })
     },
