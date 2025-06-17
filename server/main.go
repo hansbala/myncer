@@ -57,6 +57,7 @@ func GetHandlersMap() map[string]core.Handler {
 		"/api/v1/datasources/{datasource}/playlists/{playlistId}": handlers.NewGetDatasourcePlaylistHandler(),
 		// Syncs handlers.
 		"/api/v1/syncs/create": handlers.NewCreateSyncHandler(),
+		"/api/v1/syncs/delete": handlers.NewDeleteSyncHandler(),
 		"/api/v1/syncs/list":   handlers.NewListSyncsHandler(),
 		"/api/v1/syncs/run":    handlers.NewRunSyncHandler(sync_engine.NewSyncEngine()),
 	}

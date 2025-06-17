@@ -44,7 +44,7 @@ export const OneWaySyncRender = ({ sync }: { sync: OneWaySync }) => {
   }
 
   return (
-    <div className="space-y-2 text-sm w-[80%]">
+    <div className="space-y-2 text-sm w-full">
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
         {renderDatasource(sync.source.datasource, sourcePlaylist?.name, loadingSource)}
 

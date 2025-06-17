@@ -13,6 +13,7 @@ import (
 
 type SyncStore interface {
 	CreateSync(ctx context.Context, sync *myncer_pb.Sync /*const*/) error
+	DeleteSync(ctx context.Context, id string) error
 	GetSync(ctx context.Context, id string) (*myncer_pb.Sync, error)
 	GetSyncs(ctx context.Context, userInfo *myncer_pb.User /*const*/) (Set[*myncer_pb.Sync], error)
 }
@@ -40,6 +41,17 @@ func (s *syncStoreImpl) CreateSync(ctx context.Context, sync *myncer_pb.Sync /*c
 		protoBytes,
 	); err != nil {
 		return WrappedError(err, "failed to create sync in sql")
+	}
+	return nil
+}
+
+func (s *syncStoreImpl) DeleteSync(ctx context.Context, id string) error {
+	if _, err := s.db.ExecContext(
+		ctx,
+		`DELETE FROM syncs WHERE id = $1`,
+		id,
+	); err != nil {
+		return WrappedError(err, "failed to delete sync by id from sql")
 	}
 	return nil
 }
