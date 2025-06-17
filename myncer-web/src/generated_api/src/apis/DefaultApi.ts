@@ -28,7 +28,6 @@ import type {
   OAuthExchangeRequest,
   Playlist,
   RunSyncRequest,
-  RunSyncResponse,
   User,
   UserLoginRequest,
 } from '../models/index';
@@ -59,8 +58,6 @@ import {
     PlaylistToJSON,
     RunSyncRequestFromJSON,
     RunSyncRequestToJSON,
-    RunSyncResponseFromJSON,
-    RunSyncResponseToJSON,
     UserFromJSON,
     UserToJSON,
     UserLoginRequestFromJSON,
@@ -535,7 +532,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * Runs a sync job for the current user. This will execute the sync job immediately. 
      * Run a sync for the current user.
      */
-    async runSyncRaw(requestParameters: RunSyncOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RunSyncResponse>> {
+    async runSyncRaw(requestParameters: RunSyncOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['runSyncRequest'] == null) {
             throw new runtime.RequiredError(
                 'runSyncRequest',
@@ -557,16 +554,15 @@ export class DefaultApi extends runtime.BaseAPI {
             body: RunSyncRequestToJSON(requestParameters['runSyncRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => RunSyncResponseFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Runs a sync job for the current user. This will execute the sync job immediately. 
      * Run a sync for the current user.
      */
-    async runSync(requestParameters: RunSyncOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RunSyncResponse> {
-        const response = await this.runSyncRaw(requestParameters, initOverrides);
-        return await response.value();
+    async runSync(requestParameters: RunSyncOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.runSyncRaw(requestParameters, initOverrides);
     }
 
 }

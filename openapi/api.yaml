@@ -221,8 +221,8 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateSyncRequest"
       responses:
-        202:
-          description: Sync is accepted and triggered.
+        201:
+          description: Sync created successfully.
         400:
           description: Bad Request
         401:
@@ -276,12 +276,8 @@ paths:
             schema:
               $ref: "#/components/schemas/RunSyncRequest"
       responses:
-        200:
-          description: Status of the sync run.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RunSyncResponse"
+        202:
+          description: Sync is accepted and triggered.
         400:
           description: Bad Request
         401:
