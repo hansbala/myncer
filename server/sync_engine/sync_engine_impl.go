@@ -60,10 +60,23 @@ func (s *syncEngineImpl) runOneWaySync(
 	}
 
 	// TODO: Normalize songs.
+	var normalizedSongs *core.SongList
+	if s.shouldNormalize(ctx) {
+		normalizedSongs, err = NewLlmSongsNormalizer().NormalizeSongs(
+			ctx,
+			core.NewSongList(sourceSongs),
+		)
+		if err != nil {
+			return core.WrappedError(err, "failed to normalize songs")
+		}
+	} else {
+		normalizedSongs = core.NewSongList(sourceSongs)
+	}
+
 	searchedSongs, err := s.getSearchedSongs(
 		ctx,
 		userInfo,
-		sourceSongs,
+		normalizedSongs.GetSongs(),
 		sync.GetDestination().GetDatasource(),
 	)
 	if err != nil {

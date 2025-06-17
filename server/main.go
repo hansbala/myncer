@@ -159,7 +159,7 @@ func TestSongs(ctx context.Context) {
 		testSongs = append(testSongs, sync_engine.NewSong(ps))
 	}
 
-	normalizedSongs, err := n.NormalizeSongs(ctx, &core.SongList{Songs: testSongs})
+	normalizedSongs, err := n.NormalizeSongs(ctx, core.NewSongList(testSongs))
 	if err != nil {
 		panic(err)
 	}

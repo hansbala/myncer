@@ -86,7 +86,7 @@ func (lsn *llmSongsNormalizerImpl) parseLlmResponse(llmResponse string) (*core.S
 	for _, song := range songs {
 		parsed = append(parsed, NewSong(song))
 	}
-	return &core.SongList{Songs: parsed}, nil
+	return core.NewSongList(parsed), nil
 }
 
 func cleanseJsonBeginAndEndTags(i string) string {
