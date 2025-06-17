@@ -30,7 +30,7 @@ func main() {
 		},
 	)
 
-	for pattern, handler := range GetHandlersMap(myncerCtx) {
+	for pattern, handler := range GetHandlersMap() {
 		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx), myncerCtx))
 	}
 	core.Printf("Myncer listening on port 8080")
@@ -39,9 +39,15 @@ func main() {
 	}
 }
 
-func GetHandlersMap(
-	myncerCtx *core.MyncerCtx, /*const*/
-) map[string]core.Handler {
+func MustTestGemini(ctx context.Context) {
+	resp, err := core.ToMyncerCtx(ctx).LlmClient.GetResponse(ctx, "myncer system", "respond with a greeting")
+	if err != nil {
+		panic(err)
+	}
+	core.Printf("LLM response: %s", resp)
+}
+
+func GetHandlersMap() map[string]core.Handler {
 	return map[string]core.Handler{
 		// User handlers.
 		"/api/v1/users/create": handlers.NewCreateUserHandler(),
