@@ -51,9 +51,10 @@ func GetHandlersMap() map[string]core.Handler {
 		"/api/v1/users/me":     handlers.NewCurrentUserHandler(),
 		"/api/v1/users/edit":   handlers.NewEditUserHandler(),
 		// Datasource handlers.
-		"/api/v1/auth/{datasource}/exchange":              handlers.NewAuthExchangeHandler(),
-		"/api/v1/datasources/list":                        handlers.NewListDatasourcesHandler(),
-		"/api/v1/datasources/{datasource}/playlists/list": handlers.NewListDatasourcePlaylistsHandler(),
+		"/api/v1/auth/{datasource}/exchange":                      handlers.NewAuthExchangeHandler(),
+		"/api/v1/datasources/list":                                handlers.NewListDatasourcesHandler(),
+		"/api/v1/datasources/{datasource}/playlists/list":         handlers.NewListDatasourcePlaylistsHandler(),
+		"/api/v1/datasources/{datasource}/playlists/{playlistId}": handlers.NewGetDatasourcePlaylistHandler(),
 		// Syncs handlers.
 		"/api/v1/syncs/create": handlers.NewCreateSyncHandler(),
 		"/api/v1/syncs/list":   handlers.NewListSyncsHandler(),

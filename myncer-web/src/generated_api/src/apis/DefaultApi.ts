@@ -299,7 +299,7 @@ export class DefaultApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/datasource/{datasource}/playlists/{playlistId}`.replace(`{${"datasource"}}`, encodeURIComponent(String(requestParameters['datasource']))).replace(`{${"playlistId"}}`, encodeURIComponent(String(requestParameters['playlistId']))),
+            path: `/datasources/{datasource}/playlists/{playlistId}`.replace(`{${"datasource"}}`, encodeURIComponent(String(requestParameters['datasource']))).replace(`{${"playlistId"}}`, encodeURIComponent(String(requestParameters['playlistId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

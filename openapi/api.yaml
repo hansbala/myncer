@@ -177,7 +177,7 @@ paths:
           description: Unauthorized
         500:
           description: Internal Server Error
-  /datasource/{datasource}/playlists/{playlistId}:
+  /datasources/{datasource}/playlists/{playlistId}:
     get:
       summary: Get details of a specific playlist
       description: Get details of a specific playlist for the current user.
