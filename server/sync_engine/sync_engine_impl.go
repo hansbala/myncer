@@ -107,7 +107,7 @@ func (s *syncEngineImpl) getSearchedSongs(
 		newDatasourceSongId, err := song.GetIdByDatasource(ctx, userInfo, datasource)
 		if err != nil {
 			// Just log the error and continue with the next song.
-			core.Errorf(core.WrappedError(err, "failed to get datasource ID for song %s", song.GetName()))
+			core.Errorf(fmt.Sprintf("failed to get datasource ID for song %s: %s", song.GetName()), err.Error())
 			continue
 		}
 		r = append(
