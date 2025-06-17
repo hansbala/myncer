@@ -7,6 +7,8 @@ import (
 	"log"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
+
+	myncer_pb "github.com/hansbala/myncer/proto"
 )
 
 //go:embed schema.sql
@@ -19,8 +21,8 @@ type Database struct {
 	DB                   *sql.DB
 }
 
-func MustGetDatabase(ctx context.Context, config *Config /*const*/) *Database {
-	db, err := sql.Open("pgx", config.DatabaseUrl)
+func MustGetDatabase(ctx context.Context, config *myncer_pb.Config /*const*/) *Database {
+	db, err := sql.Open("pgx", config.DatabaseConfig.DatabaseUrl)
 	if err != nil {
 		panic(WrappedError(err, "failed to open database"))
 	}

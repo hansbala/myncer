@@ -18,6 +18,10 @@ message Config {
   // next: 7
 }
 
+message Configs {
+  repeated Config config = 1;
+}
+
 message DatabaseConfig {
   string database_url = 1;
 }

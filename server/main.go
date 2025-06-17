@@ -9,6 +9,7 @@ import (
 	"github.com/hansbala/myncer/core"
 	"github.com/hansbala/myncer/datasources"
 	"github.com/hansbala/myncer/handlers"
+	myncer_pb "github.com/hansbala/myncer/proto"
 	"github.com/hansbala/myncer/sync_engine"
 )
 
@@ -53,7 +54,7 @@ func WithCors(h http.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Handler 
 		func(w http.ResponseWriter, r *http.Request) {
 			origin := r.Header.Get("Origin")
 			allowedOrigin := ""
-			if myncerCtx.Config.ServerMode == core.SERVER_MODE_DEV {
+			if myncerCtx.Config.ServerMode == myncer_pb.ServerMode_DEV {
 				if origin == "http://localhost:5173" || origin == "http://localhost" {
 					allowedOrigin = origin
 				}

@@ -1,67 +1,97 @@
 package core
 
 import (
+	"context"
+	"fmt"
+	"io"
 	"os"
 
-	"github.com/joho/godotenv"
-)
+	"cloud.google.com/go/storage"
+	"google.golang.org/protobuf/encoding/prototext"
 
-type ServerMode int
+	myncer_pb "github.com/hansbala/myncer/proto"
+)
 
 const (
-	SERVER_MODE_DEV ServerMode = iota
-	SERVER_MODE_PROD
+	// Referenced from the root of the server/ folder.
+	cDevConfigPath = "config.dev.textpb"
+	cProdBucketName = "myncer-config"
+	cProdObjectPath = "config.prod.textpb"
 )
 
-type Config struct {
-	DatabaseUrl   string
-	JwtSecret     string
-	ServerMode    ServerMode
-	SpotifyConfig *SpotifyConfig
-	YoutubeConfig *YoutubeConfig
-}
-
-type SpotifyConfig struct {
-	ClientId     string
-	ClientSecret string
-	RedirectUri  string
-}
-
-type YoutubeConfig struct {
-	ClientId     string
-	ClientSecret string
-	RedirectUri  string
-}
-
-func MustGetConfig() *Config {
-	// Production will cause godotenv to fail so just log as warning.
-	if err := godotenv.Load(); err != nil {
-		Errorf(WrappedError(err, "failed to load config"))
+func MustGetConfig() *myncer_pb.Config {
+	// First try getting the config from local filesystem (for dev).
+	devConfig, err := maybeGetDevConfig()
+	if err == nil {
+		DebugPrintJson(devConfig)
+		return devConfig
 	}
-	var serverMode ServerMode
-	serverModeStr := os.Getenv("SERVER_MODE")
-	switch serverModeStr {
-	case "dev":
-		serverMode = SERVER_MODE_DEV
-	case "prod":
-		serverMode = SERVER_MODE_PROD
+	Warningf(
+		fmt.Sprintf(
+			"failed to get dev config because %s. Falling back to production config",
+			err.Error(),
+		),
+	)
+	// Fallback to prod config.
+	prodConfig, err := getProdConfig()
+	if err != nil {
+		Errorf("failed to get production config")
+		panic(err)
+	}
+	return prodConfig
+}
+
+func maybeGetDevConfig() (*myncer_pb.Config, error) {
+	bytes, err := os.ReadFile(cDevConfigPath)
+	if err != nil {
+		return nil, WrappedError(err, "failed to read dev config file")
+	}
+	config, err := parseConfigFileBytes(bytes)
+	if err != nil {
+		return nil, WrappedError(err, "failed to parse dev config file bytes")
+	}
+	return config, nil
+}
+
+func getProdConfig() (*myncer_pb.Config, error) {
+	ctx := context.Background()
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		return nil, WrappedError(err, "failed to create GCS client")
+	}
+	defer client.Close()
+
+	rc, err := client.Bucket(cProdBucketName).Object(cProdObjectPath).NewReader(ctx)
+	if err != nil {
+		return nil, WrappedError(err, "failed to open config file from GCS")
+	}
+	defer rc.Close()
+
+	bytes, err := io.ReadAll(rc)
+	if err != nil {
+		return nil, WrappedError(err, "failed to read config file bytes from GCS")
+	}
+
+	config, err := parseConfigFileBytes(bytes)
+	if err != nil {
+		return nil, WrappedError(err, "failed to parse prod config bytes")
+	}
+
+	return config, nil
+}
+
+func parseConfigFileBytes(bytes []byte /*const*/) (*myncer_pb.Config, error) {
+	cs := &myncer_pb.Configs{}
+	if err := prototext.Unmarshal(bytes, cs); err != nil {
+		return nil, WrappedError(err, "failed to unmarshal config proto bytes")
+	}
+	configs := cs.GetConfig()
+	switch len(configs) {
+	case 0:
+		return nil, NewError("configs file had no valid configs")
+	case 1:
+		return configs[0], nil
 	default:
-		// Safer to fallback to production.
-		serverMode = SERVER_MODE_PROD
-	}
-	return &Config{
-		DatabaseUrl: os.Getenv("DB_URL"),
-		JwtSecret:   os.Getenv("JWT_SECRET"),
-		ServerMode:  serverMode,
-		SpotifyConfig: &SpotifyConfig{
-			ClientId:     os.Getenv("SPOTIFY_CLIENT_ID"),
-			ClientSecret: os.Getenv("SPOTIFY_CLIENT_SECRET"),
-			RedirectUri:  os.Getenv("SPOTIFY_REDIRECT_URI"),
-		},
-		YoutubeConfig: &YoutubeConfig{
-			ClientId:     os.Getenv("YOUTUBE_CLIENT_ID"),
-			ClientSecret: os.Getenv("YOUTUBE_CLIENT_SECRET"),
-			RedirectUri:  os.Getenv("YOUTUBE_REDIRECT_URI"),
-		},
+		return nil, NewError("config file should declare only one config but had multiple")
 	}
 }

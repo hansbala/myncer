@@ -4,3 +4,5 @@
 thirdparty/
 .DS_Store
 **/node_modules/**
+server/config.dev.textpb
+server/config.prod.textpb

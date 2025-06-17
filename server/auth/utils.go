@@ -26,7 +26,7 @@ func GenerateJWTToken(jwtSecret string, userID string) (string, error) {
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(jwtSecret))
 }
 
-func SetAuthCookie(w http.ResponseWriter, jwtToken string, serverMode core.ServerMode) {
+func SetAuthCookie(w http.ResponseWriter, jwtToken string, serverMode myncer_pb.ServerMode) {
 	http.SetCookie(
 		w,
 		&http.Cookie{
@@ -41,7 +41,7 @@ func SetAuthCookie(w http.ResponseWriter, jwtToken string, serverMode core.Serve
 	)
 }
 
-func ClearAuthCookie(w http.ResponseWriter, serverMode core.ServerMode) {
+func ClearAuthCookie(w http.ResponseWriter, serverMode myncer_pb.ServerMode) {
 	http.SetCookie(
 		w,
 		&http.Cookie{
@@ -113,9 +113,9 @@ func extractUserIdFromJWTCookie(
 	return userId, nil
 }
 
-func isHttpOnly(mode core.ServerMode) bool {
+func isHttpOnly(mode myncer_pb.ServerMode) bool {
 	switch mode {
-	case core.SERVER_MODE_DEV:
+	case myncer_pb.ServerMode_DEV:
 		return false
 	default:
 		return true
