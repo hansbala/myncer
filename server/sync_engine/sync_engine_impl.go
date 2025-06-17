@@ -59,7 +59,7 @@ func (s *syncEngineImpl) runOneWaySync(
 		return core.WrappedError(err, "failed to fetch source playlist")
 	}
 
-	// TODO: Normalize songs.
+	// Normalize songs if supported.
 	var normalizedSongs *core.SongList
 	if s.shouldNormalize(ctx) {
 		normalizedSongs, err = NewLlmSongsNormalizer().NormalizeSongs(
