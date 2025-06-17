@@ -44,10 +44,13 @@ func (s *spotifyClientImpl) ExchangeCodeForToken(
 
 func (s *spotifyClientImpl) GetPlaylist(
 	ctx context.Context,
+	userInfo *myncer_pb.User, /*const*/
 	playlistId string,
-	oAuthToken *myncer_pb.OAuthToken, /*const*/
 ) (*myncer_pb.Playlist, error) {
-	client := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
+	client, err := s.getClient(ctx, userInfo)
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to get spotify client")
+	}
 	if len(playlistId) == 0 {
 		return nil, core.NewError("invalid playlist id")
 	}
@@ -60,11 +63,13 @@ func (s *spotifyClientImpl) GetPlaylist(
 
 func (s *spotifyClientImpl) GetPlaylistSongs(
 	ctx context.Context,
+	userInfo *myncer_pb.User, /*const*/
 	playlistId string,
-	oAuthToken *myncer_pb.OAuthToken, /*const*/
 ) ([]core.Song, error) {
-	client := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
-
+	client, err := s.getClient(ctx, userInfo)
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to get spotify client")
+	}
 	// Use GetPlaylistItems to fetch all songs in the playlist.
 	if len(playlistId) == 0 {
 		return nil, core.NewError("invalid playlist id")
@@ -97,13 +102,16 @@ func (s *spotifyClientImpl) GetPlaylistSongs(
 
 func (s *spotifyClientImpl) GetPlaylists(
 	ctx context.Context,
-	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	userInfo *myncer_pb.User, /*const*/
 ) ([]*myncer_pb.Playlist, error) {
-	clientSDK := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
+	client, err := s.getClient(ctx, userInfo)
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to get spotify client")
+	}
 
 	r := []*myncer_pb.Playlist{}
 	for offset := 0; ; offset += cPageLimit {
-		page, err := clientSDK.CurrentUsersPlaylists(
+		page, err := client.CurrentUsersPlaylists(
 			ctx,
 			spotify.Limit(cPageLimit),
 			spotify.Offset(offset),
@@ -142,12 +150,14 @@ func (s *spotifyClientImpl) GetPlaylists(
 
 func (s *spotifyClientImpl) AddToPlaylist(
 	ctx context.Context,
-	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	userInfo *myncer_pb.User, /*const*/
 	playlistId string, /*const*/
 	songs []core.Song, /*const*/
 ) error {
-	client := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
-
+	client, err := s.getClient(ctx, userInfo)
+	if err != nil {
+		return core.WrappedError(err, "failed to get spotify client")
+	}
 	trackIds := []spotify.ID{}
 	for _, song := range songs {
 		trackIds = append(trackIds, spotify.ID(song.GetId()))
@@ -160,11 +170,13 @@ func (s *spotifyClientImpl) AddToPlaylist(
 
 func (s *spotifyClientImpl) ClearPlaylist(
 	ctx context.Context,
-	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	userInfo *myncer_pb.User, /*const*/
 	playlistId string, /*const*/
 ) error {
-	client := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
-
+	client, err := s.getClient(ctx, userInfo)
+	if err != nil {
+		return core.WrappedError(err, "failed to get spotify client")
+	}
 	// Fetch all track URIs to remove
 	playlistTracks, err := client.GetPlaylistItems(ctx, spotify.ID(playlistId))
 	if err != nil {
@@ -190,11 +202,15 @@ func (s *spotifyClientImpl) ClearPlaylist(
 
 func (s *spotifyClientImpl) Search(
 	ctx context.Context,
-	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	userInfo *myncer_pb.User, /*const*/
 	names core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
 	artistNames core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
 	albumNames core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
 ) (core.Song, error) {
+	client, err := s.getClient(ctx, userInfo)
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to get spotify client")
+	}
 	// Build search query.
 	var queries []string
 	if names != nil && !names.IsEmpty() {
@@ -218,7 +234,6 @@ func (s *spotifyClientImpl) Search(
 	query := strings.Join(queries, " ")
 
 	// Execute search query.
-	client := s.getClient(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
 	searchResult, err := client.Search(ctx, query, spotify.SearchTypeTrack, spotify.Limit(1))
 	if err != nil {
 		return nil, core.WrappedError(err, "spotify search failed for query %q", query)
@@ -233,10 +248,22 @@ func (s *spotifyClientImpl) Search(
 	return buildSongFromSpotifyTrack(ctx, &searchResult.Tracks.Tracks[0]), nil
 }
 
-func (s *spotifyClientImpl) getClient(ctx context.Context, token *oauth2.Token /*const*/) *spotify.Client {
-	tokenSource := s.getOAuthConfig(ctx).TokenSource(ctx, token)
+func (s *spotifyClientImpl) getClient(
+	ctx context.Context,
+	userInfo *myncer_pb.User, /*const*/
+) (*spotify.Client, error) {
+	oAuthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
+		ctx,
+		userInfo.GetId(),
+		myncer_pb.Datasource_SPOTIFY,
+	)
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to get spotify token for user %s", userInfo.GetId())
+	}
+
+	tokenSource := s.getOAuthConfig(ctx).TokenSource(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken))
 	httpClient := oauth2.NewClient(ctx, tokenSource)
-	return spotify.New(httpClient)
+	return spotify.New(httpClient), nil
 }
 
 func (s *spotifyClientImpl) getAuthenticator(ctx context.Context) *spotifyauth.Authenticator {

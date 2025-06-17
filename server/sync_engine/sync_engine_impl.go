@@ -12,7 +12,7 @@ func NewSyncEngine() core.SyncEngine {
 	return &syncEngineImpl{}
 }
 
-type syncEngineImpl struct {}
+type syncEngineImpl struct{}
 
 var _ core.SyncEngine = (*syncEngineImpl)(nil)
 
@@ -54,19 +54,7 @@ func (s *syncEngineImpl) runOneWaySync(
 	}
 
 	// Fetch songs from source playlist
-	sourceOAuthToken, err := getOAuthTokenForDatasource(
-		ctx,
-		userInfo.GetId(),
-		sync.GetSource().GetDatasource(),
-	)
-	if err != nil {
-		return core.WrappedError(err, "failed to get OAuth token for source datasource")
-	}
-	sourceSongs, err := sourceClient.GetPlaylistSongs(
-		ctx,
-		sync.GetSource().GetPlaylistId(),
-		sourceOAuthToken,
-	)
+	sourceSongs, err := sourceClient.GetPlaylistSongs(ctx, userInfo, sync.GetSource().GetPlaylistId())
 	if err != nil {
 		return core.WrappedError(err, "failed to fetch source playlist")
 	}
@@ -82,33 +70,16 @@ func (s *syncEngineImpl) runOneWaySync(
 	}
 
 	// Optionally clear destination playlist
-	destOAuthToken, err := getOAuthTokenForDatasource(
-		ctx,
-		userInfo.GetId(),
-		sync.GetDestination().GetDatasource(),
-	)
-	if err != nil {
-		return core.WrappedError(err, "failed to get OAuth token for destination datasource")
-	}
 	destPlaylistId := sync.GetDestination().GetPlaylistId()
 	if sync.OverwriteExisting {
 		core.Printf("Clearing destination playlist")
-		if err := destClient.ClearPlaylist(
-			ctx,
-			destOAuthToken,
-			destPlaylistId,
-		); err != nil {
+		if err := destClient.ClearPlaylist(ctx, userInfo, destPlaylistId); err != nil {
 			return core.WrappedError(err, "failed to clear destination playlist")
 		}
 	}
 
 	// Add source songs to destination
-	if err := destClient.AddToPlaylist(
-		ctx,
-		destOAuthToken,
-		destPlaylistId,
-		searchedSongs,
-	); err != nil {
+	if err := destClient.AddToPlaylist(ctx, userInfo, destPlaylistId, searchedSongs); err != nil {
 		return core.WrappedError(err, "failed to add songs to destination playlist")
 	}
 	return nil

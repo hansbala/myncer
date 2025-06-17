@@ -41,9 +41,9 @@ func (c *youtubeClientImpl) ExchangeCodeForToken(
 
 func (c *youtubeClientImpl) GetPlaylists(
 	ctx context.Context,
-	token *myncer_pb.OAuthToken, /*const*/
+	userInfo *myncer_pb.User, /*const*/
 ) ([]*myncer_pb.Playlist, error) {
-	svc, err := c.getService(ctx, token)
+	svc, err := c.getService(ctx, userInfo)
 	if err != nil {
 		return nil, core.WrappedError(err, "failed to get YouTube service")
 	}
@@ -74,10 +74,10 @@ func (c *youtubeClientImpl) GetPlaylists(
 
 func (c *youtubeClientImpl) GetPlaylist(
 	ctx context.Context,
+	userInfo *myncer_pb.User, /*const*/
 	id string,
-	oAuthToken *myncer_pb.OAuthToken, /*const*/
 ) (*myncer_pb.Playlist, error) {
-	svc, err := c.getService(ctx, oAuthToken)
+	svc, err := c.getService(ctx, userInfo)
 	if err != nil {
 		return nil, core.WrappedError(err, "failed to get YouTube service")
 	}
@@ -98,10 +98,10 @@ func (c *youtubeClientImpl) GetPlaylist(
 
 func (c *youtubeClientImpl) GetPlaylistSongs(
 	ctx context.Context,
+	userInfo *myncer_pb.User, /*const*/
 	playlistId string,
-	oAuthToken *myncer_pb.OAuthToken,
 ) ([]core.Song, error) {
-	svc, err := c.getService(ctx, oAuthToken)
+	svc, err := c.getService(ctx, userInfo)
 	if err != nil {
 		return nil, core.WrappedError(err, "failed to get YouTube service")
 	}
@@ -137,11 +137,11 @@ func (c *youtubeClientImpl) GetPlaylistSongs(
 
 func (c *youtubeClientImpl) AddToPlaylist(
 	ctx context.Context,
-	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	userInfo *myncer_pb.User, /*const*/
 	playlistId string,
 	songs []core.Song,
 ) error {
-	svc, err := c.getService(ctx, oAuthToken)
+	svc, err := c.getService(ctx, userInfo)
 	if err != nil {
 		return core.WrappedError(err, "failed to get YouTube service")
 	}
@@ -168,10 +168,10 @@ func (c *youtubeClientImpl) AddToPlaylist(
 
 func (c *youtubeClientImpl) ClearPlaylist(
 	ctx context.Context,
-	oAuthToken *myncer_pb.OAuthToken,
+	userInfo *myncer_pb.User, /*const*/
 	playlistId string,
 ) error {
-	svc, err := c.getService(ctx, oAuthToken)
+	svc, err := c.getService(ctx, userInfo)
 	if err != nil {
 		return core.WrappedError(err, "failed to get YouTube service")
 	}
@@ -205,11 +205,15 @@ func (c *youtubeClientImpl) ClearPlaylist(
 
 func (s *youtubeClientImpl) Search(
 	ctx context.Context,
-	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	userInfo *myncer_pb.User, /*const*/
 	names core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
 	artistNames core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
 	albumNames core.Set[string], /*const,@nullable*/ // nil, empty indicates no filtering.
 ) (core.Song, error) {
+	svc, err := s.getService(ctx, userInfo)
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to get YouTube service")
+	}
 	// Build query string
 	var queryParts []string
 	if names != nil && !names.IsEmpty() {
@@ -232,10 +236,6 @@ func (s *youtubeClientImpl) Search(
 	}
 	query := strings.Join(queryParts, " ")
 
-	svc, err := s.getService(ctx, oAuthToken)
-	if err != nil {
-		return nil, core.WrappedError(err, "failed to get YouTube service")
-	}
 	call := svc.Search.List([]string{"snippet"}).
 		Q(query).
 		Type("video").
@@ -260,8 +260,16 @@ func (s *youtubeClientImpl) Search(
 
 func (c *youtubeClientImpl) getService(
 	ctx context.Context,
-	oAuthToken *myncer_pb.OAuthToken, /*const*/
+	userInfo *myncer_pb.User, /*const*/
 ) (*youtube.Service, error) {
+	oAuthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
+		ctx,
+		userInfo.GetId(),
+		myncer_pb.Datasource_YOUTUBE,
+	)
+	if err != nil {
+		return nil, core.WrappedError(err, "failed to get youtube token for user %s", userInfo.GetId())
+	}
 	httpClient := oauth2.NewClient(
 		ctx,
 		c.getOAuthConfig(ctx).TokenSource(ctx, core.ProtoOAuthTokenToOAuth2(oAuthToken)),

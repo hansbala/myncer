@@ -53,18 +53,7 @@ func (ldp *listDsPlaylistsHandlerImpl) ProcessRequest(
 			core.WrappedError(err, "failed to get datasource client from request path"),
 		)
 	}
-	oAuthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
-		ctx,
-		userInfo.GetId(),
-		ds,
-	)
-	if err != nil {
-		return core.NewProcessRequestResponse_InternalServerError(
-			core.WrappedError(err, "failed to get OAuth token for current user for datasource %v", ds),
-		)
-	}
-
-	playlists, err := dsClient.GetPlaylists(ctx, oAuthToken)
+	playlists, err := dsClient.GetPlaylists(ctx, userInfo)
 	if err != nil {
 		return core.NewProcessRequestResponse_InternalServerError(
 			core.WrappedError(err, "failed to get playlists for current user"),

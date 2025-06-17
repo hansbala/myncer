@@ -11,12 +11,12 @@ func NewSong(
 	spec *myncer_pb.Song, /*const*/
 ) core.Song {
 	return &songImpl{
-		spec:          spec,
+		spec: spec,
 	}
 }
 
 type songImpl struct {
-	spec          *myncer_pb.Song
+	spec *myncer_pb.Song
 }
 
 var _ core.Song = (*songImpl)(nil)
@@ -59,19 +59,10 @@ func (s *songImpl) getSpotifyId(
 	if s.spec.GetDatasource() == myncer_pb.Datasource_SPOTIFY {
 		return s.spec.GetDatasourceSongId(), nil
 	}
-	myncerCtx := core.ToMyncerCtx(ctx)
-	oAuthToken, err := myncerCtx.DB.DatasourceTokenStore.GetToken(
-		ctx,
-		userInfo.GetId(),
-		myncer_pb.Datasource_SPOTIFY,
-	)
-	if err != nil {
-		return "", core.WrappedError(err, "failed to get OAuth token for Spotify")
-	}
 	// Otherwise, try searching Spotify
-	result, err := myncerCtx.DatasourceClients.SpotifyClient.Search(
+	result, err := core.ToMyncerCtx(ctx).DatasourceClients.SpotifyClient.Search(
 		ctx,
-		oAuthToken,
+		userInfo,
 		core.NewSet(s.GetName()),
 		core.NewSet(s.GetArtistNames()...),
 		core.NewSet(s.GetAlbum()),
@@ -89,19 +80,10 @@ func (s *songImpl) getYoutubeId(
 	if s.spec.GetDatasource() == myncer_pb.Datasource_YOUTUBE {
 		return s.spec.GetDatasourceSongId(), nil
 	}
-	myncerCtx := core.ToMyncerCtx(ctx)
-	oAuthToken, err := myncerCtx.DB.DatasourceTokenStore.GetToken(
-		ctx,
-		userInfo.GetId(),
-		myncer_pb.Datasource_YOUTUBE,
-	)
-	if err != nil {
-		return "", core.WrappedError(err, "failed to get OAuth token for Youtube")
-	}
 	// Otherwise, try searching Youtube.
-	result, err := myncerCtx.DatasourceClients.YoutubeClient.Search(
+	result, err := core.ToMyncerCtx(ctx).DatasourceClients.YoutubeClient.Search(
 		ctx,
-		oAuthToken,
+		userInfo,
 		core.NewSet(s.GetName()),
 		core.NewSet(s.GetArtistNames()...),
 		core.NewSet(s.GetAlbum()),
