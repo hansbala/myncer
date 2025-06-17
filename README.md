@@ -12,7 +12,7 @@ Myncer aims to be an universal music sync engine for keeping your music synced a
 - Sync playlists on a hourly, weekly, bi-weekly, or monthly schedule.
 - Sync options:
   - One way syncs: (ex. Spotify is the master and Tidal just mimics Spotify)
-  -  (ex. Spotify & Tidal are merged into a master list and the master list is propagated to both). This one's the money.
+  - Merge syncs: (ex. Spotify & Tidal are merged into a list and that list is propagated to both). This one's the money.
 
 ## Datasources Supported
 
@@ -25,7 +25,7 @@ Myncer aims to be an universal music sync engine for keeping your music synced a
 ### Prerequisites:
 - [Nix](https://nixos.org/download.html) for development environment
 
-### Initial setup.
+### Initial setup
 
 ```console
 make nix
