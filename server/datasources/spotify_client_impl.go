@@ -81,7 +81,7 @@ func (s *spotifyClientImpl) GetPlaylistSongs(
 		if err != nil {
 			return nil, core.WrappedError(
 				err,
-				"failed to get playlist items for playlist %s at offset",
+				"failed to get playlist items for playlist %s at offset %d",
 				playlistId,
 				offset,
 			)

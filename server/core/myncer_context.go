@@ -10,6 +10,7 @@ type MyncerCtx struct {
 	DB                *Database          /*const*/
 	DatasourceClients *DatasourceClients /*const*/
 	Config            *Config            /*const*/
+	LlmClient         LlmClient          /*@nullable*/ // nil if LLM is disabled
 }
 
 type DatasourceClients struct {
