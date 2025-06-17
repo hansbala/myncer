@@ -21,9 +21,6 @@ func (s *syncEngineImpl) RunSync(
 	userInfo *myncer_pb.User, /*const*/
 	sync *myncer_pb.Sync, /*const*/
 ) error {
-	core.Printf("Running sync in engine...")
-	core.DebugPrintJson(sync)
-
 	switch sync.GetSyncVariant().(type) {
 	case *myncer_pb.Sync_OneWaySync:
 		if err := s.runOneWaySync(
