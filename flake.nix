@@ -16,6 +16,7 @@
             pkgs.pnpm
             pkgs.protobuf
             pkgs.openjdk17
+            pkgs.docker
           ];
 
           shellHook = ''

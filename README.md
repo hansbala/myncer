@@ -1,6 +1,6 @@
-# Myncer ↔️ [pronounced min-suh]
+# Myncer
 
-Myncer (short for Music Syncer) aims to be an all-in-one solution for keeping your music up-to-date across all streaming platforms.
+Myncer aims to be an all-in-one solution for keeping your music up-to-date across all streaming platforms.
 
 - Transfer playlists between music platforms
 - Sync playlists (hourly, weekly, bi-weekly, monthly)
@@ -10,17 +10,55 @@ Myncer (short for Music Syncer) aims to be an all-in-one solution for keeping yo
 
 ## Motivation
 
-I'm a huge audiophile and use Tidal for streaming to my Hi-Fi setup and Spotify to discover music. I'm a create-a-playlist for everything kinda guy and always struggle to keep them in sync.
+I'm a huge audiophile and use Tidal for streaming to my Hi-Fi setup and Spotify to discover music. I'm a create-a-playlist for everything kinda guy and always struggle to keep them in sync. I've gotten tired of using proprietary technologies like Soundiiz.com, tunemymusic.com, and such mostly cause I'm a cheapskate and blew all my dough on Hi-Fi speakers 😥. This aims to be an open-source alternative to these tools. I do plan on hosting this at [myncer.hansbala.com](https://myncer.hansbala.com). It shouldn't be too costly.
 
-I've gotten tired of using proprietary technologies like Soundiiz.com, tunemymusic.com, and such mostly cause I'm a cheapskate and blew all my dough on Hi-Fi speakers 😥
-
-This aims to be an open-source alternative to these tools. I do plan on hosting this at [myncer.hansbala.com](https://myncer.hansbala.com). It shouldn't be too costly.
-
-## Current Platforms supported
+## Datasources Supported
 
 - Spotify
 - Tidal
 - Youtube (with the music videos)
+
+## Development
+
+### Prerequisites:
+- [Nix](https://nixos.org/download.html) for development environment
+
+### Initial setup.
+
+```console
+make nix
+make config
+```
+
+After running `make config`, make sure to edit `server/config.dev.textpb` and `web/.env`
+
+### Fullstack Run
+
+```console
+make up
+```
+
+To kill everything
+```console
+make down
+```
+
+### Focus Development
+
+Database
+```console
+make db-up
+```
+
+Server
+```console
+make server-dev
+```
+
+Web App
+```console
+make web-dev
+```
 
 ## Technologies
 
@@ -40,25 +78,3 @@ Written fully in Golang.
 
 In production this uses a Cloud SQL postgres database. In local dev environment, it spins up a dev postgres instance.
 
-## Development
-
-### Initial setup.
-
-```console
-git clone git@github.com:hansbala/myncer.git
-cd myncer/
-make nix
-```
-
-### Full stack development
-
-After setting up the nix environment, you would also need to setup the env variables for each service. Then,
-
-```console
-# Spins up a test database.
-make database
-# Starts the server.
-make server-run
-# Starts the frontend web app.
-make frontend
-```
