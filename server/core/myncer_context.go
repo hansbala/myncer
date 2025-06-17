@@ -20,19 +20,25 @@ type DatasourceClients struct {
 	YoutubeClient DatasourceClient
 }
 
+type LlmClients struct {
+	GeminiLlmClient LlmClient
+	OpenAILlmClient LlmClient
+}
+
 func MustGetMyncerCtx(
 	ctx context.Context,
-	spotifyClient DatasourceClient,
-	youtubeClient DatasourceClient,
+	datasourceClients *DatasourceClients, /*const*/
+	llmClients *LlmClients, /*const*/
 ) *MyncerCtx {
 	config := MustGetConfig()
 	return &MyncerCtx{
 		Config: config,
 		DB:     MustGetDatabase(ctx, config),
 		DatasourceClients: &DatasourceClients{
-			SpotifyClient: spotifyClient,
-			YoutubeClient: youtubeClient,
+			SpotifyClient: datasourceClients.SpotifyClient,
+			YoutubeClient: datasourceClients.YoutubeClient,
 		},
+		LlmClient: MustGetLlmClient(ctx, llmClients, config),
 	}
 }
 
@@ -50,4 +56,24 @@ func ToMyncerCtx(ctx context.Context) *MyncerCtx {
 		panic("failed to cast to myncer ctx type")
 	}
 	return res
+}
+
+func MustGetLlmClient(
+	ctx context.Context,
+	llmClients *LlmClients, /*const*/
+	config *myncer_pb.Config, /*const*/
+) LlmClient /*@nullable*/ {
+	llmConfig := config.GetLlmConfig()
+	if !llmConfig.GetEnabled() {
+		return nil
+	}
+	provider := llmConfig.GetPreferredProvider()
+	switch provider {
+	case myncer_pb.LlmProvider_GEMINI:
+		return llmClients.GeminiLlmClient
+	case myncer_pb.LlmProvider_OPENAI:
+		return llmClients.OpenAILlmClient
+	default:
+		panic("unsupported LLM provider: " + provider.String())
+	}
 }

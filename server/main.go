@@ -9,6 +9,7 @@ import (
 	"github.com/hansbala/myncer/core"
 	"github.com/hansbala/myncer/datasources"
 	"github.com/hansbala/myncer/handlers"
+	"github.com/hansbala/myncer/llm"
 	myncer_pb "github.com/hansbala/myncer/proto"
 	"github.com/hansbala/myncer/sync_engine"
 )
@@ -17,7 +18,17 @@ func main() {
 	ctx := context.Background()
 	spotifyClient := datasources.NewSpotifyClient()
 	youtubeClient := datasources.NewYouTubeClient()
-	myncerCtx := core.MustGetMyncerCtx(ctx, spotifyClient, youtubeClient)
+	myncerCtx := core.MustGetMyncerCtx(
+		ctx,
+		&core.DatasourceClients{
+			SpotifyClient: spotifyClient,
+			YoutubeClient: youtubeClient,
+		},
+		&core.LlmClients{
+			GeminiLlmClient: llm.NewGeminiLlmClient(),
+			OpenAILlmClient: llm.NewOpenAILlmClient(),
+		},
+	)
 
 	for pattern, handler := range GetHandlersMap(myncerCtx) {
 		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx), myncerCtx))
