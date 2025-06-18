@@ -53,16 +53,34 @@ func main() {
 
 	// GRPC server.
 	go func() {
-		greeter := services.NewUserService()
+		userService := services.NewUserService()
+		// this gives you the path pattern and the bare connect handler
+		path, grpcHandler := myncer_pb_connect.NewUserServiceHandler(userService)
+
+		// wrap it step by step:
+		var h http.Handler = grpcHandler
+		// 3️⃣ apply CORS for all gRPC calls
+		h = WithGRPCCors(h, myncerCtx)
+		// 2️⃣ attach a possible user from the JWT (if present)
+		h = WithPossibleUser(h, myncerCtx)
+		// 1️⃣ inject your MyncerCtx into every request context
+		h = WithMyncerCtx(h, myncerCtx)
+
+		// register the fully-wrapped handler
 		mux := http.NewServeMux()
-		path, handler := myncer_pb_connect.NewUserServiceHandler(greeter)
-		mux.Handle(path, WithGRPCCors(handler, myncerCtx))
-		http.ListenAndServe(
-			"localhost:6969",
-			// Use h2c so we can serve HTTP/2 without TLS.
-			h2c.NewHandler(mux, &http2.Server{}),
-		)
+		mux.Handle(path, h)
+
+		// and finally serve it over HTTP/2 (h2c)
+		server := &http.Server{
+			Addr:    "localhost:6969",
+			Handler: h2c.NewHandler(mux, &http2.Server{}),
+		}
+		core.Printf("gRPC listening on port 6969")
+		if err := server.ListenAndServe(); err != nil {
+			core.Errorf(core.WrappedError(err, "gRPC server error"))
+		}
 	}()
+
 	// Keep server alive.
 	for {
 	}
@@ -89,12 +107,44 @@ func GetHandlersMap() map[string]core.Handler {
 	}
 }
 
+func WithMyncerCtx(h http.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Handler {
+	return http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			// Create custom ctx passing myncer ctx down with it.
+			ctx := core.WithMyncerCtx(r.Context(), myncerCtx)
+			// Set the context in the request.
+			r = r.WithContext(ctx)
+			// Serve the request.
+			h.ServeHTTP(w, r)
+		},
+	)
+}
+
+func WithPossibleUser(h http.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Handler {
+	return http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			ctx := r.Context()
+			// Get user based on JWT auth.
+			user, err := auth.MaybeGetUserFromRequest(ctx, myncerCtx, r)
+			if err != nil {
+				core.Warning(core.WrappedError(err, "failed to get user from request for proto handler"))
+			}
+			// Set user in myncerCtx if it exists.
+			if user != nil {
+				core.ToMyncerCtx(ctx).SetRequestUser(user)
+			}
+			h.ServeHTTP(w, r)
+		},
+	)
+}
+
 func WithGRPCCors(h http.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Handler {
 	middleware := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:5173", "https://myncer.hansbala.com"},
-		AllowedMethods: connect_cors.AllowedMethods(),
-		AllowedHeaders: connect_cors.AllowedHeaders(),
-		ExposedHeaders: connect_cors.ExposedHeaders(),
+		AllowedOrigins:   []string{"http://localhost:5173", "https://myncer.hansbala.com"},
+		AllowedMethods:   connect_cors.AllowedMethods(),
+		AllowedHeaders:   connect_cors.AllowedHeaders(),
+		ExposedHeaders:   connect_cors.ExposedHeaders(),
+		AllowCredentials: true, // for cookies
 	})
 	return middleware.Handler(h)
 }
@@ -132,7 +182,7 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 		ctx := core.WithMyncerCtx(r.Context(), myncerCtx)
 
 		// Get user based on JWT auth.
-		user, err := auth.MaybeGetUserFromRequest(ctx, r)
+		user, err := auth.MaybeGetUserFromRequest(ctx, myncerCtx, r)
 		if err != nil {
 			// Not a fatal case. Expected for unathenticated endpoints.
 			// Logging error for now but if it gets too much, we can remove.

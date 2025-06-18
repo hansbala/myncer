@@ -26,44 +26,14 @@ func GenerateJWTToken(jwtSecret string, userID string) (string, error) {
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(jwtSecret))
 }
 
-func SetAuthCookie(w http.ResponseWriter, jwtToken string, serverMode myncer_pb.ServerMode) {
-	http.SetCookie(
-		w,
-		&http.Cookie{
-			Name:     cJwtCookieName,
-			Value:    jwtToken,
-			Path:     "/",
-			HttpOnly: isHttpOnly(serverMode),
-			Secure:   true, // Send the cookie only over HTTPS.
-			SameSite: http.SameSiteStrictMode,
-			Expires:  time.Now().Add(24 * time.Hour),
-		},
-	)
-}
-
-func ClearAuthCookie(w http.ResponseWriter, serverMode myncer_pb.ServerMode) {
-	http.SetCookie(
-		w,
-		&http.Cookie{
-			Name:     cJwtCookieName,
-			Value:    "",
-			Path:     "/",
-			HttpOnly: isHttpOnly(serverMode),
-			Secure:   true,
-			SameSite: http.SameSiteStrictMode,
-			Expires:  time.Unix(0, 0),
-			MaxAge:   -1,
-		},
-	)
-}
-
 func MaybeGetUserFromRequest(
 	ctx context.Context,
+	myncerCtx *core.MyncerCtx, /*const*/
 	r *http.Request, /*const*/
 ) (*myncer_pb.User /*@nullable*/, error) {
-	myncerCtx := core.ToMyncerCtx(ctx)
 	userId, err := extractUserIdFromJWTCookie(myncerCtx.Config.JwtSecret, r)
 	if err != nil {
+		core.Printf(r.URL.Path)
 		return nil, core.WrappedError(err, "failed to extract user id from jwt cookie")
 	}
 	user, err := myncerCtx.DB.UserStore.GetUserById(ctx, userId)

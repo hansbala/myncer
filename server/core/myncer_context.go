@@ -12,7 +12,12 @@ type MyncerCtx struct {
 	DB                *Database          /*const*/
 	DatasourceClients *DatasourceClients /*const*/
 	Config            *myncer_pb.Config  /*const*/
-	LlmClient         LlmClient          /*@nullable*/ // nil if LLM is disabled
+	LlmClient         LlmClient          /*@nullable*/       // nil if LLM is disabled
+	RequestUser       *myncer_pb.User    /*const,@nullable*/ // nil if the user is not authenticated
+}
+
+func (m *MyncerCtx) SetRequestUser(user *myncer_pb.User /*const*/) {
+	m.RequestUser = user
 }
 
 type DatasourceClients struct {

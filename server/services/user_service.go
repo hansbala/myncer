@@ -5,6 +5,7 @@ import (
 
 	"connectrpc.com/connect"
 
+	// "github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 	myncer_pb_connect "github.com/hansbala/myncer/proto/myncer/myncer_pbconnect"
 )
@@ -21,9 +22,10 @@ func (s *UserService) CreateUser(
 	ctx context.Context,
 	req *connect.Request[myncer_pb.CreateUserRequest], /*const*/
 ) (*connect.Response[myncer_pb.CreateUserResponse], error) {
+	// currUser := core.ToMyncerCtx(ctx).RequestUser
+	// core.DebugPrintJson(currUser)
 	res := connect.NewResponse(&myncer_pb.CreateUserResponse{
 		Greeting: "Hello from Hans!",
 	})
-	res.Header().Set("Greet-Version", "v1")
 	return res, nil
 }
