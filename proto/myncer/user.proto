@@ -15,14 +15,71 @@ message User {
   string hashed_password = 5;
 }
 
+// Safe to expose to the public.
+message PublicUser {
+  // google/uuid generated UUID.
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+}
+
 service UserService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc LoginUser(LoginUserRequest) returns (LoginUserResponse);
+  rpc LogoutUser(LogoutUserRequest) returns (LogoutUserResponse);
+  rpc EditUser(EditUserRequest) returns (EditUserResponse);
+  rpc GetCurrentUser(CurrentUserRequest) returns (CurrentUserResponse);
 }
 
 message CreateUserRequest {
-  string name = 1;
+  string first_name = 1;
+  string last_name = 2;
+  string email = 3;
+  // The plain text password of the user.
+  string password = 4;
 }
 
 message CreateUserResponse {
-  string greeting = 1;
+  // Id of the created user.
+  string id = 1;
+}
+
+message LoginUserRequest {
+  string email = 1;
+  // The plain text password of the user.
+  string password = 2;
+}
+
+message LoginUserResponse {
+  // Id of the logged in user.
+  string id = 1;
+}
+
+message LogoutUserRequest {
+  // Id of the user to be logged out.
+  string id = 1;
+}
+
+message LogoutUserResponse {
+  // Id of the logged out user.
+  string id = 1;
+}
+
+message EditUserRequest {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+}
+
+message EditUserResponse {
+  PublicUser user = 1;
+}
+
+message CurrentUserRequest {
+}
+
+message CurrentUserResponse {
+  PublicUser user = 1;
 }

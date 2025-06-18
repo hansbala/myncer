@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file myncer/user.proto.
  */
 export const file_myncer_user: GenFile = /*@__PURE__*/
-  fileDesc("ChFteW5jZXIvdXNlci5wcm90bxIGbXluY2VyImEKBFVzZXISCgoCaWQYASABKAkSEgoKZmlyc3RfbmFtZRgCIAEoCRIRCglsYXN0X25hbWUYAyABKAkSDQoFZW1haWwYBCABKAkSFwoPaGFzaGVkX3Bhc3N3b3JkGAUgASgJIiEKEUNyZWF0ZVVzZXJSZXF1ZXN0EgwKBG5hbWUYASABKAkiJgoSQ3JlYXRlVXNlclJlc3BvbnNlEhAKCGdyZWV0aW5nGAEgASgJMlIKC1VzZXJTZXJ2aWNlEkMKCkNyZWF0ZVVzZXISGS5teW5jZXIuQ3JlYXRlVXNlclJlcXVlc3QaGi5teW5jZXIuQ3JlYXRlVXNlclJlc3BvbnNlQjNaMWdpdGh1Yi5jb20vaGFuc2JhbGEvbXluY2VyL3Byb3RvL215bmNlcjtteW5jZXJfcGJiBnByb3RvMw");
+  fileDesc("ChFteW5jZXIvdXNlci5wcm90bxIGbXluY2VyImEKBFVzZXISCgoCaWQYASABKAkSEgoKZmlyc3RfbmFtZRgCIAEoCRIRCglsYXN0X25hbWUYAyABKAkSDQoFZW1haWwYBCABKAkSFwoPaGFzaGVkX3Bhc3N3b3JkGAUgASgJIk4KClB1YmxpY1VzZXISCgoCaWQYASABKAkSEgoKZmlyc3RfbmFtZRgCIAEoCRIRCglsYXN0X25hbWUYAyABKAkSDQoFZW1haWwYBCABKAkiWwoRQ3JlYXRlVXNlclJlcXVlc3QSEgoKZmlyc3RfbmFtZRgBIAEoCRIRCglsYXN0X25hbWUYAiABKAkSDQoFZW1haWwYAyABKAkSEAoIcGFzc3dvcmQYBCABKAkiIAoSQ3JlYXRlVXNlclJlc3BvbnNlEgoKAmlkGAEgASgJIjMKEExvZ2luVXNlclJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiHwoRTG9naW5Vc2VyUmVzcG9uc2USCgoCaWQYASABKAkiHwoRTG9nb3V0VXNlclJlcXVlc3QSCgoCaWQYASABKAkiIAoSTG9nb3V0VXNlclJlc3BvbnNlEgoKAmlkGAEgASgJIlMKD0VkaXRVc2VyUmVxdWVzdBIKCgJpZBgBIAEoCRISCgpmaXJzdF9uYW1lGAIgASgJEhEKCWxhc3RfbmFtZRgDIAEoCRINCgVlbWFpbBgEIAEoCSI0ChBFZGl0VXNlclJlc3BvbnNlEiAKBHVzZXIYASABKAsyEi5teW5jZXIuUHVibGljVXNlciIUChJDdXJyZW50VXNlclJlcXVlc3QiNwoTQ3VycmVudFVzZXJSZXNwb25zZRIgCgR1c2VyGAEgASgLMhIubXluY2VyLlB1YmxpY1VzZXIy4wIKC1VzZXJTZXJ2aWNlEkMKCkNyZWF0ZVVzZXISGS5teW5jZXIuQ3JlYXRlVXNlclJlcXVlc3QaGi5teW5jZXIuQ3JlYXRlVXNlclJlc3BvbnNlEkAKCUxvZ2luVXNlchIYLm15bmNlci5Mb2dpblVzZXJSZXF1ZXN0GhkubXluY2VyLkxvZ2luVXNlclJlc3BvbnNlEkMKCkxvZ291dFVzZXISGS5teW5jZXIuTG9nb3V0VXNlclJlcXVlc3QaGi5teW5jZXIuTG9nb3V0VXNlclJlc3BvbnNlEj0KCEVkaXRVc2VyEhcubXluY2VyLkVkaXRVc2VyUmVxdWVzdBoYLm15bmNlci5FZGl0VXNlclJlc3BvbnNlEkkKDkdldEN1cnJlbnRVc2VyEhoubXluY2VyLkN1cnJlbnRVc2VyUmVxdWVzdBobLm15bmNlci5DdXJyZW50VXNlclJlc3BvbnNlQjNaMWdpdGh1Yi5jb20vaGFuc2JhbGEvbXluY2VyL3Byb3RvL215bmNlcjtteW5jZXJfcGJiBnByb3RvMw");
 
 /**
  * @generated from message myncer.User
@@ -54,13 +54,66 @@ export const UserSchema: GenMessage<User> = /*@__PURE__*/
   messageDesc(file_myncer_user, 0);
 
 /**
+ * Safe to expose to the public.
+ *
+ * @generated from message myncer.PublicUser
+ */
+export type PublicUser = Message<"myncer.PublicUser"> & {
+  /**
+   * google/uuid generated UUID.
+   *
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string first_name = 2;
+   */
+  firstName: string;
+
+  /**
+   * @generated from field: string last_name = 3;
+   */
+  lastName: string;
+
+  /**
+   * @generated from field: string email = 4;
+   */
+  email: string;
+};
+
+/**
+ * Describes the message myncer.PublicUser.
+ * Use `create(PublicUserSchema)` to create a new message.
+ */
+export const PublicUserSchema: GenMessage<PublicUser> = /*@__PURE__*/
+  messageDesc(file_myncer_user, 1);
+
+/**
  * @generated from message myncer.CreateUserRequest
  */
 export type CreateUserRequest = Message<"myncer.CreateUserRequest"> & {
   /**
-   * @generated from field: string name = 1;
+   * @generated from field: string first_name = 1;
    */
-  name: string;
+  firstName: string;
+
+  /**
+   * @generated from field: string last_name = 2;
+   */
+  lastName: string;
+
+  /**
+   * @generated from field: string email = 3;
+   */
+  email: string;
+
+  /**
+   * The plain text password of the user.
+   *
+   * @generated from field: string password = 4;
+   */
+  password: string;
 };
 
 /**
@@ -68,16 +121,18 @@ export type CreateUserRequest = Message<"myncer.CreateUserRequest"> & {
  * Use `create(CreateUserRequestSchema)` to create a new message.
  */
 export const CreateUserRequestSchema: GenMessage<CreateUserRequest> = /*@__PURE__*/
-  messageDesc(file_myncer_user, 1);
+  messageDesc(file_myncer_user, 2);
 
 /**
  * @generated from message myncer.CreateUserResponse
  */
 export type CreateUserResponse = Message<"myncer.CreateUserResponse"> & {
   /**
-   * @generated from field: string greeting = 1;
+   * Id of the created user.
+   *
+   * @generated from field: string id = 1;
    */
-  greeting: string;
+  id: string;
 };
 
 /**
@@ -85,7 +140,167 @@ export type CreateUserResponse = Message<"myncer.CreateUserResponse"> & {
  * Use `create(CreateUserResponseSchema)` to create a new message.
  */
 export const CreateUserResponseSchema: GenMessage<CreateUserResponse> = /*@__PURE__*/
-  messageDesc(file_myncer_user, 2);
+  messageDesc(file_myncer_user, 3);
+
+/**
+ * @generated from message myncer.LoginUserRequest
+ */
+export type LoginUserRequest = Message<"myncer.LoginUserRequest"> & {
+  /**
+   * @generated from field: string email = 1;
+   */
+  email: string;
+
+  /**
+   * The plain text password of the user.
+   *
+   * @generated from field: string password = 2;
+   */
+  password: string;
+};
+
+/**
+ * Describes the message myncer.LoginUserRequest.
+ * Use `create(LoginUserRequestSchema)` to create a new message.
+ */
+export const LoginUserRequestSchema: GenMessage<LoginUserRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_user, 4);
+
+/**
+ * @generated from message myncer.LoginUserResponse
+ */
+export type LoginUserResponse = Message<"myncer.LoginUserResponse"> & {
+  /**
+   * Id of the logged in user.
+   *
+   * @generated from field: string id = 1;
+   */
+  id: string;
+};
+
+/**
+ * Describes the message myncer.LoginUserResponse.
+ * Use `create(LoginUserResponseSchema)` to create a new message.
+ */
+export const LoginUserResponseSchema: GenMessage<LoginUserResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_user, 5);
+
+/**
+ * @generated from message myncer.LogoutUserRequest
+ */
+export type LogoutUserRequest = Message<"myncer.LogoutUserRequest"> & {
+  /**
+   * Id of the user to be logged out.
+   *
+   * @generated from field: string id = 1;
+   */
+  id: string;
+};
+
+/**
+ * Describes the message myncer.LogoutUserRequest.
+ * Use `create(LogoutUserRequestSchema)` to create a new message.
+ */
+export const LogoutUserRequestSchema: GenMessage<LogoutUserRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_user, 6);
+
+/**
+ * @generated from message myncer.LogoutUserResponse
+ */
+export type LogoutUserResponse = Message<"myncer.LogoutUserResponse"> & {
+  /**
+   * Id of the logged out user.
+   *
+   * @generated from field: string id = 1;
+   */
+  id: string;
+};
+
+/**
+ * Describes the message myncer.LogoutUserResponse.
+ * Use `create(LogoutUserResponseSchema)` to create a new message.
+ */
+export const LogoutUserResponseSchema: GenMessage<LogoutUserResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_user, 7);
+
+/**
+ * @generated from message myncer.EditUserRequest
+ */
+export type EditUserRequest = Message<"myncer.EditUserRequest"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string first_name = 2;
+   */
+  firstName: string;
+
+  /**
+   * @generated from field: string last_name = 3;
+   */
+  lastName: string;
+
+  /**
+   * @generated from field: string email = 4;
+   */
+  email: string;
+};
+
+/**
+ * Describes the message myncer.EditUserRequest.
+ * Use `create(EditUserRequestSchema)` to create a new message.
+ */
+export const EditUserRequestSchema: GenMessage<EditUserRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_user, 8);
+
+/**
+ * @generated from message myncer.EditUserResponse
+ */
+export type EditUserResponse = Message<"myncer.EditUserResponse"> & {
+  /**
+   * @generated from field: myncer.PublicUser user = 1;
+   */
+  user?: PublicUser;
+};
+
+/**
+ * Describes the message myncer.EditUserResponse.
+ * Use `create(EditUserResponseSchema)` to create a new message.
+ */
+export const EditUserResponseSchema: GenMessage<EditUserResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_user, 9);
+
+/**
+ * @generated from message myncer.CurrentUserRequest
+ */
+export type CurrentUserRequest = Message<"myncer.CurrentUserRequest"> & {
+};
+
+/**
+ * Describes the message myncer.CurrentUserRequest.
+ * Use `create(CurrentUserRequestSchema)` to create a new message.
+ */
+export const CurrentUserRequestSchema: GenMessage<CurrentUserRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_user, 10);
+
+/**
+ * @generated from message myncer.CurrentUserResponse
+ */
+export type CurrentUserResponse = Message<"myncer.CurrentUserResponse"> & {
+  /**
+   * @generated from field: myncer.PublicUser user = 1;
+   */
+  user?: PublicUser;
+};
+
+/**
+ * Describes the message myncer.CurrentUserResponse.
+ * Use `create(CurrentUserResponseSchema)` to create a new message.
+ */
+export const CurrentUserResponseSchema: GenMessage<CurrentUserResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_user, 11);
 
 /**
  * @generated from service myncer.UserService
@@ -98,6 +313,38 @@ export const UserService: GenService<{
     methodKind: "unary";
     input: typeof CreateUserRequestSchema;
     output: typeof CreateUserResponseSchema;
+  },
+  /**
+   * @generated from rpc myncer.UserService.LoginUser
+   */
+  loginUser: {
+    methodKind: "unary";
+    input: typeof LoginUserRequestSchema;
+    output: typeof LoginUserResponseSchema;
+  },
+  /**
+   * @generated from rpc myncer.UserService.LogoutUser
+   */
+  logoutUser: {
+    methodKind: "unary";
+    input: typeof LogoutUserRequestSchema;
+    output: typeof LogoutUserResponseSchema;
+  },
+  /**
+   * @generated from rpc myncer.UserService.EditUser
+   */
+  editUser: {
+    methodKind: "unary";
+    input: typeof EditUserRequestSchema;
+    output: typeof EditUserResponseSchema;
+  },
+  /**
+   * @generated from rpc myncer.UserService.GetCurrentUser
+   */
+  getCurrentUser: {
+    methodKind: "unary";
+    input: typeof CurrentUserRequestSchema;
+    output: typeof CurrentUserResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_myncer_user, 0);

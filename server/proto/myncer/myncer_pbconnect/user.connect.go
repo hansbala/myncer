@@ -35,11 +35,24 @@ const (
 const (
 	// UserServiceCreateUserProcedure is the fully-qualified name of the UserService's CreateUser RPC.
 	UserServiceCreateUserProcedure = "/myncer.UserService/CreateUser"
+	// UserServiceLoginUserProcedure is the fully-qualified name of the UserService's LoginUser RPC.
+	UserServiceLoginUserProcedure = "/myncer.UserService/LoginUser"
+	// UserServiceLogoutUserProcedure is the fully-qualified name of the UserService's LogoutUser RPC.
+	UserServiceLogoutUserProcedure = "/myncer.UserService/LogoutUser"
+	// UserServiceEditUserProcedure is the fully-qualified name of the UserService's EditUser RPC.
+	UserServiceEditUserProcedure = "/myncer.UserService/EditUser"
+	// UserServiceGetCurrentUserProcedure is the fully-qualified name of the UserService's
+	// GetCurrentUser RPC.
+	UserServiceGetCurrentUserProcedure = "/myncer.UserService/GetCurrentUser"
 )
 
 // UserServiceClient is a client for the myncer.UserService service.
 type UserServiceClient interface {
 	CreateUser(context.Context, *connect.Request[myncer.CreateUserRequest]) (*connect.Response[myncer.CreateUserResponse], error)
+	LoginUser(context.Context, *connect.Request[myncer.LoginUserRequest]) (*connect.Response[myncer.LoginUserResponse], error)
+	LogoutUser(context.Context, *connect.Request[myncer.LogoutUserRequest]) (*connect.Response[myncer.LogoutUserResponse], error)
+	EditUser(context.Context, *connect.Request[myncer.EditUserRequest]) (*connect.Response[myncer.EditUserResponse], error)
+	GetCurrentUser(context.Context, *connect.Request[myncer.CurrentUserRequest]) (*connect.Response[myncer.CurrentUserResponse], error)
 }
 
 // NewUserServiceClient constructs a client for the myncer.UserService service. By default, it uses
@@ -59,12 +72,40 @@ func NewUserServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(userServiceMethods.ByName("CreateUser")),
 			connect.WithClientOptions(opts...),
 		),
+		loginUser: connect.NewClient[myncer.LoginUserRequest, myncer.LoginUserResponse](
+			httpClient,
+			baseURL+UserServiceLoginUserProcedure,
+			connect.WithSchema(userServiceMethods.ByName("LoginUser")),
+			connect.WithClientOptions(opts...),
+		),
+		logoutUser: connect.NewClient[myncer.LogoutUserRequest, myncer.LogoutUserResponse](
+			httpClient,
+			baseURL+UserServiceLogoutUserProcedure,
+			connect.WithSchema(userServiceMethods.ByName("LogoutUser")),
+			connect.WithClientOptions(opts...),
+		),
+		editUser: connect.NewClient[myncer.EditUserRequest, myncer.EditUserResponse](
+			httpClient,
+			baseURL+UserServiceEditUserProcedure,
+			connect.WithSchema(userServiceMethods.ByName("EditUser")),
+			connect.WithClientOptions(opts...),
+		),
+		getCurrentUser: connect.NewClient[myncer.CurrentUserRequest, myncer.CurrentUserResponse](
+			httpClient,
+			baseURL+UserServiceGetCurrentUserProcedure,
+			connect.WithSchema(userServiceMethods.ByName("GetCurrentUser")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // userServiceClient implements UserServiceClient.
 type userServiceClient struct {
-	createUser *connect.Client[myncer.CreateUserRequest, myncer.CreateUserResponse]
+	createUser     *connect.Client[myncer.CreateUserRequest, myncer.CreateUserResponse]
+	loginUser      *connect.Client[myncer.LoginUserRequest, myncer.LoginUserResponse]
+	logoutUser     *connect.Client[myncer.LogoutUserRequest, myncer.LogoutUserResponse]
+	editUser       *connect.Client[myncer.EditUserRequest, myncer.EditUserResponse]
+	getCurrentUser *connect.Client[myncer.CurrentUserRequest, myncer.CurrentUserResponse]
 }
 
 // CreateUser calls myncer.UserService.CreateUser.
@@ -72,9 +113,33 @@ func (c *userServiceClient) CreateUser(ctx context.Context, req *connect.Request
 	return c.createUser.CallUnary(ctx, req)
 }
 
+// LoginUser calls myncer.UserService.LoginUser.
+func (c *userServiceClient) LoginUser(ctx context.Context, req *connect.Request[myncer.LoginUserRequest]) (*connect.Response[myncer.LoginUserResponse], error) {
+	return c.loginUser.CallUnary(ctx, req)
+}
+
+// LogoutUser calls myncer.UserService.LogoutUser.
+func (c *userServiceClient) LogoutUser(ctx context.Context, req *connect.Request[myncer.LogoutUserRequest]) (*connect.Response[myncer.LogoutUserResponse], error) {
+	return c.logoutUser.CallUnary(ctx, req)
+}
+
+// EditUser calls myncer.UserService.EditUser.
+func (c *userServiceClient) EditUser(ctx context.Context, req *connect.Request[myncer.EditUserRequest]) (*connect.Response[myncer.EditUserResponse], error) {
+	return c.editUser.CallUnary(ctx, req)
+}
+
+// GetCurrentUser calls myncer.UserService.GetCurrentUser.
+func (c *userServiceClient) GetCurrentUser(ctx context.Context, req *connect.Request[myncer.CurrentUserRequest]) (*connect.Response[myncer.CurrentUserResponse], error) {
+	return c.getCurrentUser.CallUnary(ctx, req)
+}
+
 // UserServiceHandler is an implementation of the myncer.UserService service.
 type UserServiceHandler interface {
 	CreateUser(context.Context, *connect.Request[myncer.CreateUserRequest]) (*connect.Response[myncer.CreateUserResponse], error)
+	LoginUser(context.Context, *connect.Request[myncer.LoginUserRequest]) (*connect.Response[myncer.LoginUserResponse], error)
+	LogoutUser(context.Context, *connect.Request[myncer.LogoutUserRequest]) (*connect.Response[myncer.LogoutUserResponse], error)
+	EditUser(context.Context, *connect.Request[myncer.EditUserRequest]) (*connect.Response[myncer.EditUserResponse], error)
+	GetCurrentUser(context.Context, *connect.Request[myncer.CurrentUserRequest]) (*connect.Response[myncer.CurrentUserResponse], error)
 }
 
 // NewUserServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -90,10 +155,42 @@ func NewUserServiceHandler(svc UserServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(userServiceMethods.ByName("CreateUser")),
 		connect.WithHandlerOptions(opts...),
 	)
+	userServiceLoginUserHandler := connect.NewUnaryHandler(
+		UserServiceLoginUserProcedure,
+		svc.LoginUser,
+		connect.WithSchema(userServiceMethods.ByName("LoginUser")),
+		connect.WithHandlerOptions(opts...),
+	)
+	userServiceLogoutUserHandler := connect.NewUnaryHandler(
+		UserServiceLogoutUserProcedure,
+		svc.LogoutUser,
+		connect.WithSchema(userServiceMethods.ByName("LogoutUser")),
+		connect.WithHandlerOptions(opts...),
+	)
+	userServiceEditUserHandler := connect.NewUnaryHandler(
+		UserServiceEditUserProcedure,
+		svc.EditUser,
+		connect.WithSchema(userServiceMethods.ByName("EditUser")),
+		connect.WithHandlerOptions(opts...),
+	)
+	userServiceGetCurrentUserHandler := connect.NewUnaryHandler(
+		UserServiceGetCurrentUserProcedure,
+		svc.GetCurrentUser,
+		connect.WithSchema(userServiceMethods.ByName("GetCurrentUser")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/myncer.UserService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case UserServiceCreateUserProcedure:
 			userServiceCreateUserHandler.ServeHTTP(w, r)
+		case UserServiceLoginUserProcedure:
+			userServiceLoginUserHandler.ServeHTTP(w, r)
+		case UserServiceLogoutUserProcedure:
+			userServiceLogoutUserHandler.ServeHTTP(w, r)
+		case UserServiceEditUserProcedure:
+			userServiceEditUserHandler.ServeHTTP(w, r)
+		case UserServiceGetCurrentUserProcedure:
+			userServiceGetCurrentUserHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -105,4 +202,20 @@ type UnimplementedUserServiceHandler struct{}
 
 func (UnimplementedUserServiceHandler) CreateUser(context.Context, *connect.Request[myncer.CreateUserRequest]) (*connect.Response[myncer.CreateUserResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("myncer.UserService.CreateUser is not implemented"))
+}
+
+func (UnimplementedUserServiceHandler) LoginUser(context.Context, *connect.Request[myncer.LoginUserRequest]) (*connect.Response[myncer.LoginUserResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("myncer.UserService.LoginUser is not implemented"))
+}
+
+func (UnimplementedUserServiceHandler) LogoutUser(context.Context, *connect.Request[myncer.LogoutUserRequest]) (*connect.Response[myncer.LogoutUserResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("myncer.UserService.LogoutUser is not implemented"))
+}
+
+func (UnimplementedUserServiceHandler) EditUser(context.Context, *connect.Request[myncer.EditUserRequest]) (*connect.Response[myncer.EditUserResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("myncer.UserService.EditUser is not implemented"))
+}
+
+func (UnimplementedUserServiceHandler) GetCurrentUser(context.Context, *connect.Request[myncer.CurrentUserRequest]) (*connect.Response[myncer.CurrentUserResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("myncer.UserService.GetCurrentUser is not implemented"))
 }
