@@ -15,23 +15,11 @@ import (
 	"github.com/hansbala/myncer/llm"
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 	myncer_pb_connect "github.com/hansbala/myncer/proto/myncer/myncer_pbconnect"
-	"github.com/hansbala/myncer/sync_engine"
 	"github.com/hansbala/myncer/services"
+	"github.com/hansbala/myncer/sync_engine"
 )
 
 func main() {
-	greeter := services.NewUserService()
-	mux := http.NewServeMux()
-	path, handler := myncer_pb_connect.NewUserServiceHandler(greeter)
-	mux.Handle(path, handler)
-	http.ListenAndServe(
-		"localhost:8080",
-		// Use h2c so we can serve HTTP/2 without TLS.
-		h2c.NewHandler(mux, &http2.Server{}),
-	)
-}
-
-func main2() {
 	ctx := context.Background()
 	spotifyClient := datasources.NewSpotifyClient()
 	youtubeClient := datasources.NewYouTubeClient()
@@ -57,6 +45,18 @@ func main2() {
 	if err := http.ListenAndServe(":8080", nil /*handler*/); err != nil {
 		core.Errorf("failed: ", err)
 	}
+}
+
+func main2() {
+	greeter := services.NewUserService()
+	mux := http.NewServeMux()
+	path, handler := myncer_pb_connect.NewUserServiceHandler(greeter)
+	mux.Handle(path, handler)
+	http.ListenAndServe(
+		"localhost:8080",
+		// Use h2c so we can serve HTTP/2 without TLS.
+		h2c.NewHandler(mux, &http2.Server{}),
+	)
 }
 
 func GetHandlersMap() map[string]core.Handler {
