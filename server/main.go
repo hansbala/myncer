@@ -5,16 +5,33 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
+
 	"github.com/hansbala/myncer/auth"
 	"github.com/hansbala/myncer/core"
 	"github.com/hansbala/myncer/datasources"
 	"github.com/hansbala/myncer/handlers"
 	"github.com/hansbala/myncer/llm"
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
+	myncer_pb_connect "github.com/hansbala/myncer/proto/myncer/myncer_pbconnect"
 	"github.com/hansbala/myncer/sync_engine"
+	"github.com/hansbala/myncer/services"
 )
 
 func main() {
+	greeter := services.NewUserService()
+	mux := http.NewServeMux()
+	path, handler := myncer_pb_connect.NewUserServiceHandler(greeter)
+	mux.Handle(path, handler)
+	http.ListenAndServe(
+		"localhost:8080",
+		// Use h2c so we can serve HTTP/2 without TLS.
+		h2c.NewHandler(mux, &http2.Server{}),
+	)
+}
+
+func main2() {
 	ctx := context.Background()
 	spotifyClient := datasources.NewSpotifyClient()
 	youtubeClient := datasources.NewYouTubeClient()
