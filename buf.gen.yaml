@@ -6,3 +6,10 @@ plugins:
   - local: protoc-gen-connect-go
     out: server/proto
     opt: paths=source_relative
+  # This will invoke protoc-gen-es and write output to src/gen
+  - local: protoc-gen-es
+    out: myncer-web/src/generated_grpc
+    # Also generate any imported dependencies
+    include_imports: true
+    # Add more plugin options here
+    opt: target=ts

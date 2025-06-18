@@ -8,6 +8,7 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
+	connect_cors "connectrpc.com/cors"
 	"github.com/hansbala/myncer/auth"
 	"github.com/hansbala/myncer/core"
 	"github.com/hansbala/myncer/datasources"
@@ -17,6 +18,7 @@ import (
 	myncer_pb_connect "github.com/hansbala/myncer/proto/myncer/myncer_pbconnect"
 	"github.com/hansbala/myncer/services"
 	"github.com/hansbala/myncer/sync_engine"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -38,25 +40,32 @@ func main() {
 	// Any testing stuff here.
 	// TestSongs(ctx)
 
+	// REST server.
 	for pattern, handler := range GetHandlersMap() {
 		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx), myncerCtx))
 	}
-	core.Printf("Myncer listening on port 8080")
-	if err := http.ListenAndServe(":8080", nil /*handler*/); err != nil {
-		core.Errorf("failed: ", err)
-	}
-}
+	go func() {
+		core.Printf("Myncer listening on port 8080")
+		if err := http.ListenAndServe(":8080", nil /*handler*/); err != nil {
+			core.Errorf("failed: ", err)
+		}
+	}()
 
-func main2() {
-	greeter := services.NewUserService()
-	mux := http.NewServeMux()
-	path, handler := myncer_pb_connect.NewUserServiceHandler(greeter)
-	mux.Handle(path, handler)
-	http.ListenAndServe(
-		"localhost:8080",
-		// Use h2c so we can serve HTTP/2 without TLS.
-		h2c.NewHandler(mux, &http2.Server{}),
-	)
+	// GRPC server.
+	go func() {
+		greeter := services.NewUserService()
+		mux := http.NewServeMux()
+		path, handler := myncer_pb_connect.NewUserServiceHandler(greeter)
+		mux.Handle(path, WithGRPCCors(handler, myncerCtx))
+		http.ListenAndServe(
+			"localhost:6969",
+			// Use h2c so we can serve HTTP/2 without TLS.
+			h2c.NewHandler(mux, &http2.Server{}),
+		)
+	}()
+	// Keep server alive.
+	for {
+	}
 }
 
 func GetHandlersMap() map[string]core.Handler {
@@ -78,6 +87,16 @@ func GetHandlersMap() map[string]core.Handler {
 		"/api/v1/syncs/list":   handlers.NewListSyncsHandler(),
 		"/api/v1/syncs/run":    handlers.NewRunSyncHandler(sync_engine.NewSyncEngine()),
 	}
+}
+
+func WithGRPCCors(h http.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Handler {
+	middleware := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:5173", "https://myncer.hansbala.com"},
+		AllowedMethods: connect_cors.AllowedMethods(),
+		AllowedHeaders: connect_cors.AllowedHeaders(),
+		ExposedHeaders: connect_cors.ExposedHeaders(),
+	})
+	return middleware.Handler(h)
 }
 
 func WithCors(h http.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Handler {

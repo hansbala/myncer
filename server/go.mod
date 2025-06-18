@@ -7,9 +7,11 @@ toolchain go1.23.9
 require (
 	cloud.google.com/go/storage v1.43.0
 	connectrpc.com/connect v1.18.1
+	connectrpc.com/cors v0.1.0
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v4 v4.18.3
+	github.com/rs/cors v1.11.1
 	github.com/stretchr/testify v1.9.0
 	github.com/zmb3/spotify/v2 v2.4.3
 	golang.org/x/crypto v0.37.0
