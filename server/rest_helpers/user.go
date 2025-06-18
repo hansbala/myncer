@@ -2,7 +2,7 @@ package rest_helpers
 
 import (
 	"github.com/hansbala/myncer/api"
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
 
 func UserProtoToRest(up *myncer_pb.User /*const*/) *api.User {

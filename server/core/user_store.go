@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 	"google.golang.org/protobuf/proto"
 )
 

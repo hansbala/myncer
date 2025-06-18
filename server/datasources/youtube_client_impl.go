@@ -9,7 +9,7 @@ import (
 	youtube "google.golang.org/api/youtube/v3"
 
 	"github.com/hansbala/myncer/core"
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 	"github.com/hansbala/myncer/rest_helpers"
 	"github.com/hansbala/myncer/sync_engine"
 )

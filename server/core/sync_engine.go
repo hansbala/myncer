@@ -3,7 +3,7 @@ package core
 import (
 	"context"
 
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
 
 type SyncEngine interface {

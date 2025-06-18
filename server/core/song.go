@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
 
 type Song interface {

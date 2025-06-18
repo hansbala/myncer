@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
 
 type Handler interface {

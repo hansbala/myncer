@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/oauth2"
 
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
 
 func WrappedError(err error, format string, a ...any) error {

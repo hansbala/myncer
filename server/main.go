@@ -10,7 +10,7 @@ import (
 	"github.com/hansbala/myncer/datasources"
 	"github.com/hansbala/myncer/handlers"
 	"github.com/hansbala/myncer/llm"
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 	"github.com/hansbala/myncer/sync_engine"
 )
 

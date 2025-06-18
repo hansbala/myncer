@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/hansbala/myncer/core"
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 	"github.com/hansbala/myncer/auth"
 )
 

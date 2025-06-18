@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/hansbala/myncer/core"
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
 
 func NewSong(

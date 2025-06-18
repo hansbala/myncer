@@ -8,7 +8,7 @@ import (
 
 	_ "github.com/jackc/pgx/v4/stdlib"
 
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
 
 //go:embed schema.sql

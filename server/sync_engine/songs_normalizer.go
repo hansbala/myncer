@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/hansbala/myncer/core"
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
 
 //go:embed normalizer_system.prompt

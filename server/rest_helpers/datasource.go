@@ -3,7 +3,7 @@ package rest_helpers
 import (
 	"github.com/hansbala/myncer/api"
 	"github.com/hansbala/myncer/core"
-	myncer_pb "github.com/hansbala/myncer/proto"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
 
 func ProtoDatasourceToRest(ds myncer_pb.Datasource) (api.Datasource, error) {
