@@ -3,6 +3,7 @@ package datasources
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"strings"
 
 	spotify "github.com/zmb3/spotify/v2"
@@ -77,8 +78,17 @@ func (s *spotifyClientImpl) GetPlaylistSongs(
 	allSongs := []core.Song{}
 	offset := 0
 	for {
-		playlistTracks, err := client.GetPlaylistItems(ctx, spotify.ID(playlistId))
+		playlistTracks, err := client.GetPlaylistItems(
+			ctx,
+			spotify.ID(playlistId),
+			spotify.Limit(cPageLimit),
+			spotify.Offset(offset),
+		)
 		if err != nil {
+			if spotifyErr, ok := err.(spotify.Error); ok &&
+				spotifyErr.Status == http.StatusTooManyRequests {
+					core.Printf("Spotify API rate limit hit, with message: %s", spotifyErr.Message)
+			}
 			return nil, core.WrappedError(
 				err,
 				"failed to get playlist items for playlist %s at offset %d",
