@@ -4,7 +4,7 @@ package myncer;
 
 import "myncer/datasource.proto";
 
-option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
+option go_package = "github.com/hansbala/myncer/proto/myncer;myncer_pb";
 
 message Song {
   string name = 1;

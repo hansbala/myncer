@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package myncer;
 
-option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
+option go_package = "github.com/hansbala/myncer/proto/myncer;myncer_pb";
 
 message User {
   // google/uuid generated UUID.
@@ -15,3 +15,14 @@ message User {
   string hashed_password = 5;
 }
 
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+}
+
+message CreateUserRequest {
+  string name = 1;
+}
+
+message CreateUserResponse {
+  string greeting = 1;
+}

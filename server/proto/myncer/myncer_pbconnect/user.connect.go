@@ -8,7 +8,7 @@ import (
 	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	proto "github.com/hansbala/myncer/server/proto"
+	myncer "github.com/hansbala/myncer/proto/myncer"
 	http "net/http"
 	strings "strings"
 )
@@ -39,7 +39,7 @@ const (
 
 // UserServiceClient is a client for the myncer.UserService service.
 type UserServiceClient interface {
-	CreateUser(context.Context, *connect.Request[proto.CreateUserRequest]) (*connect.Response[proto.User], error)
+	CreateUser(context.Context, *connect.Request[myncer.CreateUserRequest]) (*connect.Response[myncer.CreateUserResponse], error)
 }
 
 // NewUserServiceClient constructs a client for the myncer.UserService service. By default, it uses
@@ -51,9 +51,9 @@ type UserServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewUserServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) UserServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	userServiceMethods := proto.File_myncer_user_proto.Services().ByName("UserService").Methods()
+	userServiceMethods := myncer.File_myncer_user_proto.Services().ByName("UserService").Methods()
 	return &userServiceClient{
-		createUser: connect.NewClient[proto.CreateUserRequest, proto.User](
+		createUser: connect.NewClient[myncer.CreateUserRequest, myncer.CreateUserResponse](
 			httpClient,
 			baseURL+UserServiceCreateUserProcedure,
 			connect.WithSchema(userServiceMethods.ByName("CreateUser")),
@@ -64,17 +64,17 @@ func NewUserServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 
 // userServiceClient implements UserServiceClient.
 type userServiceClient struct {
-	createUser *connect.Client[proto.CreateUserRequest, proto.User]
+	createUser *connect.Client[myncer.CreateUserRequest, myncer.CreateUserResponse]
 }
 
 // CreateUser calls myncer.UserService.CreateUser.
-func (c *userServiceClient) CreateUser(ctx context.Context, req *connect.Request[proto.CreateUserRequest]) (*connect.Response[proto.User], error) {
+func (c *userServiceClient) CreateUser(ctx context.Context, req *connect.Request[myncer.CreateUserRequest]) (*connect.Response[myncer.CreateUserResponse], error) {
 	return c.createUser.CallUnary(ctx, req)
 }
 
 // UserServiceHandler is an implementation of the myncer.UserService service.
 type UserServiceHandler interface {
-	CreateUser(context.Context, *connect.Request[proto.CreateUserRequest]) (*connect.Response[proto.User], error)
+	CreateUser(context.Context, *connect.Request[myncer.CreateUserRequest]) (*connect.Response[myncer.CreateUserResponse], error)
 }
 
 // NewUserServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -83,7 +83,7 @@ type UserServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewUserServiceHandler(svc UserServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	userServiceMethods := proto.File_myncer_user_proto.Services().ByName("UserService").Methods()
+	userServiceMethods := myncer.File_myncer_user_proto.Services().ByName("UserService").Methods()
 	userServiceCreateUserHandler := connect.NewUnaryHandler(
 		UserServiceCreateUserProcedure,
 		svc.CreateUser,
@@ -103,6 +103,6 @@ func NewUserServiceHandler(svc UserServiceHandler, opts ...connect.HandlerOption
 // UnimplementedUserServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedUserServiceHandler struct{}
 
-func (UnimplementedUserServiceHandler) CreateUser(context.Context, *connect.Request[proto.CreateUserRequest]) (*connect.Response[proto.User], error) {
+func (UnimplementedUserServiceHandler) CreateUser(context.Context, *connect.Request[myncer.CreateUserRequest]) (*connect.Response[myncer.CreateUserResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("myncer.UserService.CreateUser is not implemented"))
 }

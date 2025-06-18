@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package myncer;
 
-option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
+option go_package = "github.com/hansbala/myncer/proto/myncer;myncer_pb";
 
 message Config {
   // All database specific config lives in here.

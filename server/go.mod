@@ -6,12 +6,14 @@ toolchain go1.23.9
 
 require (
 	cloud.google.com/go/storage v1.43.0
+	connectrpc.com/connect v1.18.1
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/stretchr/testify v1.9.0
 	github.com/zmb3/spotify/v2 v2.4.3
 	golang.org/x/crypto v0.37.0
+	golang.org/x/net v0.29.0
 	golang.org/x/oauth2 v0.30.0
 	google.golang.org/api v0.197.0
 	google.golang.org/genai v1.11.1
@@ -50,7 +52,6 @@ require (
 	go.opentelemetry.io/otel v1.29.0 // indirect
 	go.opentelemetry.io/otel/metric v1.29.0 // indirect
 	go.opentelemetry.io/otel/trace v1.29.0 // indirect
-	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/sync v0.13.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
