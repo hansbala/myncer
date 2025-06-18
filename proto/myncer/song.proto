@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package myncer;
 
-import "datasource.proto";
+import "myncer/datasource.proto";
 
 option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
 

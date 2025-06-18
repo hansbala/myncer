@@ -3,7 +3,7 @@ syntax = "proto3";
 package myncer;
 
 import "google/protobuf/timestamp.proto";
-import "datasource.proto";
+import "myncer/datasource.proto";
 
 option go_package = "github.com/hansbala/myncer/server/proto;myncer_pb";
 
