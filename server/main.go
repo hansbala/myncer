@@ -5,9 +5,6 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/h2c"
-
 	connect_cors "connectrpc.com/cors"
 	"github.com/hansbala/myncer/auth"
 	"github.com/hansbala/myncer/core"
@@ -37,47 +34,34 @@ func main() {
 		},
 	)
 	ctx = core.WithMyncerCtx(ctx, myncerCtx)
-	// Any testing stuff here.
-	// TestSongs(ctx)
 
-	// REST server.
+	// All routes are served on a single mux.
+	// We expect there is no path conflict between REST and GRPC for the time being.
+	// The long term goal is to remove API entirely.
+	mux := http.NewServeMux()
+
+	// Register REST routes.
 	for pattern, handler := range GetHandlersMap() {
-		http.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx), myncerCtx))
+		mux.Handle(pattern, WithCors(ServerHandler(handler, myncerCtx), myncerCtx))
 	}
-	go func() {
-		core.Printf("Myncer listening on port 8080")
-		if err := http.ListenAndServe(":8080", nil /*handler*/); err != nil {
-			core.Errorf("failed: ", err)
-		}
-	}()
 
-	// GRPC server.
-	go func() {
-		userService := services.NewUserService()
-		path, grpcHandler := myncer_pb_connect.NewUserServiceHandler(userService)
+	// Register GRPC routes.
+	userService := services.NewUserService()
+	path, grpcHandler := myncer_pb_connect.NewUserServiceHandler(userService)
+	mux.Handle(path, GetWrappedGrpcHandler(grpcHandler, myncerCtx))
 
-		var h http.Handler = grpcHandler
-		h = WithGRPCCors(h, myncerCtx)
-		h = WithPossibleUser(h, myncerCtx)
-		h = WithMyncerCtx(h, myncerCtx)
-
-		mux := http.NewServeMux()
-		mux.Handle(path, h)
-
-		// Serve it over HTTP/2 (h2c)
-		server := &http.Server{
-			Addr:    "localhost:6969",
-			Handler: h2c.NewHandler(mux, &http2.Server{}),
-		}
-		core.Printf("gRPC listening on port 6969")
-		if err := server.ListenAndServe(); err != nil {
-			core.Errorf(core.WrappedError(err, "gRPC server error"))
-		}
-	}()
-
-	// Keep server alive.
-	for {
+	core.Printf("REST and gRPC listening on port 8080")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
+		core.Errorf("failed: ", err)
 	}
+}
+
+func GetWrappedGrpcHandler(handler http.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Handler {
+	// Order matters here.
+	grpcWrapped := handler
+	grpcWrapped = WithGRPCCors(grpcWrapped, myncerCtx)
+	grpcWrapped = WithPossibleUser(grpcWrapped, myncerCtx)
+	return WithMyncerCtx(grpcWrapped, myncerCtx)
 }
 
 func GetHandlersMap() map[string]core.Handler {
