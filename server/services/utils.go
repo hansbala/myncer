@@ -15,21 +15,27 @@ import (
 func OrchestrateHandler[RequestT any, ResponseT any](
 	ctx context.Context,
 	handler core.GrpcHandler[*RequestT, *ResponseT],
-	req *RequestT,
+	reqBody *RequestT,
 ) (*connect.Response[ResponseT], error) {
 	userInfo := core.ToMyncerCtx(ctx).RequestUser
-	if err := handler.CheckUserPermissions(ctx, userInfo, req); err != nil {
+	if err := handler.CheckUserPermissions(ctx, userInfo, reqBody); err != nil {
 		return nil, connect.NewError(
 			connect.CodePermissionDenied,
 			core.WrappedError(err, "failed to check user permissions"),
 		)
 	}
-	resp := handler.ProcessRequest(ctx, userInfo, req)
+	resp := handler.ProcessRequest(ctx, userInfo, reqBody)
 	if resp.Err != nil {
 		return nil, connect.NewError(
 			connect.Code(resp.StatusCode), // TODO: Make sure this works as expected E2E.
 			core.WrappedError(resp.Err, "failed to process request"),
 		)
 	}
-	return connect.NewResponse(resp.Response), nil
+	connectResp := connect.NewResponse(resp.Response)
+	if len(resp.Cookies) > 0 {
+		for _, cookie := range resp.Cookies {
+			connectResp.Header().Set("Set-Cookie", cookie.String())
+		}
+	}
+	return connectResp, nil
 }

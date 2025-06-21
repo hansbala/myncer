@@ -13,12 +13,18 @@ import (
 
 func NewUserService() *UserService {
 	return &UserService{
-		createUserHandler: grpc_handlers.NewCreateUserHandler(),
+		createUserHandler:  grpc_handlers.NewCreateUserHandler(),
+		loginUserHandler:   grpc_handlers.NewLoginUserHandler(),
+		currentUserHandler: grpc_handlers.NewCurrentUserHandler(),
+		logoutUserHandler:  grpc_handlers.NewLogoutUserHandler(),
 	}
 }
 
-type UserService struct{
-	createUserHandler core.GrpcHandler[*myncer_pb.CreateUserRequest, *myncer_pb.CreateUserResponse]
+type UserService struct {
+	createUserHandler  core.GrpcHandler[*myncer_pb.CreateUserRequest, *myncer_pb.CreateUserResponse]
+	loginUserHandler   core.GrpcHandler[*myncer_pb.LoginUserRequest, *myncer_pb.LoginUserResponse]
+	currentUserHandler core.GrpcHandler[*myncer_pb.CurrentUserRequest, *myncer_pb.CurrentUserResponse]
+	logoutUserHandler  core.GrpcHandler[*myncer_pb.LogoutUserRequest, *myncer_pb.LogoutUserResponse]
 }
 
 var _ myncer_pb_connect.UserServiceHandler = (*UserService)(nil)
@@ -31,17 +37,17 @@ func (u *UserService) CreateUser(
 }
 
 func (u *UserService) LoginUser(
-	ctx context.Context, 
+	ctx context.Context,
 	req *connect.Request[myncer_pb.LoginUserRequest], /*const*/
 ) (*connect.Response[myncer_pb.LoginUserResponse], error) {
-	return nil, core.NewError("not implemented yet")
+	return OrchestrateHandler(ctx, u.loginUserHandler, req.Msg)
 }
 
 func (u *UserService) LogoutUser(
-	ctx context.Context, 
+	ctx context.Context,
 	req *connect.Request[myncer_pb.LogoutUserRequest], /*const*/
 ) (*connect.Response[myncer_pb.LogoutUserResponse], error) {
-	return nil, core.NewError("not implemented yet")
+	return OrchestrateHandler(ctx, u.logoutUserHandler, req.Msg)
 }
 
 func (u *UserService) EditUser(
@@ -52,8 +58,8 @@ func (u *UserService) EditUser(
 }
 
 func (u *UserService) GetCurrentUser(
-	ctx context.Context, 
+	ctx context.Context,
 	req *connect.Request[myncer_pb.CurrentUserRequest], /*const*/
 ) (*connect.Response[myncer_pb.CurrentUserResponse], error) {
-	return nil, core.NewError("not implemented yet")
+	return OrchestrateHandler(ctx, u.currentUserHandler, req.Msg)
 }
