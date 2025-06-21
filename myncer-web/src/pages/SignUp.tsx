@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useApiClient } from "../hooks/useApiClient"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../hooks/useAuth"
+import { useCreateUser } from "@/hooks/useCreateUser"
 
 const signUpSchema = z
   .object({
@@ -27,36 +27,26 @@ const signUpSchema = z
 type SignUpFormInputs = z.infer<typeof signUpSchema>
 
 export const SignUp = () => {
-  const apiClient = useApiClient()
   const navigate = useNavigate()
+  const { mutate: createUser, isPending: isCreating } = useCreateUser()
   const { isAuthenticated } = useAuth()
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError,
   } = useForm<SignUpFormInputs>({
     resolver: zodResolver(signUpSchema),
   })
 
-  const onSubmit = async (data: SignUpFormInputs) => {
-    try {
-      await apiClient.createUser({
-        createUserRequest: {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          password: data.password,
-        },
-      })
-      navigate("/")
-    } catch (err) {
-      setError("email", {
-        type: "manual",
-        message: "An account with this email may already exist",
-      })
-    }
+  const onSubmit = (data: SignUpFormInputs) => {
+    createUser({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: data.password,
+    })
+    navigate("/")
   }
 
   if (isAuthenticated) {
@@ -138,7 +128,7 @@ export const SignUp = () => {
           disabled={isSubmitting}
           className="w-full rounded-md bg-primary px-6 py-3 text-lg text-secondary hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isSubmitting ? "Creating account..." : "Sign Up"}
+          {isSubmitting || isCreating ? "Creating account..." : "Sign Up"}
         </button>
 
         <p className="text-center text-sm text-gray-600">

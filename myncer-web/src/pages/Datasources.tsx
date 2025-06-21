@@ -2,24 +2,10 @@ import { PageWrapper } from "@/components/PageWrapper"
 import { Button } from "@/components/ui/button"
 import { PageLoader } from "@/components/ui/page-loader"
 import { useConnectedDatasources } from "@/hooks/useConnectedDatasources"
-import { useUserService } from "@/hooks/useUserService"
 import { getSpotifyAuthUrl, getYoutubeAuthUrl } from "@/lib/utils"
 import { ArrowRightIcon, CheckIcon } from "lucide-react"
-import { useEffect } from "react"
 
 export const Datasources = () => {
-  const userService = useUserService()
-
-  const getUserResponse = async () => {
-    const resp = await userService.createUser({ name: "Hans" })
-    console.log(resp)
-    return resp
-  }
-
-  useEffect(() => {
-    getUserResponse()
-  }, [])
-
   const handleConnectSpotify = () => {
     // window.location since we're redirecting externally.
     window.location.href = getSpotifyAuthUrl()
