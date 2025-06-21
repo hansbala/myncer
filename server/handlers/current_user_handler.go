@@ -27,7 +27,7 @@ func (c *currentUserHandlerImpl) CheckUserPermissions(
 	reqBody any, /*const,@nullable*/
 ) error {
 	if userInfo == nil {
-		return core.NewError("user is required")
+		return core.NewError("user is required to get current user details")
 	}
 	return nil
 }

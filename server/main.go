@@ -54,23 +54,17 @@ func main() {
 	// GRPC server.
 	go func() {
 		userService := services.NewUserService()
-		// this gives you the path pattern and the bare connect handler
 		path, grpcHandler := myncer_pb_connect.NewUserServiceHandler(userService)
 
-		// wrap it step by step:
 		var h http.Handler = grpcHandler
-		// 3️⃣ apply CORS for all gRPC calls
 		h = WithGRPCCors(h, myncerCtx)
-		// 2️⃣ attach a possible user from the JWT (if present)
 		h = WithPossibleUser(h, myncerCtx)
-		// 1️⃣ inject your MyncerCtx into every request context
 		h = WithMyncerCtx(h, myncerCtx)
 
-		// register the fully-wrapped handler
 		mux := http.NewServeMux()
 		mux.Handle(path, h)
 
-		// and finally serve it over HTTP/2 (h2c)
+		// Serve it over HTTP/2 (h2c)
 		server := &http.Server{
 			Addr:    "localhost:6969",
 			Handler: h2c.NewHandler(mux, &http2.Server{}),
@@ -186,7 +180,7 @@ func ServerHandler(h core.Handler, myncerCtx *core.MyncerCtx /*const*/) http.Han
 		if err != nil {
 			// Not a fatal case. Expected for unathenticated endpoints.
 			// Logging error for now but if it gets too much, we can remove.
-			core.Warning(core.WrappedError(err, "failed to get user from request"))
+			// core.Warning(core.WrappedError(err, "failed to get user from request"))
 		}
 
 		// Unmarshal request body here for usage in process request.

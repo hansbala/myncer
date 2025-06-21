@@ -76,7 +76,7 @@ func (eh *editUserHandlerImpl) ProcessRequest(
 }
 
 func (eh *editUserHandlerImpl) validateRequest(req *api.EditUserRequest /*const*/) error {
-	return validateUserFields(
+	return ValidateUserFields(
 		req.GetFirstName(),
 		req.GetLastName(),
 		req.GetEmail(),
@@ -88,7 +88,7 @@ func (eh *editUserHandlerImpl) getUpdatedUser(
 	user *myncer_pb.User, /*const*/
 	restReq *api.EditUserRequest, /*const*/
 ) (*myncer_pb.User, error) {
-	return getProtoUser(
+	return GetProtoUser(
 		user.GetId(),
 		restReq.GetFirstName(),
 		restReq.GetLastName(),

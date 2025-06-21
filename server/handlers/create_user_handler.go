@@ -75,7 +75,7 @@ func (c *createUserHandlerImpl) ProcessRequest(
 }
 
 func (c *createUserHandlerImpl) validateRequest(req *api.CreateUserRequest /*const*/) error {
-	return validateUserFields(
+	return ValidateUserFields(
 		req.GetFirstName(),
 		req.GetLastName(),
 		req.GetEmail(),
@@ -86,7 +86,7 @@ func (c *createUserHandlerImpl) validateRequest(req *api.CreateUserRequest /*con
 func (c *createUserHandlerImpl) createProtoUser(
 	req *api.CreateUserRequest, /*const*/
 ) (*myncer_pb.User, error) {
-	return getProtoUser(
+	return GetProtoUser(
 		uuid.New().String(),
 		req.GetFirstName(),
 		req.GetLastName(),

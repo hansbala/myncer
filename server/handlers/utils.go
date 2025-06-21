@@ -27,7 +27,7 @@ func WriteJSONOk(resp http.ResponseWriter, body any) error {
 	return nil
 }
 
-func getProtoUser(
+func GetProtoUser(
 	id string,
 	firstName string,
 	lastName string,
@@ -47,15 +47,7 @@ func getProtoUser(
 	}, nil
 }
 
-func hashPassword(plaintext string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(plaintext), bcrypt.DefaultCost)
-	if err != nil {
-		return "", core.WrappedError(err, "failed to hash password using bcrypt")
-	}
-	return string(bytes), nil
-}
-
-func validateUserFields(
+func ValidateUserFields(
 	firstName string,
 	lastName string,
 	email string,
@@ -74,6 +66,14 @@ func validateUserFields(
 		return core.WrappedError(err, "password validation failed")
 	}
 	return nil
+}
+
+func hashPassword(plaintext string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(plaintext), bcrypt.DefaultCost)
+	if err != nil {
+		return "", core.WrappedError(err, "failed to hash password using bcrypt")
+	}
+	return string(bytes), nil
 }
 
 func validatePassword(password string) error {
