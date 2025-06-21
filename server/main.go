@@ -103,14 +103,12 @@ func WithPossibleUser(h http.Handler, myncerCtx *core.MyncerCtx /*const*/) http.
 		func(w http.ResponseWriter, r *http.Request) {
 			ctx := r.Context()
 			// Get user based on JWT auth.
-			user, err := auth.MaybeGetUserFromRequest(ctx, myncerCtx, r)
-			if err != nil {
-				core.Warning(core.WrappedError(err, "failed to get user from request for proto handler"))
-			}
-			// Set user in myncerCtx if it exists.
+			user, _ := auth.MaybeGetUserFromRequest(ctx, myncerCtx, r)
+			core.Printf("user from request: %v", user)
 			if user != nil {
-				core.ToMyncerCtx(ctx).SetRequestUser(user)
+				ctx = auth.ContextWithUser(ctx, user)
 			}
+			r = r.WithContext(ctx)
 			h.ServeHTTP(w, r)
 		},
 	)

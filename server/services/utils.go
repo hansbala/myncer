@@ -5,6 +5,7 @@ import (
 
 	"connectrpc.com/connect"
 
+	"github.com/hansbala/myncer/auth"
 	"github.com/hansbala/myncer/core"
 )
 
@@ -17,8 +18,9 @@ func OrchestrateHandler[RequestT any, ResponseT any](
 	handler core.GrpcHandler[*RequestT, *ResponseT],
 	reqBody *RequestT,
 ) (*connect.Response[ResponseT], error) {
-	userInfo := core.ToMyncerCtx(ctx).RequestUser
+	userInfo := auth.UserFromContext(ctx)
 	if err := handler.CheckUserPermissions(ctx, userInfo, reqBody); err != nil {
+		core.Printf("failed to check user permissions: %v", err)
 		return nil, connect.NewError(
 			connect.CodePermissionDenied,
 			core.WrappedError(err, "failed to check user permissions"),
