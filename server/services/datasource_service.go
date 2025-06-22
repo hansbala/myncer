@@ -55,15 +55,15 @@ func (d *DatasourceService) ListDatasources(
 }
 
 func (d *DatasourceService) ListPlaylists(
-	context.Context,
-	*connect.Request[myncer_pb.ListPlaylistsRequest],
+	ctx context.Context,
+	req *connect.Request[myncer_pb.ListPlaylistsRequest],
 ) (*connect.Response[myncer_pb.ListPlaylistsResponse], error) {
-	return OrchestrateHandler(context.Background(), d.listPlaylistsHandler, nil)
+	return OrchestrateHandler(ctx, d.listPlaylistsHandler, req.Msg)
 }
 
 func (d *DatasourceService) GetPlaylistDetails(
-	context.Context,
-	*connect.Request[myncer_pb.GetPlaylistDetailsRequest],
+	ctx context.Context,
+	req *connect.Request[myncer_pb.GetPlaylistDetailsRequest],
 ) (*connect.Response[myncer_pb.GetPlaylistDetailsResponse], error) {
-	return OrchestrateHandler(context.Background(), d.getPlaylistDetailsHandler, nil)
+	return OrchestrateHandler(ctx, d.getPlaylistDetailsHandler, nil)
 }
