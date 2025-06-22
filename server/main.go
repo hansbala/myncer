@@ -104,7 +104,6 @@ func WithPossibleUser(h http.Handler, myncerCtx *core.MyncerCtx /*const*/) http.
 			ctx := r.Context()
 			// Get user based on JWT auth.
 			user, _ := auth.MaybeGetUserFromRequest(ctx, myncerCtx, r)
-			core.Printf("user from request: %v", user)
 			if user != nil {
 				ctx = auth.ContextWithUser(ctx, user)
 			}

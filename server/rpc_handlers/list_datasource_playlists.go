@@ -32,7 +32,7 @@ func (l *listDatasourcePlaylistsImpl) ProcessRequest(
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.ListPlaylistsRequest, /*const*/
 ) *core.GrpcHandlerResponse[*myncer_pb.ListPlaylistsResponse] {
-	dsClient, err := ldp.getClientFromDatasource(ctx, reqBody.GetDatasource())
+	dsClient, err := l.getClientFromDatasource(ctx, reqBody.GetDatasource())
 	if err != nil {
 		return core.NewGrpcHandlerResponse_InternalServerError[*myncer_pb.ListPlaylistsResponse](
 			core.WrappedError(err, "failed to get datasource client"),
@@ -52,7 +52,7 @@ func (l *listDatasourcePlaylistsImpl) ProcessRequest(
 	)
 }
 
-func (ldp *listDatasourcePlaylistsImpl) getClientFromDatasource(
+func (l *listDatasourcePlaylistsImpl) getClientFromDatasource(
 	ctx context.Context,
 	ds myncer_pb.Datasource,
 ) (core.DatasourceClient, error) {
