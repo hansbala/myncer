@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { DatasourceSelector } from "./DatasourceSelector"
 import { PlaylistSelector } from "./PlaylistSelector"
-import { useCreateSync } from "@/hooks/useCreateSync"
+import { useCreateSyncDeprecated } from "@/hooks/useCreateSync"
 import { Loader2 } from "lucide-react"
 import { useDatasources } from "@/hooks/useDatasources"
 import { useListPlaylists } from "@/hooks/useListPlaylists"
@@ -35,7 +35,7 @@ export const CreateOneWaySyncDialog = () => {
   } = useForm<FormValues>({
     mode: "onChange",
   })
-  const { mutate: createSync, isPending: creating } = useCreateSync()
+  const { mutate: createSync, isPending: creating } = useCreateSyncDeprecated()
 
   const sourceDatasource = watch("sourceDatasource")
   const targetDatasource = watch("targetDatasource")

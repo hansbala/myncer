@@ -3,7 +3,7 @@ import { useApiClient } from "./useApiClient"
 import type { CreateSyncRequest } from "@/generated_api/src"
 import { toast } from "sonner"
 
-export const useCreateSync = () => {
+export const useCreateSyncDeprecated = () => {
   const apiClient = useApiClient()
   const queryClient = useQueryClient()
 
