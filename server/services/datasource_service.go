@@ -12,9 +12,10 @@ import (
 
 func NewDatasourceService() *DatasourceService {
 	return &DatasourceService{
-		exchangeOAuthCodeHandler: rpc_handlers.NewDatasourceOAuthExchangeHandler(),
-		listDatasourcesHandler:   rpc_handlers.NewListDatasourcesHandler(),
-		listPlaylistsHandler:     rpc_handlers.NewListDatasourcePlaylistsHandler(),
+		exchangeOAuthCodeHandler:  rpc_handlers.NewDatasourceOAuthExchangeHandler(),
+		listDatasourcesHandler:    rpc_handlers.NewListDatasourcesHandler(),
+		listPlaylistsHandler:      rpc_handlers.NewListDatasourcePlaylistsHandler(),
+		getPlaylistDetailsHandler: rpc_handlers.NewGetPlaylistDetailsHandler(),
 	}
 }
 
@@ -30,6 +31,10 @@ type DatasourceService struct {
 	listPlaylistsHandler core.GrpcHandler[
 		*myncer_pb.ListPlaylistsRequest,
 		*myncer_pb.ListPlaylistsResponse,
+	]
+	getPlaylistDetailsHandler core.GrpcHandler[
+		*myncer_pb.GetPlaylistDetailsRequest,
+		*myncer_pb.GetPlaylistDetailsResponse,
 	]
 }
 
@@ -60,5 +65,5 @@ func (d *DatasourceService) GetPlaylistDetails(
 	context.Context,
 	*connect.Request[myncer_pb.GetPlaylistDetailsRequest],
 ) (*connect.Response[myncer_pb.GetPlaylistDetailsResponse], error) {
-	return nil, core.NewError("not implemented")
+	return OrchestrateHandler(context.Background(), d.getPlaylistDetailsHandler, nil)
 }
