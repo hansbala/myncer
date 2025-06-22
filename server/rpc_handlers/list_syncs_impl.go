@@ -29,7 +29,7 @@ func (ls *listSyncsImpl) CheckUserPermissions(
 
 func (ls *listSyncsImpl) ProcessRequest(
 	ctx context.Context,
-	userInfo *myncer_pb.User, /*const,@nullable*/
+	userInfo *myncer_pb.User, /*const*/
 	reqBody *myncer_pb.ListSyncsRequest, /*const*/
 ) *core.GrpcHandlerResponse[*myncer_pb.ListSyncsResponse] {
 	// Get all syncs for current user.

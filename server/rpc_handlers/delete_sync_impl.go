@@ -41,7 +41,7 @@ func (l *deleteSyncImpl) CheckUserPermissions(
 
 func (l *deleteSyncImpl) ProcessRequest(
 	ctx context.Context,
-	userInfo *myncer_pb.User, /*const,@nullable*/
+	userInfo *myncer_pb.User, /*const*/
 	reqBody *myncer_pb.DeleteSyncRequest, /*const*/
 ) *core.GrpcHandlerResponse[*myncer_pb.DeleteSyncResponse] {
 	if err := core.ToMyncerCtx(ctx).DB.SyncStore.DeleteSync(ctx, reqBody.GetSyncId()); err != nil {
