@@ -48,9 +48,12 @@ func main() {
 	// Register GRPC routes.
 	userService := services.NewUserService()
 	datasourceService := services.NewDatasourceService()
+	syncService := services.NewSyncService()
 	path, grpcHandler := myncer_pb_connect.NewUserServiceHandler(userService)
 	mux.Handle(path, GetWrappedGrpcHandler(grpcHandler, myncerCtx))
 	path, grpcHandler = myncer_pb_connect.NewDatasourceServiceHandler(datasourceService)
+	mux.Handle(path, GetWrappedGrpcHandler(grpcHandler, myncerCtx))
+	path, grpcHandler = myncer_pb_connect.NewSyncServiceHandler(syncService)
 	mux.Handle(path, GetWrappedGrpcHandler(grpcHandler, myncerCtx))
 
 	core.Printf("REST and gRPC listening on port 8080")

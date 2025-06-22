@@ -70,7 +70,7 @@ func (cs *createSyncHandlerImpl) ProcessRequest(
 	// Write a 201 back indicating we created the sync.
 	return core.NewProcessRequestResponse(
 		"Sync created successfully", /*msgForHttp*/
-		nil, /*err*/
+		nil,                         /*err*/
 		http.StatusCreated,
 	)
 }
@@ -101,7 +101,7 @@ func (cs *createSyncHandlerImpl) createSyncFromRequest(
 }
 
 func validateOneWaySync(
-	ctx context.Context, 
+	ctx context.Context,
 	userInfo *myncer_pb.User, /*const*/
 	s *api.OneWaySync, /*const*/
 ) error {
@@ -120,7 +120,7 @@ func validateOneWaySync(
 	}
 	destProtoDs := rest_helpers.RestDatasourceToProto(s.GetDestination().Datasource)
 	if destProtoDs == myncer_pb.Datasource_DATASOURCE_UNSPECIFIED {
-			return core.NewError("failed to get proto ds from %s", s.GetDestination().Datasource)
+		return core.NewError("failed to get proto ds from %s", s.GetDestination().Datasource)
 	}
 	if !connectedDatasources.Contains(sourceProtoDs) {
 		return core.NewError("source datasource %v is not connected for user", sourceProtoDs)
