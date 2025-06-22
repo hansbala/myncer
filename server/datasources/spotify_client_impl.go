@@ -87,7 +87,7 @@ func (s *spotifyClientImpl) GetPlaylistSongs(
 		if err != nil {
 			if spotifyErr, ok := err.(spotify.Error); ok &&
 				spotifyErr.Status == http.StatusTooManyRequests {
-					core.Printf("Spotify API rate limit hit, with message: %s", spotifyErr.Message)
+				core.Printf("Spotify API rate limit hit, with message: %s", spotifyErr.Message)
 			}
 			return nil, core.WrappedError(
 				err,
@@ -139,7 +139,7 @@ func (s *spotifyClientImpl) GetPlaylists(
 				r,
 				&myncer_pb.Playlist{
 					MusicSource: rest_helpers.CreateMusicSource(
-						myncer_pb.Datasource_SPOTIFY,
+						myncer_pb.Datasource_DATASOURCE_SPOTIFY,
 						p.ID.String(),
 					),
 					Name:        p.Name,
@@ -264,7 +264,7 @@ func (s *spotifyClientImpl) getClient(
 	oAuthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
 		ctx,
 		userInfo.GetId(),
-		myncer_pb.Datasource_SPOTIFY,
+		myncer_pb.Datasource_DATASOURCE_SPOTIFY,
 	)
 	if err != nil {
 		return nil, core.WrappedError(err, "failed to get spotify token for user %s", userInfo.GetId())
@@ -306,7 +306,7 @@ func buildSongFromSpotifyTrack(
 			Name:             track.Name,
 			ArtistName:       []string{track.Artists[0].Name},
 			AlbumName:        track.Album.Name,
-			Datasource:       myncer_pb.Datasource_SPOTIFY,
+			Datasource:       myncer_pb.Datasource_DATASOURCE_SPOTIFY,
 			DatasourceSongId: track.ID.String(),
 		},
 	)

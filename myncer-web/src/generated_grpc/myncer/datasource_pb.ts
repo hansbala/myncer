@@ -2,14 +2,245 @@
 // @generated from file myncer/datasource.proto (package myncer, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile } from "@bufbuild/protobuf/codegenv2";
-import { enumDesc, fileDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file myncer/datasource.proto.
  */
 export const file_myncer_datasource: GenFile = /*@__PURE__*/
-  fileDesc("ChdteW5jZXIvZGF0YXNvdXJjZS5wcm90bxIGbXluY2VyKkIKCkRhdGFzb3VyY2USGgoWREFUQVNPVVJDRV9VTlNQRUNJRklFRBAAEgsKB1NQT1RJRlkQARILCgdZT1VUVUJFEAJCM1oxZ2l0aHViLmNvbS9oYW5zYmFsYS9teW5jZXIvcHJvdG8vbXluY2VyO215bmNlcl9wYmIGcHJvdG8z");
+  fileDesc("ChdteW5jZXIvZGF0YXNvdXJjZS5wcm90bxIGbXluY2VyImQKGEV4Y2hhbmdlT0F1dGhDb2RlUmVxdWVzdBImCgpkYXRhc291cmNlGAEgASgOMhIubXluY2VyLkRhdGFzb3VyY2USDAoEY29kZRgCIAEoCRISCgpjc3JmX3Rva2VuGAMgASgJIm4KGUV4Y2hhbmdlT0F1dGhDb2RlUmVzcG9uc2USFQoNZXJyb3JfbWVzc2FnZRgBIAEoCRI6ChVvYXV0aF9leGNoYW5nZV9zdGF0dXMYAiABKA4yGy5teW5jZXIuT0F1dGhFeGNoYW5nZVN0YXR1cyIYChZMaXN0RGF0YXNvdXJjZXNSZXF1ZXN0IkEKF0xpc3REYXRhc291cmNlc1Jlc3BvbnNlEiYKCmRhdGFzb3VyY2UYASADKA4yEi5teW5jZXIuRGF0YXNvdXJjZSI+ChRMaXN0UGxheWxpc3RzUmVxdWVzdBImCgpkYXRhc291cmNlGAEgASgOMhIubXluY2VyLkRhdGFzb3VyY2UiawoIUGxheWxpc3QSKQoMbXVzaWNfc291cmNlGAEgASgLMhMubXluY2VyLk11c2ljU291cmNlEgwKBG5hbWUYAiABKAkSEwoLZGVzY3JpcHRpb24YAyABKAkSEQoJaW1hZ2VfdXJsGAQgASgJIjsKFUxpc3RQbGF5bGlzdHNSZXNwb25zZRIiCghwbGF5bGlzdBgBIAMoCzIQLm15bmNlci5QbGF5bGlzdCJYChlHZXRQbGF5bGlzdERldGFpbHNSZXF1ZXN0EiYKCmRhdGFzb3VyY2UYASABKA4yEi5teW5jZXIuRGF0YXNvdXJjZRITCgtwbGF5bGlzdF9pZBgCIAEoCSJAChpHZXRQbGF5bGlzdERldGFpbHNSZXNwb25zZRIiCghwbGF5bGlzdBgBIAEoCzIQLm15bmNlci5QbGF5bGlzdCJKCgtNdXNpY1NvdXJjZRImCgpkYXRhc291cmNlGAEgASgOMhIubXluY2VyLkRhdGFzb3VyY2USEwoLcGxheWxpc3RfaWQYAiABKAkqWAoKRGF0YXNvdXJjZRIaChZEQVRBU09VUkNFX1VOU1BFQ0lGSUVEEAASFgoSREFUQVNPVVJDRV9TUE9USUZZEAESFgoSREFUQVNPVVJDRV9ZT1VUVUJFEAIqhQEKE09BdXRoRXhjaGFuZ2VTdGF0dXMSJgoiT19BVVRIX0VYQ0hBTkdFX1NUQVRVU19VTlNQRUNJRklFRBAAEiIKHk9fQVVUSF9FWENIQU5HRV9TVEFUVVNfU1VDQ0VTUxABEiIKHk9fQVVUSF9FWENIQU5HRV9TVEFUVVNfRkFJTFVSRRACMuwCChFEYXRhc291cmNlU2VydmljZRJYChFFeGNoYW5nZU9BdXRoQ29kZRIgLm15bmNlci5FeGNoYW5nZU9BdXRoQ29kZVJlcXVlc3QaIS5teW5jZXIuRXhjaGFuZ2VPQXV0aENvZGVSZXNwb25zZRJSCg9MaXN0RGF0YXNvdXJjZXMSHi5teW5jZXIuTGlzdERhdGFzb3VyY2VzUmVxdWVzdBofLm15bmNlci5MaXN0RGF0YXNvdXJjZXNSZXNwb25zZRJMCg1MaXN0UGxheWxpc3RzEhwubXluY2VyLkxpc3RQbGF5bGlzdHNSZXF1ZXN0Gh0ubXluY2VyLkxpc3RQbGF5bGlzdHNSZXNwb25zZRJbChJHZXRQbGF5bGlzdERldGFpbHMSIS5teW5jZXIuR2V0UGxheWxpc3REZXRhaWxzUmVxdWVzdBoiLm15bmNlci5HZXRQbGF5bGlzdERldGFpbHNSZXNwb25zZUIzWjFnaXRodWIuY29tL2hhbnNiYWxhL215bmNlci9wcm90by9teW5jZXI7bXluY2VyX3BiYgZwcm90bzM");
+
+/**
+ * @generated from message myncer.ExchangeOAuthCodeRequest
+ */
+export type ExchangeOAuthCodeRequest = Message<"myncer.ExchangeOAuthCodeRequest"> & {
+  /**
+   * @generated from field: myncer.Datasource datasource = 1;
+   */
+  datasource: Datasource;
+
+  /**
+   * The authorization code returned by the datasource.
+   *
+   * @generated from field: string code = 2;
+   */
+  code: string;
+
+  /**
+   * Optional CSRF protection token returned from the datasource.
+   *
+   * @generated from field: string csrf_token = 3;
+   */
+  csrfToken: string;
+};
+
+/**
+ * Describes the message myncer.ExchangeOAuthCodeRequest.
+ * Use `create(ExchangeOAuthCodeRequestSchema)` to create a new message.
+ */
+export const ExchangeOAuthCodeRequestSchema: GenMessage<ExchangeOAuthCodeRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_datasource, 0);
+
+/**
+ * @generated from message myncer.ExchangeOAuthCodeResponse
+ */
+export type ExchangeOAuthCodeResponse = Message<"myncer.ExchangeOAuthCodeResponse"> & {
+  /**
+   * @generated from field: string error_message = 1;
+   */
+  errorMessage: string;
+
+  /**
+   * @generated from field: myncer.OAuthExchangeStatus oauth_exchange_status = 2;
+   */
+  oauthExchangeStatus: OAuthExchangeStatus;
+};
+
+/**
+ * Describes the message myncer.ExchangeOAuthCodeResponse.
+ * Use `create(ExchangeOAuthCodeResponseSchema)` to create a new message.
+ */
+export const ExchangeOAuthCodeResponseSchema: GenMessage<ExchangeOAuthCodeResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_datasource, 1);
+
+/**
+ * @generated from message myncer.ListDatasourcesRequest
+ */
+export type ListDatasourcesRequest = Message<"myncer.ListDatasourcesRequest"> & {
+};
+
+/**
+ * Describes the message myncer.ListDatasourcesRequest.
+ * Use `create(ListDatasourcesRequestSchema)` to create a new message.
+ */
+export const ListDatasourcesRequestSchema: GenMessage<ListDatasourcesRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_datasource, 2);
+
+/**
+ * @generated from message myncer.ListDatasourcesResponse
+ */
+export type ListDatasourcesResponse = Message<"myncer.ListDatasourcesResponse"> & {
+  /**
+   * @generated from field: repeated myncer.Datasource datasource = 1;
+   */
+  datasource: Datasource[];
+};
+
+/**
+ * Describes the message myncer.ListDatasourcesResponse.
+ * Use `create(ListDatasourcesResponseSchema)` to create a new message.
+ */
+export const ListDatasourcesResponseSchema: GenMessage<ListDatasourcesResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_datasource, 3);
+
+/**
+ * @generated from message myncer.ListPlaylistsRequest
+ */
+export type ListPlaylistsRequest = Message<"myncer.ListPlaylistsRequest"> & {
+  /**
+   * @generated from field: myncer.Datasource datasource = 1;
+   */
+  datasource: Datasource;
+};
+
+/**
+ * Describes the message myncer.ListPlaylistsRequest.
+ * Use `create(ListPlaylistsRequestSchema)` to create a new message.
+ */
+export const ListPlaylistsRequestSchema: GenMessage<ListPlaylistsRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_datasource, 4);
+
+/**
+ * @generated from message myncer.Playlist
+ */
+export type Playlist = Message<"myncer.Playlist"> & {
+  /**
+   * @generated from field: myncer.MusicSource music_source = 1;
+   */
+  musicSource?: MusicSource;
+
+  /**
+   * Human readable name of the playlist as stored in the original datasource.
+   *
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * Human readable description of the playlist as stored in the original datasource.
+   *
+   * @generated from field: string description = 3;
+   */
+  description: string;
+
+  /**
+   * URL to the playlist image as stored in the original datasource.
+   *
+   * next: 5
+   *
+   * @generated from field: string image_url = 4;
+   */
+  imageUrl: string;
+};
+
+/**
+ * Describes the message myncer.Playlist.
+ * Use `create(PlaylistSchema)` to create a new message.
+ */
+export const PlaylistSchema: GenMessage<Playlist> = /*@__PURE__*/
+  messageDesc(file_myncer_datasource, 5);
+
+/**
+ * @generated from message myncer.ListPlaylistsResponse
+ */
+export type ListPlaylistsResponse = Message<"myncer.ListPlaylistsResponse"> & {
+  /**
+   * List of playlists attached to the datasource.
+   *
+   * @generated from field: repeated myncer.Playlist playlist = 1;
+   */
+  playlist: Playlist[];
+};
+
+/**
+ * Describes the message myncer.ListPlaylistsResponse.
+ * Use `create(ListPlaylistsResponseSchema)` to create a new message.
+ */
+export const ListPlaylistsResponseSchema: GenMessage<ListPlaylistsResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_datasource, 6);
+
+/**
+ * @generated from message myncer.GetPlaylistDetailsRequest
+ */
+export type GetPlaylistDetailsRequest = Message<"myncer.GetPlaylistDetailsRequest"> & {
+  /**
+   * The datasource of the playlist.
+   *
+   * @generated from field: myncer.Datasource datasource = 1;
+   */
+  datasource: Datasource;
+
+  /**
+   * The unique, stable identifier of the playlist for the datasource.
+   *
+   * @generated from field: string playlist_id = 2;
+   */
+  playlistId: string;
+};
+
+/**
+ * Describes the message myncer.GetPlaylistDetailsRequest.
+ * Use `create(GetPlaylistDetailsRequestSchema)` to create a new message.
+ */
+export const GetPlaylistDetailsRequestSchema: GenMessage<GetPlaylistDetailsRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_datasource, 7);
+
+/**
+ * @generated from message myncer.GetPlaylistDetailsResponse
+ */
+export type GetPlaylistDetailsResponse = Message<"myncer.GetPlaylistDetailsResponse"> & {
+  /**
+   * Details of the specified playlist.
+   *
+   * @generated from field: myncer.Playlist playlist = 1;
+   */
+  playlist?: Playlist;
+};
+
+/**
+ * Describes the message myncer.GetPlaylistDetailsResponse.
+ * Use `create(GetPlaylistDetailsResponseSchema)` to create a new message.
+ */
+export const GetPlaylistDetailsResponseSchema: GenMessage<GetPlaylistDetailsResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_datasource, 8);
+
+/**
+ * @generated from message myncer.MusicSource
+ */
+export type MusicSource = Message<"myncer.MusicSource"> & {
+  /**
+   * @generated from field: myncer.Datasource datasource = 1;
+   */
+  datasource: Datasource;
+
+  /**
+   * Unique, stable playlist identifier for the datasource.
+   *
+   * next: 3
+   *
+   * @generated from field: string playlist_id = 2;
+   */
+  playlistId: string;
+};
+
+/**
+ * Describes the message myncer.MusicSource.
+ * Use `create(MusicSourceSchema)` to create a new message.
+ */
+export const MusicSourceSchema: GenMessage<MusicSource> = /*@__PURE__*/
+  messageDesc(file_myncer_datasource, 9);
 
 /**
  * @generated from enum myncer.Datasource
@@ -18,15 +249,15 @@ export enum Datasource {
   /**
    * @generated from enum value: DATASOURCE_UNSPECIFIED = 0;
    */
-  DATASOURCE_UNSPECIFIED = 0,
+  UNSPECIFIED = 0,
 
   /**
-   * @generated from enum value: SPOTIFY = 1;
+   * @generated from enum value: DATASOURCE_SPOTIFY = 1;
    */
   SPOTIFY = 1,
 
   /**
-   * @generated from enum value: YOUTUBE = 2;
+   * @generated from enum value: DATASOURCE_YOUTUBE = 2;
    */
   YOUTUBE = 2,
 }
@@ -36,4 +267,69 @@ export enum Datasource {
  */
 export const DatasourceSchema: GenEnum<Datasource> = /*@__PURE__*/
   enumDesc(file_myncer_datasource, 0);
+
+/**
+ * @generated from enum myncer.OAuthExchangeStatus
+ */
+export enum OAuthExchangeStatus {
+  /**
+   * @generated from enum value: O_AUTH_EXCHANGE_STATUS_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: O_AUTH_EXCHANGE_STATUS_SUCCESS = 1;
+   */
+  SUCCESS = 1,
+
+  /**
+   * @generated from enum value: O_AUTH_EXCHANGE_STATUS_FAILURE = 2;
+   */
+  FAILURE = 2,
+}
+
+/**
+ * Describes the enum myncer.OAuthExchangeStatus.
+ */
+export const OAuthExchangeStatusSchema: GenEnum<OAuthExchangeStatus> = /*@__PURE__*/
+  enumDesc(file_myncer_datasource, 1);
+
+/**
+ * @generated from service myncer.DatasourceService
+ */
+export const DatasourceService: GenService<{
+  /**
+   * @generated from rpc myncer.DatasourceService.ExchangeOAuthCode
+   */
+  exchangeOAuthCode: {
+    methodKind: "unary";
+    input: typeof ExchangeOAuthCodeRequestSchema;
+    output: typeof ExchangeOAuthCodeResponseSchema;
+  },
+  /**
+   * @generated from rpc myncer.DatasourceService.ListDatasources
+   */
+  listDatasources: {
+    methodKind: "unary";
+    input: typeof ListDatasourcesRequestSchema;
+    output: typeof ListDatasourcesResponseSchema;
+  },
+  /**
+   * @generated from rpc myncer.DatasourceService.ListPlaylists
+   */
+  listPlaylists: {
+    methodKind: "unary";
+    input: typeof ListPlaylistsRequestSchema;
+    output: typeof ListPlaylistsResponseSchema;
+  },
+  /**
+   * @generated from rpc myncer.DatasourceService.GetPlaylistDetails
+   */
+  getPlaylistDetails: {
+    methodKind: "unary";
+    input: typeof GetPlaylistDetailsRequestSchema;
+    output: typeof GetPlaylistDetailsResponseSchema;
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_myncer_datasource, 0);
 

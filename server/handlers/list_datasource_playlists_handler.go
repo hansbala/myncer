@@ -101,9 +101,9 @@ func (ldp *listDsPlaylistsHandlerImpl) getClientFromDatasource(
 ) (core.DatasourceClient, error) {
 	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
 	switch ds {
-	case myncer_pb.Datasource_SPOTIFY:
+	case myncer_pb.Datasource_DATASOURCE_SPOTIFY:
 		return dsClients.SpotifyClient, nil
-	case myncer_pb.Datasource_YOUTUBE:
+	case myncer_pb.Datasource_DATASOURCE_YOUTUBE:
 		return dsClients.YoutubeClient, nil
 	default:
 		return nil, core.NewError("unsupported datasource: %v", ds)

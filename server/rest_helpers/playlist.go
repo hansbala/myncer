@@ -27,7 +27,7 @@ func SpotifyPlaylistToProto(p *spotify.FullPlaylist /*const*/) *myncer_pb.Playli
 		Description: p.Description,
 		ImageUrl:    GetBestSpotifyImageURL(p.Images),
 		MusicSource: &myncer_pb.MusicSource{
-			Datasource: myncer_pb.Datasource_SPOTIFY,
+			Datasource: myncer_pb.Datasource_DATASOURCE_SPOTIFY,
 			PlaylistId: string(p.ID),
 		},
 	}

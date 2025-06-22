@@ -60,7 +60,7 @@ func (c *youtubeClientImpl) GetPlaylists(
 			playlists,
 			&myncer_pb.Playlist{
 				MusicSource: rest_helpers.CreateMusicSource(
-					myncer_pb.Datasource_YOUTUBE,
+					myncer_pb.Datasource_DATASOURCE_YOUTUBE,
 					p.Id,
 				),
 				Name:        p.Snippet.Title,
@@ -89,7 +89,7 @@ func (c *youtubeClientImpl) GetPlaylist(
 
 	p := resp.Items[0]
 	return &myncer_pb.Playlist{
-		MusicSource: rest_helpers.CreateMusicSource(myncer_pb.Datasource_YOUTUBE, p.Id),
+		MusicSource: rest_helpers.CreateMusicSource(myncer_pb.Datasource_DATASOURCE_YOUTUBE, p.Id),
 		Name:        p.Snippet.Title,
 		Description: p.Snippet.Description,
 		ImageUrl:    getBestThumbnailUrl(p.Snippet.Thumbnails),
@@ -265,7 +265,7 @@ func (c *youtubeClientImpl) getService(
 	oAuthToken, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetToken(
 		ctx,
 		userInfo.GetId(),
-		myncer_pb.Datasource_YOUTUBE,
+		myncer_pb.Datasource_DATASOURCE_YOUTUBE,
 	)
 	if err != nil {
 		return nil, core.WrappedError(err, "failed to get youtube token for user %s", userInfo.GetId())
@@ -301,7 +301,7 @@ func buildSongFromYouTubePlaylistItem(
 		&myncer_pb.Song{
 			Name:             pi.Snippet.Title,
 			ArtistName:       []string{pi.Snippet.ChannelTitle},
-			Datasource:       myncer_pb.Datasource_YOUTUBE,
+			Datasource:       myncer_pb.Datasource_DATASOURCE_YOUTUBE,
 			DatasourceSongId: pi.Id,
 		},
 	)
@@ -321,7 +321,7 @@ func buildSongFormYoutubeSearchResultItem(
 			Name: strings.TrimSpace(item.Snippet.Title),
 			// best-effort: channel title often includes artist
 			ArtistName:       []string{item.Snippet.ChannelTitle},
-			Datasource:       myncer_pb.Datasource_YOUTUBE,
+			Datasource:       myncer_pb.Datasource_DATASOURCE_YOUTUBE,
 			DatasourceSongId: videoId,
 		},
 	), nil

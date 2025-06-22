@@ -53,24 +53,24 @@ func (dp *getDsPlaylistHandlerImpl) ProcessRequest(
 	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
 	playlist := &myncer_pb.Playlist{}
 	switch datasource {
-		case myncer_pb.Datasource_SPOTIFY:
-			playlist, err = dsClients.SpotifyClient.GetPlaylist(ctx, userInfo, playlistId)
-			if err != nil {
-				return core.NewProcessRequestResponse_InternalServerError(
-					core.WrappedError(err, "failed to get Spotify playlist"),
-				)
-			}
-		case myncer_pb.Datasource_YOUTUBE:
-			playlist, err = dsClients.YoutubeClient.GetPlaylist(ctx, userInfo, playlistId)
-			if err != nil {
-				return core.NewProcessRequestResponse_InternalServerError(
-					core.WrappedError(err, "failed to get YouTube playlist"),
-				)
-			}
-		default:
+	case myncer_pb.Datasource_DATASOURCE_SPOTIFY:
+		playlist, err = dsClients.SpotifyClient.GetPlaylist(ctx, userInfo, playlistId)
+		if err != nil {
 			return core.NewProcessRequestResponse_InternalServerError(
-				core.NewError("unsupported datasource: %s", datasource),
+				core.WrappedError(err, "failed to get Spotify playlist"),
 			)
+		}
+	case myncer_pb.Datasource_DATASOURCE_YOUTUBE:
+		playlist, err = dsClients.YoutubeClient.GetPlaylist(ctx, userInfo, playlistId)
+		if err != nil {
+			return core.NewProcessRequestResponse_InternalServerError(
+				core.WrappedError(err, "failed to get YouTube playlist"),
+			)
+		}
+	default:
+		return core.NewProcessRequestResponse_InternalServerError(
+			core.NewError("unsupported datasource: %s", datasource),
+		)
 	}
 
 	// Convert to REST and write the response.

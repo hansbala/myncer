@@ -43,9 +43,9 @@ func (s *songImpl) GetIdByDatasource(
 	datasource myncer_pb.Datasource,
 ) (string, error) {
 	switch datasource {
-	case myncer_pb.Datasource_SPOTIFY:
+	case myncer_pb.Datasource_DATASOURCE_SPOTIFY:
 		return s.getSpotifyId(ctx, userInfo)
-	case myncer_pb.Datasource_YOUTUBE:
+	case myncer_pb.Datasource_DATASOURCE_YOUTUBE:
 		return s.getYoutubeId(ctx, userInfo)
 	default:
 		return "", core.NewError("Unknown datasource: %v", datasource)
@@ -60,7 +60,7 @@ func (s *songImpl) getSpotifyId(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const*/
 ) (string, error) {
-	if s.spec.GetDatasource() == myncer_pb.Datasource_SPOTIFY {
+	if s.spec.GetDatasource() == myncer_pb.Datasource_DATASOURCE_SPOTIFY {
 		return s.spec.GetDatasourceSongId(), nil
 	}
 	// Otherwise, try searching Spotify
@@ -81,7 +81,7 @@ func (s *songImpl) getYoutubeId(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const*/
 ) (string, error) {
-	if s.spec.GetDatasource() == myncer_pb.Datasource_YOUTUBE {
+	if s.spec.GetDatasource() == myncer_pb.Datasource_DATASOURCE_YOUTUBE {
 		return s.spec.GetDatasourceSongId(), nil
 	}
 	// Otherwise, try searching Youtube.

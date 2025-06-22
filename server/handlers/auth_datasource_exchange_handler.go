@@ -67,7 +67,7 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 	dsClients := core.ToMyncerCtx(ctx).DatasourceClients
 	var oAuthToken *myncer_pb.OAuthToken
 	switch datasource {
-	case myncer_pb.Datasource_SPOTIFY:
+	case myncer_pb.Datasource_DATASOURCE_SPOTIFY:
 		token, err := dsClients.SpotifyClient.ExchangeCodeForToken(ctx, restReq.GetCode())
 		if err != nil {
 			return core.NewProcessRequestResponse_InternalServerError(
@@ -83,7 +83,7 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 			time.Now().Add(time.Second*time.Duration(token.ExpiresIn)),
 			datasource,
 		)
-	case myncer_pb.Datasource_YOUTUBE:
+	case myncer_pb.Datasource_DATASOURCE_YOUTUBE:
 		token, err := dsClients.YoutubeClient.ExchangeCodeForToken(ctx, restReq.GetCode())
 		if err != nil {
 			return core.NewProcessRequestResponse_InternalServerError(

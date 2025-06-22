@@ -32,9 +32,3 @@ message OneWaySync {
   // next: 4
 }
 
-message MusicSource {
-  myncer.Datasource datasource = 1;
-  // Unique, stable playlist identifier for the datasource.
-  string playlist_id = 2;
-  // next: 3
-}

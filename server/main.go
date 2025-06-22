@@ -210,7 +210,7 @@ func TestSongs(ctx context.Context) {
 			Name:             "Michael Jackson - Billie Jean (Live performance at 1986)",
 			ArtistName:       []string{"VEVO Music"},
 			AlbumName:        "Man in the mirror",
-			Datasource:       myncer_pb.Datasource_YOUTUBE,
+			Datasource:       myncer_pb.Datasource_DATASOURCE_YOUTUBE,
 			DatasourceSongId: "abcd-12344727-2762",
 		},
 	}

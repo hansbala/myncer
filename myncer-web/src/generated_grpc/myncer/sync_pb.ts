@@ -6,7 +6,7 @@ import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
-import type { Datasource } from "./datasource_pb";
+import type { MusicSource } from "./datasource_pb";
 import { file_myncer_datasource } from "./datasource_pb";
 import type { Message } from "@bufbuild/protobuf";
 
@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file myncer/sync.proto.
  */
 export const file_myncer_sync: GenFile = /*@__PURE__*/
-  fileDesc("ChFteW5jZXIvc3luYy5wcm90bxIGbXluY2VyIr8BCgRTeW5jEgoKAmlkGAEgASgJEg8KB3VzZXJfaWQYAiABKAkSLgoKY3JlYXRlZF9hdBgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASKgoMb25lX3dheV9zeW5jGAUgASgLMhIubXluY2VyLk9uZVdheVN5bmNIAEIOCgxzeW5jX3ZhcmlhbnQidwoKT25lV2F5U3luYxIjCgZzb3VyY2UYASABKAsyEy5teW5jZXIuTXVzaWNTb3VyY2USKAoLZGVzdGluYXRpb24YAiABKAsyEy5teW5jZXIuTXVzaWNTb3VyY2USGgoSb3ZlcndyaXRlX2V4aXN0aW5nGAMgASgIIkoKC011c2ljU291cmNlEiYKCmRhdGFzb3VyY2UYASABKA4yEi5teW5jZXIuRGF0YXNvdXJjZRITCgtwbGF5bGlzdF9pZBgCIAEoCUIzWjFnaXRodWIuY29tL2hhbnNiYWxhL215bmNlci9wcm90by9teW5jZXI7bXluY2VyX3BiYgZwcm90bzM", [file_google_protobuf_timestamp, file_myncer_datasource]);
+  fileDesc("ChFteW5jZXIvc3luYy5wcm90bxIGbXluY2VyIr8BCgRTeW5jEgoKAmlkGAEgASgJEg8KB3VzZXJfaWQYAiABKAkSLgoKY3JlYXRlZF9hdBgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASKgoMb25lX3dheV9zeW5jGAUgASgLMhIubXluY2VyLk9uZVdheVN5bmNIAEIOCgxzeW5jX3ZhcmlhbnQidwoKT25lV2F5U3luYxIjCgZzb3VyY2UYASABKAsyEy5teW5jZXIuTXVzaWNTb3VyY2USKAoLZGVzdGluYXRpb24YAiABKAsyEy5teW5jZXIuTXVzaWNTb3VyY2USGgoSb3ZlcndyaXRlX2V4aXN0aW5nGAMgASgIQjNaMWdpdGh1Yi5jb20vaGFuc2JhbGEvbXluY2VyL3Byb3RvL215bmNlcjtteW5jZXJfcGJiBnByb3RvMw", [file_google_protobuf_timestamp, file_myncer_datasource]);
 
 /**
  * @generated from message myncer.Sync
@@ -100,30 +100,4 @@ export type OneWaySync = Message<"myncer.OneWaySync"> & {
  */
 export const OneWaySyncSchema: GenMessage<OneWaySync> = /*@__PURE__*/
   messageDesc(file_myncer_sync, 1);
-
-/**
- * @generated from message myncer.MusicSource
- */
-export type MusicSource = Message<"myncer.MusicSource"> & {
-  /**
-   * @generated from field: myncer.Datasource datasource = 1;
-   */
-  datasource: Datasource;
-
-  /**
-   * Unique, stable playlist identifier for the datasource.
-   *
-   * next: 3
-   *
-   * @generated from field: string playlist_id = 2;
-   */
-  playlistId: string;
-};
-
-/**
- * Describes the message myncer.MusicSource.
- * Use `create(MusicSourceSchema)` to create a new message.
- */
-export const MusicSourceSchema: GenMessage<MusicSource> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 2);
 

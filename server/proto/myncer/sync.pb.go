@@ -188,59 +188,6 @@ func (x *OneWaySync) GetOverwriteExisting() bool {
 	return false
 }
 
-type MusicSource struct {
-	state      protoimpl.MessageState `protogen:"open.v1"`
-	Datasource Datasource             `protobuf:"varint,1,opt,name=datasource,proto3,enum=myncer.Datasource" json:"datasource,omitempty"`
-	// Unique, stable playlist identifier for the datasource.
-	PlaylistId    string `protobuf:"bytes,2,opt,name=playlist_id,json=playlistId,proto3" json:"playlist_id,omitempty"` // next: 3
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *MusicSource) Reset() {
-	*x = MusicSource{}
-	mi := &file_myncer_sync_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *MusicSource) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*MusicSource) ProtoMessage() {}
-
-func (x *MusicSource) ProtoReflect() protoreflect.Message {
-	mi := &file_myncer_sync_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use MusicSource.ProtoReflect.Descriptor instead.
-func (*MusicSource) Descriptor() ([]byte, []int) {
-	return file_myncer_sync_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *MusicSource) GetDatasource() Datasource {
-	if x != nil {
-		return x.Datasource
-	}
-	return Datasource_DATASOURCE_UNSPECIFIED
-}
-
-func (x *MusicSource) GetPlaylistId() string {
-	if x != nil {
-		return x.PlaylistId
-	}
-	return ""
-}
-
 var File_myncer_sync_proto protoreflect.FileDescriptor
 
 var file_myncer_sync_proto_rawDesc = string([]byte{
@@ -274,17 +221,11 @@ var file_myncer_sync_proto_rawDesc = string([]byte{
 	0x74, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x2d, 0x0a, 0x12, 0x6f, 0x76, 0x65, 0x72,
 	0x77, 0x72, 0x69, 0x74, 0x65, 0x5f, 0x65, 0x78, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x18, 0x03,
 	0x20, 0x01, 0x28, 0x08, 0x52, 0x11, 0x6f, 0x76, 0x65, 0x72, 0x77, 0x72, 0x69, 0x74, 0x65, 0x45,
-	0x78, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x22, 0x62, 0x0a, 0x0b, 0x4d, 0x75, 0x73, 0x69, 0x63,
-	0x53, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x32, 0x0a, 0x0a, 0x64, 0x61, 0x74, 0x61, 0x73, 0x6f,
-	0x75, 0x72, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x12, 0x2e, 0x6d, 0x79, 0x6e,
-	0x63, 0x65, 0x72, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x52, 0x0a,
-	0x64, 0x61, 0x74, 0x61, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x6c,
-	0x61, 0x79, 0x6c, 0x69, 0x73, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x0a, 0x70, 0x6c, 0x61, 0x79, 0x6c, 0x69, 0x73, 0x74, 0x49, 0x64, 0x42, 0x33, 0x5a, 0x31, 0x67,
-	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x68, 0x61, 0x6e, 0x73, 0x62, 0x61,
-	0x6c, 0x61, 0x2f, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f,
-	0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x3b, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x5f, 0x70, 0x62,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x78, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x42, 0x33, 0x5a, 0x31, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x68, 0x61, 0x6e, 0x73, 0x62, 0x61, 0x6c, 0x61, 0x2f, 0x6d,
+	0x79, 0x6e, 0x63, 0x65, 0x72, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x6d, 0x79, 0x6e, 0x63,
+	0x65, 0x72, 0x3b, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x5f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 })
 
 var (
@@ -299,26 +240,24 @@ func file_myncer_sync_proto_rawDescGZIP() []byte {
 	return file_myncer_sync_proto_rawDescData
 }
 
-var file_myncer_sync_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_myncer_sync_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_myncer_sync_proto_goTypes = []any{
 	(*Sync)(nil),                  // 0: myncer.Sync
 	(*OneWaySync)(nil),            // 1: myncer.OneWaySync
-	(*MusicSource)(nil),           // 2: myncer.MusicSource
-	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
-	(Datasource)(0),               // 4: myncer.Datasource
+	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
+	(*MusicSource)(nil),           // 3: myncer.MusicSource
 }
 var file_myncer_sync_proto_depIdxs = []int32{
-	3, // 0: myncer.Sync.created_at:type_name -> google.protobuf.Timestamp
-	3, // 1: myncer.Sync.updated_at:type_name -> google.protobuf.Timestamp
+	2, // 0: myncer.Sync.created_at:type_name -> google.protobuf.Timestamp
+	2, // 1: myncer.Sync.updated_at:type_name -> google.protobuf.Timestamp
 	1, // 2: myncer.Sync.one_way_sync:type_name -> myncer.OneWaySync
-	2, // 3: myncer.OneWaySync.source:type_name -> myncer.MusicSource
-	2, // 4: myncer.OneWaySync.destination:type_name -> myncer.MusicSource
-	4, // 5: myncer.MusicSource.datasource:type_name -> myncer.Datasource
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	3, // 3: myncer.OneWaySync.source:type_name -> myncer.MusicSource
+	3, // 4: myncer.OneWaySync.destination:type_name -> myncer.MusicSource
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_myncer_sync_proto_init() }
@@ -336,7 +275,7 @@ func file_myncer_sync_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_myncer_sync_proto_rawDesc), len(file_myncer_sync_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

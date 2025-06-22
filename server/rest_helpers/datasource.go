@@ -8,9 +8,9 @@ import (
 
 func ProtoDatasourceToRest(ds myncer_pb.Datasource) (api.Datasource, error) {
 	switch ds {
-	case myncer_pb.Datasource_SPOTIFY:
+	case myncer_pb.Datasource_DATASOURCE_SPOTIFY:
 		return api.SPOTIFY, nil
-	case myncer_pb.Datasource_YOUTUBE:
+	case myncer_pb.Datasource_DATASOURCE_YOUTUBE:
 		return api.YOUTUBE, nil
 	default:
 		return "", core.NewError("unknown datasource")
@@ -20,9 +20,9 @@ func ProtoDatasourceToRest(ds myncer_pb.Datasource) (api.Datasource, error) {
 func RestDatasourceToProto(ds api.Datasource) myncer_pb.Datasource {
 	switch ds {
 	case api.SPOTIFY:
-		return myncer_pb.Datasource_SPOTIFY
+		return myncer_pb.Datasource_DATASOURCE_SPOTIFY
 	case api.YOUTUBE:
-		return myncer_pb.Datasource_YOUTUBE
+		return myncer_pb.Datasource_DATASOURCE_YOUTUBE
 	default:
 		return myncer_pb.Datasource_DATASOURCE_UNSPECIFIED
 	}

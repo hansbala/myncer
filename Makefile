@@ -42,6 +42,7 @@ proto-go:
 .PHONY: proto-go-clean
 proto-go-clean:
 	rm -rf $(PROTO_DIR)/*.pb.go
+	rm -rf server/proto
 
 ##############################################
 # Openapi targets.

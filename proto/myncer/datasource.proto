@@ -4,8 +4,79 @@ package myncer;
 
 option go_package = "github.com/hansbala/myncer/proto/myncer;myncer_pb";
 
+service DatasourceService {
+  rpc ExchangeOAuthCode(ExchangeOAuthCodeRequest) returns (ExchangeOAuthCodeResponse);
+  rpc ListDatasources(ListDatasourcesRequest) returns (ListDatasourcesResponse);
+  rpc ListPlaylists(ListPlaylistsRequest) returns (ListPlaylistsResponse);
+  rpc GetPlaylistDetails(GetPlaylistDetailsRequest) returns (GetPlaylistDetailsResponse);
+}
+
 enum Datasource {
   DATASOURCE_UNSPECIFIED = 0;
-  SPOTIFY = 1;
-  YOUTUBE = 2;
+  DATASOURCE_SPOTIFY = 1;
+  DATASOURCE_YOUTUBE = 2;
+}
+
+message ExchangeOAuthCodeRequest {
+  Datasource datasource = 1;
+  // The authorization code returned by the datasource.
+  string code = 2;
+  // Optional CSRF protection token returned from the datasource.
+  string csrf_token = 3;
+}
+
+enum OAuthExchangeStatus {
+  O_AUTH_EXCHANGE_STATUS_UNSPECIFIED = 0;
+  O_AUTH_EXCHANGE_STATUS_SUCCESS = 1;
+  O_AUTH_EXCHANGE_STATUS_FAILURE = 2;
+}
+
+message ExchangeOAuthCodeResponse {
+  string error_message = 1;
+  OAuthExchangeStatus oauth_exchange_status = 2;
+}
+
+message ListDatasourcesRequest {}
+
+message ListDatasourcesResponse {
+  repeated Datasource datasource = 1;
+}
+
+message ListPlaylistsRequest {
+  Datasource datasource = 1;
+}
+
+message Playlist {
+  myncer.MusicSource music_source = 1;
+  // Human readable name of the playlist as stored in the original datasource.
+  string name = 2;
+  // Human readable description of the playlist as stored in the original datasource.
+  string description = 3;
+  // URL to the playlist image as stored in the original datasource.
+  string image_url = 4;
+  // next: 5
+}
+
+message ListPlaylistsResponse {
+  // List of playlists attached to the datasource.
+  repeated Playlist playlist = 1;
+}
+
+message GetPlaylistDetailsRequest {
+  // The datasource of the playlist.
+  Datasource datasource = 1;
+  // The unique, stable identifier of the playlist for the datasource.
+  string playlist_id = 2;
+}
+
+message GetPlaylistDetailsResponse {
+  // Details of the specified playlist.
+  Playlist playlist = 1;
+}
+
+message MusicSource {
+  myncer.Datasource datasource = 1;
+  // Unique, stable playlist identifier for the datasource.
+  string playlist_id = 2;
+  // next: 3
 }
