@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import type { Playlist } from "@/generated_api/src"
+import type { Playlist } from "@/generated_grpc/myncer/datasource_pb"
 import { Controller, type UseControllerProps, type FieldValues } from "react-hook-form"
 
 interface PlaylistProps<T extends FieldValues> extends UseControllerProps<T> {
@@ -31,12 +31,12 @@ export function PlaylistSelector<T extends FieldValues>({
           <SelectContent>
             {playlists.map((p) => (
               <SelectItem
-                key={p.playlistId}
-                value={p.playlistId}
-                title={p.name || p.playlistId} // Tooltip on hover
+                key={p?.musicSource?.playlistId || ""}
+                value={p?.musicSource?.playlistId || ""}
+                title={p.name || p?.musicSource?.playlistId || ""} // Tooltip on hover
               >
                 <div className="truncate max-w-full">
-                  {p.name || p.playlistId}
+                  {p.name || p?.musicSource?.playlistId || ""}
                 </div>
               </SelectItem>
             ))}

@@ -8,13 +8,13 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
-import { usePlaylists } from "@/hooks/usePlaylists"
-import type { Datasource } from "@/generated_api/src"
 import { DatasourceSelector } from "./DatasourceSelector"
 import { PlaylistSelector } from "./PlaylistSelector"
 import { useCreateSync } from "@/hooks/useCreateSync"
 import { Loader2 } from "lucide-react"
 import { useDatasources } from "@/hooks/useDatasources"
+import { useListPlaylists } from "@/hooks/useListPlaylists"
+import type { Datasource } from "@/generated_grpc/myncer/datasource_pb"
 
 type FormValues = {
   sourceDatasource: Datasource
@@ -43,22 +43,22 @@ export const CreateOneWaySyncDialog = () => {
   const {
     playlists: sourcePlaylists,
     loading: sourcePlaylistsLoading,
-  } = usePlaylists({ datasource: sourceDatasource })
+  } = useListPlaylists({ datasource: sourceDatasource })
 
   const {
     playlists: targetPlaylists,
     loading: targetPlaylistsLoading,
-  } = usePlaylists({ datasource: targetDatasource })
+  } = useListPlaylists({ datasource: targetDatasource })
 
   const onSubmit = (data: FormValues) => {
     createSync({
       syncVariant: "ONE_WAY",
       source: {
-        datasource: data.sourceDatasource,
+        datasource: "SPOTIFY",
         playlistId: data.sourcePlaylistId,
       },
       destination: {
-        datasource: data.targetDatasource,
+        datasource: "YOUTUBE",
         playlistId: data.targetPlaylistId,
       },
       // TODO: Add overwrite existing? to form and then use here.

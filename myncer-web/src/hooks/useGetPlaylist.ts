@@ -12,7 +12,6 @@ export const useGetPlaylist = ({ datasource, playlistId }: { datasource?: Dataso
     {
       // Only fetch playlists if a datasource and playlist id is provided.
       enabled: !!datasource && !!playlistId,
-      retry: false,
     },
   )
 
