@@ -12,7 +12,6 @@ import (
 
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
-	"github.com/hansbala/myncer/rest_helpers"
 	"github.com/hansbala/myncer/sync_engine"
 )
 
@@ -59,7 +58,7 @@ func (s *spotifyClientImpl) GetPlaylist(
 	if err != nil {
 		return nil, core.WrappedError(err, "failed to get spotify playlist with id %s", playlistId)
 	}
-	return rest_helpers.SpotifyPlaylistToProto(playlist), nil
+	return spotifyPlaylistToProto(playlist), nil
 }
 
 func (s *spotifyClientImpl) GetPlaylistSongs(
@@ -138,13 +137,13 @@ func (s *spotifyClientImpl) GetPlaylists(
 			r = append(
 				r,
 				&myncer_pb.Playlist{
-					MusicSource: rest_helpers.CreateMusicSource(
+					MusicSource: createMusicSource(
 						myncer_pb.Datasource_DATASOURCE_SPOTIFY,
 						p.ID.String(),
 					),
 					Name:        p.Name,
 					Description: p.Description,
-					ImageUrl:    rest_helpers.GetBestSpotifyImageURL(p.Images),
+					ImageUrl:    getBestSpotifyImageURL(p.Images),
 				},
 			)
 		}

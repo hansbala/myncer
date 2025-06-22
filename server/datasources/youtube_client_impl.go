@@ -10,7 +10,6 @@ import (
 
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
-	"github.com/hansbala/myncer/rest_helpers"
 	"github.com/hansbala/myncer/sync_engine"
 )
 
@@ -59,7 +58,7 @@ func (c *youtubeClientImpl) GetPlaylists(
 		playlists = append(
 			playlists,
 			&myncer_pb.Playlist{
-				MusicSource: rest_helpers.CreateMusicSource(
+				MusicSource: createMusicSource(
 					myncer_pb.Datasource_DATASOURCE_YOUTUBE,
 					p.Id,
 				),
@@ -89,7 +88,7 @@ func (c *youtubeClientImpl) GetPlaylist(
 
 	p := resp.Items[0]
 	return &myncer_pb.Playlist{
-		MusicSource: rest_helpers.CreateMusicSource(myncer_pb.Datasource_DATASOURCE_YOUTUBE, p.Id),
+		MusicSource: createMusicSource(myncer_pb.Datasource_DATASOURCE_YOUTUBE, p.Id),
 		Name:        p.Snippet.Title,
 		Description: p.Snippet.Description,
 		ImageUrl:    getBestThumbnailUrl(p.Snippet.Thumbnails),
