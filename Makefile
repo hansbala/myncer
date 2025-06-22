@@ -67,6 +67,14 @@ server-test:
 ##############################################
 # Database targets.
 ##############################################
+.PHONY: db-up
+db-up:
+	docker-compose up db -d
+
+.PHONY: db-down
+db-down:
+	docker-compose down db --volumes --remove-orphans
+
 .PHONY: psql
 psql:
 	psql "postgres://devuser:devpass@localhost:5432/myncer"
