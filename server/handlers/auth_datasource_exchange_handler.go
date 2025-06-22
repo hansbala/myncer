@@ -74,7 +74,7 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 				core.WrappedError(err, "failed to exchange oauth code"),
 			)
 		}
-		oAuthToken = buildOAuthToken(
+		oAuthToken = BuildOAuthToken(
 			uuid.New().String(),
 			userInfo.GetId(),
 			token.AccessToken,
@@ -90,7 +90,7 @@ func (aeh *authExchangeHandlerImpl) ProcessRequest(
 				core.WrappedError(err, "failed to exchange oauth code"),
 			)
 		}
-		oAuthToken = buildOAuthToken(
+		oAuthToken = BuildOAuthToken(
 			uuid.New().String(),
 			userInfo.GetId(),
 			token.AccessToken,

@@ -98,7 +98,7 @@ func validatePassword(password string) error {
 	return nil
 }
 
-func buildOAuthToken(
+func BuildOAuthToken(
 	id string,
 	userId string,
 	accessToken string,

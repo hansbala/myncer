@@ -71,3 +71,52 @@ func NewGrpcHandlerResponse_OK[T any](resp T) *GrpcHandlerResponse[T] {
 	}
 }
 
+func NewGprcHandlerResponseBuilder[T any]() *GrpcHandlerResponseBuilder[T] {
+	return &GrpcHandlerResponseBuilder[T]{}
+}
+
+type GrpcHandlerResponseBuilder[T any] struct {
+	// Error used for internal logging on server.
+	Err error /*@nullable*/
+	// Any cookies that need to be set in the response.
+	Cookies []*http.Cookie /*@nullable*/
+	// To support HTTP status codes.
+	StatusCode int
+	// Actual response.
+	Response T
+}
+
+func (g *GrpcHandlerResponseBuilder[T]) WithErr(err error) *GrpcHandlerResponseBuilder[T] {
+	g.Err = err
+	return g
+}
+
+func (g *GrpcHandlerResponseBuilder[T]) WithCookies(
+	cookies []*http.Cookie, /*const*/
+) *GrpcHandlerResponseBuilder[T] {
+	g.Cookies = cookies
+	return g
+}
+
+func (g *GrpcHandlerResponseBuilder[T]) WithStatusCode(
+	statusCode int,
+) *GrpcHandlerResponseBuilder[T] {
+	g.StatusCode = statusCode
+	return g
+}
+
+func (g *GrpcHandlerResponseBuilder[T]) WithResponse(
+	response T,
+) *GrpcHandlerResponseBuilder[T] {
+	g.Response = response
+	return g
+}
+
+func (g *GrpcHandlerResponseBuilder[T]) Build() *GrpcHandlerResponse[T] {
+	return &GrpcHandlerResponse[T]{
+		Err: g.Err,
+		Cookies: g.Cookies,
+		StatusCode: g.StatusCode,
+		Response: g.Response,
+	}
+}
