@@ -65,7 +65,7 @@ export const MyncerSidebar = () => {
               <span>{user.firstName || user.email}</span>
             </div>
             <button
-              onClick={logout}
+              onClick={() => logout.mutateAsync({})}
               className="flex items-center gap-2 text-red-500 hover:underline"
             >
               <LogOut className="h-4 w-4" />

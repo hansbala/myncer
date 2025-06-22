@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useApiClient } from "../hooks/useApiClient"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../hooks/useAuth"
+import { useLoginUser } from "@/hooks/useLoginUser"
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Enter a valid email" }),
@@ -13,7 +13,7 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>
 
 export const Login = () => {
-  const apiClient = useApiClient()
+  const { mutate: loginUser } = useLoginUser()
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
 
@@ -21,21 +21,15 @@ export const Login = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError,
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit = async (data: LoginFormInputs) => {
-    try {
-      await apiClient.loginUser({ userLoginRequest: data })
-      navigate("/")
-    } catch (err) {
-      setError("email", {
-        type: "manual",
-        message: "Invalid email or password",
-      })
-    }
+  const onSubmit = (data: LoginFormInputs) => {
+    loginUser({
+      email: data.email,
+      password: data.password,
+    })
   }
 
   if (isAuthenticated) {
