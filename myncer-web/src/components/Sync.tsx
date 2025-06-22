@@ -1,21 +1,22 @@
-import type { Sync } from "@/generated_api/src"
-import { useRunSync } from "@/hooks/useRunSync"
-import { useDeleteSync } from "@/hooks/useDeleteSync"
 import { Button } from "@/components/ui/button"
 import { Loader2, Trash2 } from "lucide-react"
 import { OneWaySyncRender } from "./OneWaySyncRender"
+import { useDeleteSync } from "@/hooks/useDeleteSync"
+import { useRunSync } from "@/hooks/useRunSync"
+import type { Sync } from "@/generated_grpc/myncer/sync_pb"
 
 export const SyncRender = ({ sync }: { sync: Sync }) => {
   const { runSync, isRunningSync } = useRunSync()
   const { deleteSync, isDeleting } = useDeleteSync()
-  const { syncData, id, createdAt } = sync
+  const { syncVariant, id, createdAt } = sync
 
   const renderVariantLabel = () => {
-    return syncData.syncVariant === "ONE_WAY"
-      ? "One-Way"
-      : syncData.syncVariant === "MERGE"
-        ? "Merge"
-        : "Unknown"
+    switch (syncVariant.case) {
+      case "oneWaySync":
+        return "One-Way"
+      default:
+        return "Unknown"
+    }
   }
 
   return (
@@ -29,13 +30,8 @@ export const SyncRender = ({ sync }: { sync: Sync }) => {
 
       {/* Sync Details */}
       <div className="mb-8">
-        {syncData.syncVariant === "ONE_WAY" && (
-          <OneWaySyncRender sync={syncData} />
-        )}
-        {syncData.syncVariant === "MERGE" && (
-          <div className="text-sm text-muted-foreground italic">
-            Merging playlists (details coming soon…)
-          </div>
+        {syncVariant.case === "oneWaySync" && (
+          <OneWaySyncRender sync={syncVariant.value} />
         )}
       </div>
 
@@ -43,7 +39,7 @@ export const SyncRender = ({ sync }: { sync: Sync }) => {
       <div className="flex justify-between items-center">
         <div className="space-y-1 text-xs text-muted-foreground">
           <div>Last synced at coming soon…</div>
-          <div>Created at {new Date(createdAt).toLocaleString()}</div>
+          <div>Created at {createdAt?.toLocaleString()}</div>
         </div>
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
@@ -51,7 +47,7 @@ export const SyncRender = ({ sync }: { sync: Sync }) => {
           <Button
             size="sm"
             variant="destructive"
-            onClick={() => deleteSync(id)}
+            onClick={() => deleteSync({ syncId: id })}
             disabled={isDeleting || isRunningSync}
           >
             {isDeleting ? (
@@ -69,7 +65,7 @@ export const SyncRender = ({ sync }: { sync: Sync }) => {
           {/* Run Sync */}
           <Button
             size="sm"
-            onClick={() => runSync(id)}
+            onClick={() => runSync({ syncId: id })}
             disabled={isRunningSync || isDeleting}
           >
             {isRunningSync ? (

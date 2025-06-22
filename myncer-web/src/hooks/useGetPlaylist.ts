@@ -6,8 +6,8 @@ export const useGetPlaylist = ({ datasource, playlistId }: { datasource?: Dataso
   const { data: response, isLoading, isError } = useQuery(
     getPlaylistDetails,
     {
-      datasource,
-      playlistId,
+      datasource: datasource!,
+      playlistId: playlistId!,
     },
     {
       // Only fetch playlists if a datasource and playlist id is provided.

@@ -6,6 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Datasource } from "@/generated_grpc/myncer/datasource_pb"
+import { getDatasourceLabel } from "@/lib/utils"
 import { Controller, type UseControllerProps, type FieldValues } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -39,17 +40,7 @@ export function DatasourceSelector<T extends FieldValues>({
           </SelectTrigger>
           <SelectContent>
             {datasources.map((ds) => {
-              let datasourceLabel: string
-              switch (ds) {
-                case Datasource.SPOTIFY:
-                  datasourceLabel = "Spotify"
-                  break
-                case Datasource.YOUTUBE:
-                  datasourceLabel = "YouTube"
-                  break
-                default:
-                  datasourceLabel = ds.toString()
-              }
+              const datasourceLabel = getDatasourceLabel(ds)
               return (
                 <SelectItem key={ds} value={String(ds)}>
                   {datasourceLabel}

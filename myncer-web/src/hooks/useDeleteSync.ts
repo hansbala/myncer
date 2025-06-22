@@ -1,22 +1,25 @@
+import { deleteSync, listSyncs } from "@/generated_grpc/myncer/sync-SyncService_connectquery"
+import { createConnectQueryKey, useMutation } from "@connectrpc/connect-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { useApiClient } from "./useApiClient"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export const useDeleteSync = () => {
-  const apiClient = useApiClient()
   const queryClient = useQueryClient()
-  const { mutate: deleteSync, isPending: isDeleting } = useMutation({
-    mutationKey: ["syncs", "delete"],
-    mutationFn: async (syncId: string) => {
-      return apiClient.deleteSync({ deleteSyncRequest: { syncId } })
-    },
+  const { mutate, isPending: isDeleting } = useMutation(deleteSync, {
     onSuccess: () => {
-      toast.success("Sync deleted!")
-      queryClient.invalidateQueries({ queryKey: ["syncs"] })
+      toast.success("Sync created!")
+      // Invalidate the syncs list so the new sync shows up in the UI
+      queryClient.refetchQueries({
+        queryKey: createConnectQueryKey({
+          schema: listSyncs,
+          cardinality: undefined,
+        })
+      })
     },
   })
+
   return {
-    deleteSync,
+    deleteSync: mutate,
     isDeleting,
   }
 }

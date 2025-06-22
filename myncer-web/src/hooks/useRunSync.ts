@@ -1,15 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
-import { useApiClient } from "./useApiClient";
-import { toast } from "sonner"
+import { runSync } from "@/generated_grpc/myncer/sync-SyncService_connectquery"
+import { useMutation } from "@connectrpc/connect-query"
+import { toast } from "sonner";
 
 export const useRunSync = () => {
-  const apiClient = useApiClient();
-  const { mutate: runSync, isPending: isRunningSync } = useMutation({
-    mutationFn: (id: string) => apiClient.runSync({
-      runSyncRequest: {
-        syncId: id,
-      }
-    }),
+  const { mutateAsync, isPending: isRunningSync } = useMutation(runSync, {
     onSuccess: () => {
       toast.success("Sync started!");
     },
@@ -18,7 +12,7 @@ export const useRunSync = () => {
     },
   })
   return {
-    runSync,
+    runSync: mutateAsync,
     isRunningSync,
   }
 }

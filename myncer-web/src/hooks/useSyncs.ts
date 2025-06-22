@@ -1,15 +1,10 @@
-import { useQuery } from "@tanstack/react-query"
-import { useApiClient } from "./useApiClient"
+import { listSyncs } from "@/generated_grpc/myncer/sync-SyncService_connectquery"
+import { useQuery } from "@connectrpc/connect-query"
 
 export const useSyncs = () => {
-  const apiClient = useApiClient()
-  const { data: listSyncsResponse, isLoading } = useQuery({
-    queryKey: ["syncs", "list"],
-    queryFn: () => apiClient.listSyncs(),
-    retry: false,
-  })
+  const { data: listSyncsResponse, isLoading } = useQuery(listSyncs)
   return {
-    syncs: listSyncsResponse ? listSyncsResponse.syncs || [] : [],
+    syncs: listSyncsResponse?.syncs ?? [],
     loading: isLoading,
   }
 }

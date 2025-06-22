@@ -1,3 +1,4 @@
+import { Datasource } from "@/generated_grpc/myncer/datasource_pb"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -34,4 +35,15 @@ export const getYoutubeAuthUrl = () => {
   const state = crypto.randomUUID() // CSRF protection
 
   return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}&access_type=offline&prompt=consent`
+}
+
+export const getDatasourceLabel = (datasource: Datasource) => {
+  switch (datasource) {
+    case Datasource.SPOTIFY:
+      return "Spotify"
+    case Datasource.YOUTUBE:
+      return "YouTube"
+    default:
+      return "Unknown Datasource"
+  }
 }
