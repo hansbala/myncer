@@ -28,9 +28,11 @@ func OrchestrateHandler[RequestT any, ResponseT any](
 	}
 	resp := handler.ProcessRequest(ctx, userInfo, reqBody)
 	if resp.Err != nil {
+		err := core.WrappedError(resp.Err, "failed to process request")
+		core.Errorf(err)
 		return nil, connect.NewError(
 			connect.Code(resp.StatusCode), // TODO: Make sure this works as expected E2E.
-			core.WrappedError(resp.Err, "failed to process request"),
+			err,
 		)
 	}
 	connectResp := connect.NewResponse(resp.Response)

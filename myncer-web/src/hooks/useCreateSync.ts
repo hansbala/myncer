@@ -1,23 +1,20 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useApiClient } from "./useApiClient"
-import type { CreateSyncRequest } from "@/generated_api/src"
+import { createSync, listSyncs } from "@/generated_grpc/myncer/sync-SyncService_connectquery"
+import { createConnectQueryKey, useMutation } from "@connectrpc/connect-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-export const useCreateSyncDeprecated = () => {
-  const apiClient = useApiClient()
+export const useCreateSync = () => {
   const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (payload: CreateSyncRequest): Promise<void> => {
-      return apiClient.createSync({
-        createSyncRequest: payload,
-      })
-    },
+  return useMutation(createSync, {
     onSuccess: () => {
       toast.success("Sync created!")
       // Invalidate the syncs list so the new sync shows up in the UI
-      queryClient.invalidateQueries({ queryKey: ["syncs", "list"] })
+      queryClient.invalidateQueries({
+        queryKey: createConnectQueryKey({
+          schema: listSyncs,
+          cardinality: undefined,
+        })
+      })
     },
   })
 }
-

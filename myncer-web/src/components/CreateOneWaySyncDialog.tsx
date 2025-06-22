@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { DatasourceSelector } from "./DatasourceSelector"
 import { PlaylistSelector } from "./PlaylistSelector"
-import { useCreateSyncDeprecated } from "@/hooks/useCreateSync"
+import { useCreateSync } from "@/hooks/useCreateSync"
 import { Loader2 } from "lucide-react"
 import { useDatasources } from "@/hooks/useDatasources"
 import { useListPlaylists } from "@/hooks/useListPlaylists"
@@ -35,7 +35,7 @@ export const CreateOneWaySyncDialog = () => {
   } = useForm<FormValues>({
     mode: "onChange",
   })
-  const { mutate: createSync, isPending: creating } = useCreateSyncDeprecated()
+  const { mutate: createSync, isPending: creating } = useCreateSync()
 
   const sourceDatasource = watch("sourceDatasource")
   const targetDatasource = watch("targetDatasource")
@@ -52,14 +52,18 @@ export const CreateOneWaySyncDialog = () => {
 
   const onSubmit = (data: FormValues) => {
     createSync({
-      syncVariant: "ONE_WAY",
-      source: {
-        datasource: "SPOTIFY",
-        playlistId: data.sourcePlaylistId,
-      },
-      destination: {
-        datasource: "YOUTUBE",
-        playlistId: data.targetPlaylistId,
+      syncVariant: {
+        case: 'oneWaySync',
+        value: {
+          source: {
+            datasource: data.sourceDatasource,
+            playlistId: data.sourcePlaylistId
+          },
+          destination: {
+            datasource: data.targetDatasource,
+            playlistId: data.targetPlaylistId,
+          },
+        },
       },
       // TODO: Add overwrite existing? to form and then use here.
     })
