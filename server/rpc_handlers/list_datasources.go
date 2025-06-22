@@ -21,6 +21,9 @@ func (l *listDatasourcesImpl) CheckUserPermissions(
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.ListDatasourcesRequest, /*const*/
 ) error {
+	if userInfo == nil {
+		return core.NewError("user is required to list datasources")
+	}
 	return nil
 }
 
@@ -29,5 +32,21 @@ func (l *listDatasourcesImpl) ProcessRequest(
 	userInfo *myncer_pb.User, /*const*/
 	reqBody *myncer_pb.ListDatasourcesRequest, /*const*/
 ) *core.GrpcHandlerResponse[*myncer_pb.ListDatasourcesResponse] {
-	return nil
+	tokens, err := core.ToMyncerCtx(ctx).DB.DatasourceTokenStore.GetTokens(ctx, userInfo.GetId())
+	if err != nil {
+		return core.NewGrpcHandlerResponse_InternalServerError[*myncer_pb.ListDatasourcesResponse](
+			core.WrappedError(err, "failed to get auth tokens for user"),
+		)
+	}
+
+	connectedDatasources := []myncer_pb.Datasource{}
+	for _, token := range tokens {
+		connectedDatasources = append(connectedDatasources, token.GetDatasource())
+	}
+
+	return core.NewGrpcHandlerResponse_OK(
+		&myncer_pb.ListDatasourcesResponse{
+			Datasource: connectedDatasources,
+		},
+	)
 }

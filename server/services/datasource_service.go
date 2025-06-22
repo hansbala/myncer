@@ -13,13 +13,18 @@ import (
 func NewDatasourceService() *DatasourceService {
 	return &DatasourceService{
 		exchangeOAuthCodeHandler: rpc_handlers.NewDatasourceOAuthExchangeHandler(),
+		listDatasourcesHandler:   rpc_handlers.NewListDatasourcesHandler(),
 	}
 }
 
-type DatasourceService struct{
+type DatasourceService struct {
 	exchangeOAuthCodeHandler core.GrpcHandler[
 		*myncer_pb.ExchangeOAuthCodeRequest,
 		*myncer_pb.ExchangeOAuthCodeResponse,
+	]
+	listDatasourcesHandler core.GrpcHandler[
+		*myncer_pb.ListDatasourcesRequest,
+		*myncer_pb.ListDatasourcesResponse,
 	]
 }
 
@@ -36,7 +41,7 @@ func (d *DatasourceService) ListDatasources(
 	ctx context.Context,
 	req *connect.Request[myncer_pb.ListDatasourcesRequest],
 ) (*connect.Response[myncer_pb.ListDatasourcesResponse], error) {
-	return nil, core.NewError("not implemented")
+	return OrchestrateHandler(ctx, d.listDatasourcesHandler, req.Msg)
 }
 
 func (d *DatasourceService) ListPlaylists(
