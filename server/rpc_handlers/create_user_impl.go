@@ -5,7 +5,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hansbala/myncer/core"
-	"github.com/hansbala/myncer/handlers"
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
 
@@ -52,7 +51,7 @@ func (c *createUserImpl) ProcessRequest(
 }
 
 func (c *createUserImpl) validateRequest(req *myncer_pb.CreateUserRequest /*const*/) error {
-	return handlers.ValidateUserFields(
+	return ValidateUserFields(
 		req.GetFirstName(),
 		req.GetLastName(),
 		req.GetEmail(),
@@ -63,7 +62,7 @@ func (c *createUserImpl) validateRequest(req *myncer_pb.CreateUserRequest /*cons
 func (c *createUserImpl) createProtoUser(
 	req *myncer_pb.CreateUserRequest, /*const*/
 ) (*myncer_pb.User, error) {
-	return handlers.GetProtoUser(
+	return GetProtoUser(
 		uuid.New().String(),
 		req.GetFirstName(),
 		req.GetLastName(),

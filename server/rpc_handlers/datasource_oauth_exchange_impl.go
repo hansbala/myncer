@@ -6,7 +6,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hansbala/myncer/core"
-	"github.com/hansbala/myncer/handlers"
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 	"golang.org/x/oauth2"
 )
@@ -70,7 +69,7 @@ func (do *datasourceOAuthExchangeImpl) ProcessRequest(
 	}
 
 	// Convert the token to our internal format.
-	oAuthToken := handlers.BuildOAuthToken(
+	oAuthToken := BuildOAuthToken(
 		uuid.New().String(),
 		userInfo.GetId(),
 		token.AccessToken,

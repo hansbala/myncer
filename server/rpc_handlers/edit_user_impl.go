@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/hansbala/myncer/core"
-	"github.com/hansbala/myncer/handlers"
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
 
@@ -56,7 +55,7 @@ func (eu *editUserHandlerImpl) ProcessRequest(
 }
 
 func (eu *editUserHandlerImpl) validateRequest(req *myncer_pb.EditUserRequest /*const*/) error {
-	return handlers.ValidateUserFields(
+	return ValidateUserFields(
 		req.GetFirstName(),
 		req.GetLastName(),
 		req.GetEmail(),
@@ -68,7 +67,7 @@ func (eu *editUserHandlerImpl) getUpdatedUser(
 	userInfo *myncer_pb.User, /*const*/
 	req *myncer_pb.EditUserRequest, /*const*/
 ) (*myncer_pb.User, error) {
-	return handlers.GetProtoUser(
+	return GetProtoUser(
 		userInfo.GetId(),
 		req.GetFirstName(),
 		req.GetLastName(),
