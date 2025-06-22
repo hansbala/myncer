@@ -14,17 +14,9 @@ down:
 # Proto constants.
 PROTO_DIR := server/proto
 
-# Openapi constants.
-OPENAPI_JAR := thirdparty/openapi-generator-cli.jar
-OPENAPI_CMD := java -jar $(OPENAPI_JAR)
-OPENAPI_FILE := openapi/api.yaml
-OPENAPI_GO_OUT := server/api/
-OPENAPI_GO_PKG_NAME := api
-OPENAPI_TS_OUT := myncer-web/src/generated_api
-OPENAPI_TS_PKG_NAME := myncer-api
-
 ##############################################
 # Proto targets.
+# TODO: Migrate these to use `buf`.
 ##############################################
 .PHONY: proto
 proto: proto-go
@@ -43,44 +35,6 @@ proto-go:
 proto-go-clean:
 	rm -rf $(PROTO_DIR)/*.pb.go
 	rm -rf server/proto
-
-##############################################
-# Openapi targets.
-##############################################
-.PHONY: openapi
-openapi: openapi-go openapi-ts
-
-.PHONY: openapi-clean
-openapi-clean: openapi-go-clean openapi-ts-clean
-
-.PHONY: openapi-go
-openapi-go:
-	mkdir -p $(OPENAPI_GO_OUT)
-	$(OPENAPI_CMD) generate \
-	  -i $(OPENAPI_FILE) \
-	  -g go \
-	  -o $(OPENAPI_GO_OUT) \
-	  --package-name=$(OPENAPI_GO_PKG_NAME) \
-		--global-property=models,modelDocs=false,supportingFiles=utils.go
-
-.PHONY: openapi-go-clean
-openapi-go-clean:
-	rm -rf $(OPENAPI_GO_OUT)
-
-.PHONY: openapi-ts
-openapi-ts:
-	mkdir -p $(OPENAPI_TS_OUT)
-	$(OPENAPI_CMD) generate \
-	  -i $(OPENAPI_FILE) \
-	  -g typescript-fetch \
-	  -o $(OPENAPI_TS_OUT) \
-	  --additional-properties=npmName=$(OPENAPI_TS_PKG_NAME),supportsES6=true
-# TODO: Figure out how to generate less slop.
-# --global-property=apis,models,supportingFiles=runtime.ts,base.ts \
-
-.PHONY: openapi-ts-clean
-openapi-ts-clean:
-	rm -rf $(OPENAPI_TS_OUT)
 
 ##############################################
 # Common.
