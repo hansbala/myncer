@@ -46,7 +46,7 @@ func (l *listDatasourcesImpl) ProcessRequest(
 
 	return core.NewGrpcHandlerResponse_OK(
 		&myncer_pb.ListDatasourcesResponse{
-			Datasource: connectedDatasources,
+			Datasources: connectedDatasources,
 		},
 	)
 }

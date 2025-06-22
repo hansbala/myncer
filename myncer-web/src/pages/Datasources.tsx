@@ -1,7 +1,8 @@
 import { PageWrapper } from "@/components/PageWrapper"
 import { Button } from "@/components/ui/button"
 import { PageLoader } from "@/components/ui/page-loader"
-import { useConnectedDatasources } from "@/hooks/useConnectedDatasources"
+import { Datasource } from "@/generated_grpc/myncer/datasource_pb"
+import { useDatasources } from "@/hooks/useDatasources"
 import { getSpotifyAuthUrl, getYoutubeAuthUrl } from "@/lib/utils"
 import { ArrowRightIcon, CheckIcon } from "lucide-react"
 
@@ -13,7 +14,7 @@ export const Datasources = () => {
   const handleConnectYoutube = () => {
     window.location.href = getYoutubeAuthUrl()
   }
-  const { datasources, loading } = useConnectedDatasources()
+  const { datasources, loading } = useDatasources()
 
   if (loading) {
     return <PageLoader />
@@ -38,7 +39,7 @@ export const Datasources = () => {
                   Connect account to sync playlists.
                 </p>
               </div>
-              {datasources?.some((ds) => ds === "SPOTIFY") ? (
+              {datasources?.some((ds) => ds === Datasource.SPOTIFY) ? (
                 <CheckIcon className="h-5 w-5 text-green-600" />
               ) : (
                 <Button onClick={handleConnectSpotify} className="flex items-center gap-1">
@@ -56,7 +57,7 @@ export const Datasources = () => {
                   Connect account to sync playlists.
                 </p>
               </div>
-              {datasources?.some((ds) => ds === "YOUTUBE") ? (
+              {datasources?.some((ds) => ds === Datasource.YOUTUBE) ? (
                 <CheckIcon className="h-5 w-5 text-green-600" />
               ) : (
                 <Button onClick={handleConnectYoutube} className="flex items-center gap-1">

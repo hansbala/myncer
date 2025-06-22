@@ -39,7 +39,7 @@ message ExchangeOAuthCodeResponse {
 message ListDatasourcesRequest {}
 
 message ListDatasourcesResponse {
-  repeated Datasource datasource = 1;
+  repeated Datasource datasources = 1;
 }
 
 message ListPlaylistsRequest {

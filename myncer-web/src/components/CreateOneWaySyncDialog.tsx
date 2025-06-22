@@ -8,13 +8,13 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
-import { useConnectedDatasources } from "@/hooks/useConnectedDatasources"
 import { usePlaylists } from "@/hooks/usePlaylists"
 import type { Datasource } from "@/generated_api/src"
 import { DatasourceSelector } from "./DatasourceSelector"
 import { PlaylistSelector } from "./PlaylistSelector"
 import { useCreateSync } from "@/hooks/useCreateSync"
 import { Loader2 } from "lucide-react"
+import { useDatasources } from "@/hooks/useDatasources"
 
 type FormValues = {
   sourceDatasource: Datasource
@@ -25,7 +25,7 @@ type FormValues = {
 
 export const CreateOneWaySyncDialog = () => {
   const [open, setOpen] = useState(false)
-  const { datasources: connectedDatasources, loading: datasourcesLoading } = useConnectedDatasources()
+  const { datasources: connectedDatasources, loading: datasourcesLoading } = useDatasources()
 
   const {
     control,
