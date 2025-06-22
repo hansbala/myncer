@@ -7,6 +7,7 @@ import { SignUp } from './pages/SignUp';
 import { Datasources } from './pages/Datasources';
 import { DatasourceAuthPage } from './pages/DatasourceAuthPage';
 import { Syncs } from './pages/Syncs';
+import { Datasource } from './generated_grpc/myncer/datasource_pb';
 
 const router = createBrowserRouter([
   {
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
         path: "datasource/spotify/callback",
         element: (
           <RequireAuth>
-            <DatasourceAuthPage datasource='SPOTIFY' />
+            <DatasourceAuthPage datasource={Datasource.SPOTIFY} />
           </RequireAuth>
         ),
       },
@@ -58,7 +59,7 @@ const router = createBrowserRouter([
         path: "datasource/youtube/callback",
         element: (
           <RequireAuth>
-            <DatasourceAuthPage datasource='YOUTUBE'/>
+            <DatasourceAuthPage datasource={Datasource.YOUTUBE} />
           </RequireAuth>
         ),
       },
