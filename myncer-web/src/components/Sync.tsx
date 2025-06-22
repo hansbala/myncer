@@ -4,6 +4,7 @@ import { OneWaySyncRender } from "./OneWaySyncRender"
 import { useDeleteSync } from "@/hooks/useDeleteSync"
 import { useRunSync } from "@/hooks/useRunSync"
 import type { Sync } from "@/generated_grpc/myncer/sync_pb"
+import { protoTimestampToDate } from "@/lib/utils"
 
 export const SyncRender = ({ sync }: { sync: Sync }) => {
   const { runSync, isRunningSync } = useRunSync()
@@ -39,7 +40,7 @@ export const SyncRender = ({ sync }: { sync: Sync }) => {
       <div className="flex justify-between items-center">
         <div className="space-y-1 text-xs text-muted-foreground">
           <div>Last synced at coming soon…</div>
-          <div>Created at {createdAt?.toLocaleString()}</div>
+          <div>Created at {createdAt ? protoTimestampToDate(createdAt).toLocaleString() : "Unknown"}</div>
         </div>
         {/* Action Buttons */}
         <div className="flex items-center gap-2">

@@ -7,7 +7,7 @@ export const useDeleteSync = () => {
   const queryClient = useQueryClient()
   const { mutate, isPending: isDeleting } = useMutation(deleteSync, {
     onSuccess: () => {
-      toast.success("Sync created!")
+      toast.success("Sync deleted!")
       // Invalidate the syncs list so the new sync shows up in the UI
       queryClient.refetchQueries({
         queryKey: createConnectQueryKey({

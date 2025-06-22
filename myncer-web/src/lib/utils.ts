@@ -1,4 +1,5 @@
 import { Datasource } from "@/generated_grpc/myncer/datasource_pb"
+import type { Timestamp } from "@bufbuild/protobuf/wkt"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -47,3 +48,9 @@ export const getDatasourceLabel = (datasource: Datasource) => {
       return "Unknown Datasource"
   }
 }
+
+export const protoTimestampToDate = (ts: Timestamp): Date => {
+  const millis = Number(ts.seconds) * 1000 + Math.floor((ts.nanos || 0) / 1_000_000)
+  return new Date(millis)
+}
+
