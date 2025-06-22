@@ -22,6 +22,69 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type SyncStatus int32
+
+const (
+	SyncStatus_SYNC_STATUS_UNSPECIFIED SyncStatus = 0
+	// The sync is pending and has not started yet.
+	SyncStatus_SYNC_STATUS_PENDING SyncStatus = 1
+	// The sync is currently running.
+	SyncStatus_SYNC_STATUS_RUNNING SyncStatus = 2
+	// The sync has completed successfully.
+	SyncStatus_SYNC_STATUS_COMPLETED SyncStatus = 3
+	// The sync has failed.
+	SyncStatus_SYNC_STATUS_FAILED SyncStatus = 4
+	// The sync was cancelled.
+	SyncStatus_SYNC_STATUS_CANCELLED SyncStatus = 5
+)
+
+// Enum value maps for SyncStatus.
+var (
+	SyncStatus_name = map[int32]string{
+		0: "SYNC_STATUS_UNSPECIFIED",
+		1: "SYNC_STATUS_PENDING",
+		2: "SYNC_STATUS_RUNNING",
+		3: "SYNC_STATUS_COMPLETED",
+		4: "SYNC_STATUS_FAILED",
+		5: "SYNC_STATUS_CANCELLED",
+	}
+	SyncStatus_value = map[string]int32{
+		"SYNC_STATUS_UNSPECIFIED": 0,
+		"SYNC_STATUS_PENDING":     1,
+		"SYNC_STATUS_RUNNING":     2,
+		"SYNC_STATUS_COMPLETED":   3,
+		"SYNC_STATUS_FAILED":      4,
+		"SYNC_STATUS_CANCELLED":   5,
+	}
+)
+
+func (x SyncStatus) Enum() *SyncStatus {
+	p := new(SyncStatus)
+	*p = x
+	return p
+}
+
+func (x SyncStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SyncStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_myncer_sync_proto_enumTypes[0].Descriptor()
+}
+
+func (SyncStatus) Type() protoreflect.EnumType {
+	return &file_myncer_sync_proto_enumTypes[0]
+}
+
+func (x SyncStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SyncStatus.Descriptor instead.
+func (SyncStatus) EnumDescriptor() ([]byte, []int) {
+	return file_myncer_sync_proto_rawDescGZIP(), []int{0}
+}
+
 type Sync struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// google/uuid generated UUID.
@@ -188,6 +251,397 @@ func (x *OneWaySync) GetOverwriteExisting() bool {
 	return false
 }
 
+type CreateSyncRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The sync to create.
+	//
+	// Types that are valid to be assigned to SyncVariant:
+	//
+	//	*CreateSyncRequest_OneWaySync
+	SyncVariant   isCreateSyncRequest_SyncVariant `protobuf_oneof:"sync_variant"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateSyncRequest) Reset() {
+	*x = CreateSyncRequest{}
+	mi := &file_myncer_sync_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateSyncRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateSyncRequest) ProtoMessage() {}
+
+func (x *CreateSyncRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_myncer_sync_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateSyncRequest.ProtoReflect.Descriptor instead.
+func (*CreateSyncRequest) Descriptor() ([]byte, []int) {
+	return file_myncer_sync_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *CreateSyncRequest) GetSyncVariant() isCreateSyncRequest_SyncVariant {
+	if x != nil {
+		return x.SyncVariant
+	}
+	return nil
+}
+
+func (x *CreateSyncRequest) GetOneWaySync() *OneWaySync {
+	if x != nil {
+		if x, ok := x.SyncVariant.(*CreateSyncRequest_OneWaySync); ok {
+			return x.OneWaySync
+		}
+	}
+	return nil
+}
+
+type isCreateSyncRequest_SyncVariant interface {
+	isCreateSyncRequest_SyncVariant()
+}
+
+type CreateSyncRequest_OneWaySync struct {
+	OneWaySync *OneWaySync `protobuf:"bytes,1,opt,name=one_way_sync,json=oneWaySync,proto3,oneof"`
+}
+
+func (*CreateSyncRequest_OneWaySync) isCreateSyncRequest_SyncVariant() {}
+
+type CreateSyncResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The created sync.
+	Sync          *Sync `protobuf:"bytes,1,opt,name=sync,proto3" json:"sync,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateSyncResponse) Reset() {
+	*x = CreateSyncResponse{}
+	mi := &file_myncer_sync_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateSyncResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateSyncResponse) ProtoMessage() {}
+
+func (x *CreateSyncResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_myncer_sync_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateSyncResponse.ProtoReflect.Descriptor instead.
+func (*CreateSyncResponse) Descriptor() ([]byte, []int) {
+	return file_myncer_sync_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *CreateSyncResponse) GetSync() *Sync {
+	if x != nil {
+		return x.Sync
+	}
+	return nil
+}
+
+type DeleteSyncRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The ID of the sync to delete.
+	SyncId        string `protobuf:"bytes,1,opt,name=sync_id,json=syncId,proto3" json:"sync_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteSyncRequest) Reset() {
+	*x = DeleteSyncRequest{}
+	mi := &file_myncer_sync_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteSyncRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSyncRequest) ProtoMessage() {}
+
+func (x *DeleteSyncRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_myncer_sync_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSyncRequest.ProtoReflect.Descriptor instead.
+func (*DeleteSyncRequest) Descriptor() ([]byte, []int) {
+	return file_myncer_sync_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DeleteSyncRequest) GetSyncId() string {
+	if x != nil {
+		return x.SyncId
+	}
+	return ""
+}
+
+type DeleteSyncResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The ID of the deleted sync.
+	SyncId        string `protobuf:"bytes,1,opt,name=sync_id,json=syncId,proto3" json:"sync_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteSyncResponse) Reset() {
+	*x = DeleteSyncResponse{}
+	mi := &file_myncer_sync_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteSyncResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSyncResponse) ProtoMessage() {}
+
+func (x *DeleteSyncResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_myncer_sync_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSyncResponse.ProtoReflect.Descriptor instead.
+func (*DeleteSyncResponse) Descriptor() ([]byte, []int) {
+	return file_myncer_sync_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DeleteSyncResponse) GetSyncId() string {
+	if x != nil {
+		return x.SyncId
+	}
+	return ""
+}
+
+type ListSyncsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListSyncsRequest) Reset() {
+	*x = ListSyncsRequest{}
+	mi := &file_myncer_sync_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListSyncsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListSyncsRequest) ProtoMessage() {}
+
+func (x *ListSyncsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_myncer_sync_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListSyncsRequest.ProtoReflect.Descriptor instead.
+func (*ListSyncsRequest) Descriptor() ([]byte, []int) {
+	return file_myncer_sync_proto_rawDescGZIP(), []int{6}
+}
+
+type ListSyncsResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// List of syncs for the current user.
+	Syncs         *Sync `protobuf:"bytes,1,opt,name=syncs,proto3" json:"syncs,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListSyncsResponse) Reset() {
+	*x = ListSyncsResponse{}
+	mi := &file_myncer_sync_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListSyncsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListSyncsResponse) ProtoMessage() {}
+
+func (x *ListSyncsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_myncer_sync_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListSyncsResponse.ProtoReflect.Descriptor instead.
+func (*ListSyncsResponse) Descriptor() ([]byte, []int) {
+	return file_myncer_sync_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *ListSyncsResponse) GetSyncs() *Sync {
+	if x != nil {
+		return x.Syncs
+	}
+	return nil
+}
+
+type RunSyncRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The ID of the sync to run.
+	SyncId        string `protobuf:"bytes,1,opt,name=sync_id,json=syncId,proto3" json:"sync_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RunSyncRequest) Reset() {
+	*x = RunSyncRequest{}
+	mi := &file_myncer_sync_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RunSyncRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RunSyncRequest) ProtoMessage() {}
+
+func (x *RunSyncRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_myncer_sync_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RunSyncRequest.ProtoReflect.Descriptor instead.
+func (*RunSyncRequest) Descriptor() ([]byte, []int) {
+	return file_myncer_sync_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *RunSyncRequest) GetSyncId() string {
+	if x != nil {
+		return x.SyncId
+	}
+	return ""
+}
+
+type RunSyncResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The ID of the sync that was run.
+	SyncId string     `protobuf:"bytes,1,opt,name=sync_id,json=syncId,proto3" json:"sync_id,omitempty"`
+	Status SyncStatus `protobuf:"varint,2,opt,name=status,proto3,enum=myncer.SyncStatus" json:"status,omitempty"`
+	// If the sync failed, this will contain the error message.
+	ErrorMessage  string `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RunSyncResponse) Reset() {
+	*x = RunSyncResponse{}
+	mi := &file_myncer_sync_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RunSyncResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RunSyncResponse) ProtoMessage() {}
+
+func (x *RunSyncResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_myncer_sync_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RunSyncResponse.ProtoReflect.Descriptor instead.
+func (*RunSyncResponse) Descriptor() ([]byte, []int) {
+	return file_myncer_sync_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *RunSyncResponse) GetSyncId() string {
+	if x != nil {
+		return x.SyncId
+	}
+	return ""
+}
+
+func (x *RunSyncResponse) GetStatus() SyncStatus {
+	if x != nil {
+		return x.Status
+	}
+	return SyncStatus_SYNC_STATUS_UNSPECIFIED
+}
+
+func (x *RunSyncResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_myncer_sync_proto protoreflect.FileDescriptor
 
 var file_myncer_sync_proto_rawDesc = string([]byte{
@@ -221,11 +675,69 @@ var file_myncer_sync_proto_rawDesc = string([]byte{
 	0x74, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x2d, 0x0a, 0x12, 0x6f, 0x76, 0x65, 0x72,
 	0x77, 0x72, 0x69, 0x74, 0x65, 0x5f, 0x65, 0x78, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x18, 0x03,
 	0x20, 0x01, 0x28, 0x08, 0x52, 0x11, 0x6f, 0x76, 0x65, 0x72, 0x77, 0x72, 0x69, 0x74, 0x65, 0x45,
-	0x78, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x42, 0x33, 0x5a, 0x31, 0x67, 0x69, 0x74, 0x68, 0x75,
-	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x68, 0x61, 0x6e, 0x73, 0x62, 0x61, 0x6c, 0x61, 0x2f, 0x6d,
-	0x79, 0x6e, 0x63, 0x65, 0x72, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x6d, 0x79, 0x6e, 0x63,
-	0x65, 0x72, 0x3b, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x5f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x78, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x22, 0x5b, 0x0a, 0x11, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x53, 0x79, 0x6e, 0x63, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x36, 0x0a, 0x0c,
+	0x6f, 0x6e, 0x65, 0x5f, 0x77, 0x61, 0x79, 0x5f, 0x73, 0x79, 0x6e, 0x63, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x12, 0x2e, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x2e, 0x4f, 0x6e, 0x65, 0x57,
+	0x61, 0x79, 0x53, 0x79, 0x6e, 0x63, 0x48, 0x00, 0x52, 0x0a, 0x6f, 0x6e, 0x65, 0x57, 0x61, 0x79,
+	0x53, 0x79, 0x6e, 0x63, 0x42, 0x0e, 0x0a, 0x0c, 0x73, 0x79, 0x6e, 0x63, 0x5f, 0x76, 0x61, 0x72,
+	0x69, 0x61, 0x6e, 0x74, 0x22, 0x36, 0x0a, 0x12, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x53, 0x79,
+	0x6e, 0x63, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x20, 0x0a, 0x04, 0x73, 0x79,
+	0x6e, 0x63, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x6d, 0x79, 0x6e, 0x63, 0x65,
+	0x72, 0x2e, 0x53, 0x79, 0x6e, 0x63, 0x52, 0x04, 0x73, 0x79, 0x6e, 0x63, 0x22, 0x2c, 0x0a, 0x11,
+	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x53, 0x79, 0x6e, 0x63, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x17, 0x0a, 0x07, 0x73, 0x79, 0x6e, 0x63, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x06, 0x73, 0x79, 0x6e, 0x63, 0x49, 0x64, 0x22, 0x2d, 0x0a, 0x12, 0x44, 0x65,
+	0x6c, 0x65, 0x74, 0x65, 0x53, 0x79, 0x6e, 0x63, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x17, 0x0a, 0x07, 0x73, 0x79, 0x6e, 0x63, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x06, 0x73, 0x79, 0x6e, 0x63, 0x49, 0x64, 0x22, 0x12, 0x0a, 0x10, 0x4c, 0x69, 0x73,
+	0x74, 0x53, 0x79, 0x6e, 0x63, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x37, 0x0a,
+	0x11, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x79, 0x6e, 0x63, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x22, 0x0a, 0x05, 0x73, 0x79, 0x6e, 0x63, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x0c, 0x2e, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x2e, 0x53, 0x79, 0x6e, 0x63, 0x52,
+	0x05, 0x73, 0x79, 0x6e, 0x63, 0x73, 0x22, 0x29, 0x0a, 0x0e, 0x52, 0x75, 0x6e, 0x53, 0x79, 0x6e,
+	0x63, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x73, 0x79, 0x6e, 0x63,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x79, 0x6e, 0x63, 0x49,
+	0x64, 0x22, 0x7b, 0x0a, 0x0f, 0x52, 0x75, 0x6e, 0x53, 0x79, 0x6e, 0x63, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x73, 0x79, 0x6e, 0x63, 0x5f, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x79, 0x6e, 0x63, 0x49, 0x64, 0x12, 0x2a, 0x0a,
+	0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x12, 0x2e,
+	0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x2e, 0x53, 0x79, 0x6e, 0x63, 0x53, 0x74, 0x61, 0x74, 0x75,
+	0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x23, 0x0a, 0x0d, 0x65, 0x72, 0x72,
+	0x6f, 0x72, 0x5f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0c, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2a, 0xa9,
+	0x01, 0x0a, 0x0a, 0x53, 0x79, 0x6e, 0x63, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1b, 0x0a,
+	0x17, 0x53, 0x59, 0x4e, 0x43, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x55, 0x4e, 0x53,
+	0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x17, 0x0a, 0x13, 0x53, 0x59,
+	0x4e, 0x43, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x50, 0x45, 0x4e, 0x44, 0x49, 0x4e,
+	0x47, 0x10, 0x01, 0x12, 0x17, 0x0a, 0x13, 0x53, 0x59, 0x4e, 0x43, 0x5f, 0x53, 0x54, 0x41, 0x54,
+	0x55, 0x53, 0x5f, 0x52, 0x55, 0x4e, 0x4e, 0x49, 0x4e, 0x47, 0x10, 0x02, 0x12, 0x19, 0x0a, 0x15,
+	0x53, 0x59, 0x4e, 0x43, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x43, 0x4f, 0x4d, 0x50,
+	0x4c, 0x45, 0x54, 0x45, 0x44, 0x10, 0x03, 0x12, 0x16, 0x0a, 0x12, 0x53, 0x59, 0x4e, 0x43, 0x5f,
+	0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x46, 0x41, 0x49, 0x4c, 0x45, 0x44, 0x10, 0x04, 0x12,
+	0x19, 0x0a, 0x15, 0x53, 0x59, 0x4e, 0x43, 0x5f, 0x53, 0x54, 0x41, 0x54, 0x55, 0x53, 0x5f, 0x43,
+	0x41, 0x4e, 0x43, 0x45, 0x4c, 0x4c, 0x45, 0x44, 0x10, 0x05, 0x32, 0x95, 0x02, 0x0a, 0x0b, 0x53,
+	0x79, 0x6e, 0x63, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x43, 0x0a, 0x0a, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x53, 0x79, 0x6e, 0x63, 0x12, 0x19, 0x2e, 0x6d, 0x79, 0x6e, 0x63, 0x65,
+	0x72, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x53, 0x79, 0x6e, 0x63, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x2e, 0x43, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x53, 0x79, 0x6e, 0x63, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x43, 0x0a, 0x0a, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x53, 0x79, 0x6e, 0x63, 0x12, 0x19, 0x2e,
+	0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x53, 0x79, 0x6e,
+	0x63, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x6d, 0x79, 0x6e, 0x63, 0x65,
+	0x72, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x53, 0x79, 0x6e, 0x63, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x40, 0x0a, 0x09, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x79, 0x6e, 0x63,
+	0x73, 0x12, 0x18, 0x2e, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53,
+	0x79, 0x6e, 0x63, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x19, 0x2e, 0x6d, 0x79,
+	0x6e, 0x63, 0x65, 0x72, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x79, 0x6e, 0x63, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3a, 0x0a, 0x07, 0x52, 0x75, 0x6e, 0x53, 0x79, 0x6e,
+	0x63, 0x12, 0x16, 0x2e, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x2e, 0x52, 0x75, 0x6e, 0x53, 0x79,
+	0x6e, 0x63, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x6d, 0x79, 0x6e, 0x63,
+	0x65, 0x72, 0x2e, 0x52, 0x75, 0x6e, 0x53, 0x79, 0x6e, 0x63, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x42, 0x33, 0x5a, 0x31, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x2f, 0x68, 0x61, 0x6e, 0x73, 0x62, 0x61, 0x6c, 0x61, 0x2f, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72,
+	0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x3b, 0x6d, 0x79,
+	0x6e, 0x63, 0x65, 0x72, 0x5f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 })
 
 var (
@@ -240,24 +752,46 @@ func file_myncer_sync_proto_rawDescGZIP() []byte {
 	return file_myncer_sync_proto_rawDescData
 }
 
-var file_myncer_sync_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_myncer_sync_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_myncer_sync_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_myncer_sync_proto_goTypes = []any{
-	(*Sync)(nil),                  // 0: myncer.Sync
-	(*OneWaySync)(nil),            // 1: myncer.OneWaySync
-	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
-	(*MusicSource)(nil),           // 3: myncer.MusicSource
+	(SyncStatus)(0),               // 0: myncer.SyncStatus
+	(*Sync)(nil),                  // 1: myncer.Sync
+	(*OneWaySync)(nil),            // 2: myncer.OneWaySync
+	(*CreateSyncRequest)(nil),     // 3: myncer.CreateSyncRequest
+	(*CreateSyncResponse)(nil),    // 4: myncer.CreateSyncResponse
+	(*DeleteSyncRequest)(nil),     // 5: myncer.DeleteSyncRequest
+	(*DeleteSyncResponse)(nil),    // 6: myncer.DeleteSyncResponse
+	(*ListSyncsRequest)(nil),      // 7: myncer.ListSyncsRequest
+	(*ListSyncsResponse)(nil),     // 8: myncer.ListSyncsResponse
+	(*RunSyncRequest)(nil),        // 9: myncer.RunSyncRequest
+	(*RunSyncResponse)(nil),       // 10: myncer.RunSyncResponse
+	(*timestamppb.Timestamp)(nil), // 11: google.protobuf.Timestamp
+	(*MusicSource)(nil),           // 12: myncer.MusicSource
 }
 var file_myncer_sync_proto_depIdxs = []int32{
-	2, // 0: myncer.Sync.created_at:type_name -> google.protobuf.Timestamp
-	2, // 1: myncer.Sync.updated_at:type_name -> google.protobuf.Timestamp
-	1, // 2: myncer.Sync.one_way_sync:type_name -> myncer.OneWaySync
-	3, // 3: myncer.OneWaySync.source:type_name -> myncer.MusicSource
-	3, // 4: myncer.OneWaySync.destination:type_name -> myncer.MusicSource
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	11, // 0: myncer.Sync.created_at:type_name -> google.protobuf.Timestamp
+	11, // 1: myncer.Sync.updated_at:type_name -> google.protobuf.Timestamp
+	2,  // 2: myncer.Sync.one_way_sync:type_name -> myncer.OneWaySync
+	12, // 3: myncer.OneWaySync.source:type_name -> myncer.MusicSource
+	12, // 4: myncer.OneWaySync.destination:type_name -> myncer.MusicSource
+	2,  // 5: myncer.CreateSyncRequest.one_way_sync:type_name -> myncer.OneWaySync
+	1,  // 6: myncer.CreateSyncResponse.sync:type_name -> myncer.Sync
+	1,  // 7: myncer.ListSyncsResponse.syncs:type_name -> myncer.Sync
+	0,  // 8: myncer.RunSyncResponse.status:type_name -> myncer.SyncStatus
+	3,  // 9: myncer.SyncService.CreateSync:input_type -> myncer.CreateSyncRequest
+	5,  // 10: myncer.SyncService.DeleteSync:input_type -> myncer.DeleteSyncRequest
+	7,  // 11: myncer.SyncService.ListSyncs:input_type -> myncer.ListSyncsRequest
+	9,  // 12: myncer.SyncService.RunSync:input_type -> myncer.RunSyncRequest
+	4,  // 13: myncer.SyncService.CreateSync:output_type -> myncer.CreateSyncResponse
+	6,  // 14: myncer.SyncService.DeleteSync:output_type -> myncer.DeleteSyncResponse
+	8,  // 15: myncer.SyncService.ListSyncs:output_type -> myncer.ListSyncsResponse
+	10, // 16: myncer.SyncService.RunSync:output_type -> myncer.RunSyncResponse
+	13, // [13:17] is the sub-list for method output_type
+	9,  // [9:13] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_myncer_sync_proto_init() }
@@ -269,18 +803,22 @@ func file_myncer_sync_proto_init() {
 	file_myncer_sync_proto_msgTypes[0].OneofWrappers = []any{
 		(*Sync_OneWaySync)(nil),
 	}
+	file_myncer_sync_proto_msgTypes[2].OneofWrappers = []any{
+		(*CreateSyncRequest_OneWaySync)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_myncer_sync_proto_rawDesc), len(file_myncer_sync_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   2,
+			NumEnums:      1,
+			NumMessages:   10,
 			NumExtensions: 0,
-			NumServices:   0,
+			NumServices:   1,
 		},
 		GoTypes:           file_myncer_sync_proto_goTypes,
 		DependencyIndexes: file_myncer_sync_proto_depIdxs,
+		EnumInfos:         file_myncer_sync_proto_enumTypes,
 		MessageInfos:      file_myncer_sync_proto_msgTypes,
 	}.Build()
 	File_myncer_sync_proto = out.File

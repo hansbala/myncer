@@ -2,8 +2,8 @@
 // @generated from file myncer/sync.proto (package myncer, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
 import type { MusicSource } from "./datasource_pb";
@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file myncer/sync.proto.
  */
 export const file_myncer_sync: GenFile = /*@__PURE__*/
-  fileDesc("ChFteW5jZXIvc3luYy5wcm90bxIGbXluY2VyIr8BCgRTeW5jEgoKAmlkGAEgASgJEg8KB3VzZXJfaWQYAiABKAkSLgoKY3JlYXRlZF9hdBgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASKgoMb25lX3dheV9zeW5jGAUgASgLMhIubXluY2VyLk9uZVdheVN5bmNIAEIOCgxzeW5jX3ZhcmlhbnQidwoKT25lV2F5U3luYxIjCgZzb3VyY2UYASABKAsyEy5teW5jZXIuTXVzaWNTb3VyY2USKAoLZGVzdGluYXRpb24YAiABKAsyEy5teW5jZXIuTXVzaWNTb3VyY2USGgoSb3ZlcndyaXRlX2V4aXN0aW5nGAMgASgIQjNaMWdpdGh1Yi5jb20vaGFuc2JhbGEvbXluY2VyL3Byb3RvL215bmNlcjtteW5jZXJfcGJiBnByb3RvMw", [file_google_protobuf_timestamp, file_myncer_datasource]);
+  fileDesc("ChFteW5jZXIvc3luYy5wcm90bxIGbXluY2VyIr8BCgRTeW5jEgoKAmlkGAEgASgJEg8KB3VzZXJfaWQYAiABKAkSLgoKY3JlYXRlZF9hdBgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASKgoMb25lX3dheV9zeW5jGAUgASgLMhIubXluY2VyLk9uZVdheVN5bmNIAEIOCgxzeW5jX3ZhcmlhbnQidwoKT25lV2F5U3luYxIjCgZzb3VyY2UYASABKAsyEy5teW5jZXIuTXVzaWNTb3VyY2USKAoLZGVzdGluYXRpb24YAiABKAsyEy5teW5jZXIuTXVzaWNTb3VyY2USGgoSb3ZlcndyaXRlX2V4aXN0aW5nGAMgASgIIk8KEUNyZWF0ZVN5bmNSZXF1ZXN0EioKDG9uZV93YXlfc3luYxgBIAEoCzISLm15bmNlci5PbmVXYXlTeW5jSABCDgoMc3luY192YXJpYW50IjAKEkNyZWF0ZVN5bmNSZXNwb25zZRIaCgRzeW5jGAEgASgLMgwubXluY2VyLlN5bmMiJAoRRGVsZXRlU3luY1JlcXVlc3QSDwoHc3luY19pZBgBIAEoCSIlChJEZWxldGVTeW5jUmVzcG9uc2USDwoHc3luY19pZBgBIAEoCSISChBMaXN0U3luY3NSZXF1ZXN0IjAKEUxpc3RTeW5jc1Jlc3BvbnNlEhsKBXN5bmNzGAEgASgLMgwubXluY2VyLlN5bmMiIQoOUnVuU3luY1JlcXVlc3QSDwoHc3luY19pZBgBIAEoCSJdCg9SdW5TeW5jUmVzcG9uc2USDwoHc3luY19pZBgBIAEoCRIiCgZzdGF0dXMYAiABKA4yEi5teW5jZXIuU3luY1N0YXR1cxIVCg1lcnJvcl9tZXNzYWdlGAMgASgJKqkBCgpTeW5jU3RhdHVzEhsKF1NZTkNfU1RBVFVTX1VOU1BFQ0lGSUVEEAASFwoTU1lOQ19TVEFUVVNfUEVORElORxABEhcKE1NZTkNfU1RBVFVTX1JVTk5JTkcQAhIZChVTWU5DX1NUQVRVU19DT01QTEVURUQQAxIWChJTWU5DX1NUQVRVU19GQUlMRUQQBBIZChVTWU5DX1NUQVRVU19DQU5DRUxMRUQQBTKVAgoLU3luY1NlcnZpY2USQwoKQ3JlYXRlU3luYxIZLm15bmNlci5DcmVhdGVTeW5jUmVxdWVzdBoaLm15bmNlci5DcmVhdGVTeW5jUmVzcG9uc2USQwoKRGVsZXRlU3luYxIZLm15bmNlci5EZWxldGVTeW5jUmVxdWVzdBoaLm15bmNlci5EZWxldGVTeW5jUmVzcG9uc2USQAoJTGlzdFN5bmNzEhgubXluY2VyLkxpc3RTeW5jc1JlcXVlc3QaGS5teW5jZXIuTGlzdFN5bmNzUmVzcG9uc2USOgoHUnVuU3luYxIWLm15bmNlci5SdW5TeW5jUmVxdWVzdBoXLm15bmNlci5SdW5TeW5jUmVzcG9uc2VCM1oxZ2l0aHViLmNvbS9oYW5zYmFsYS9teW5jZXIvcHJvdG8vbXluY2VyO215bmNlcl9wYmIGcHJvdG8z", [file_google_protobuf_timestamp, file_myncer_datasource]);
 
 /**
  * @generated from message myncer.Sync
@@ -100,4 +100,258 @@ export type OneWaySync = Message<"myncer.OneWaySync"> & {
  */
 export const OneWaySyncSchema: GenMessage<OneWaySync> = /*@__PURE__*/
   messageDesc(file_myncer_sync, 1);
+
+/**
+ * @generated from message myncer.CreateSyncRequest
+ */
+export type CreateSyncRequest = Message<"myncer.CreateSyncRequest"> & {
+  /**
+   * The sync to create.
+   *
+   * @generated from oneof myncer.CreateSyncRequest.sync_variant
+   */
+  syncVariant: {
+    /**
+     * @generated from field: myncer.OneWaySync one_way_sync = 1;
+     */
+    value: OneWaySync;
+    case: "oneWaySync";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message myncer.CreateSyncRequest.
+ * Use `create(CreateSyncRequestSchema)` to create a new message.
+ */
+export const CreateSyncRequestSchema: GenMessage<CreateSyncRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_sync, 2);
+
+/**
+ * @generated from message myncer.CreateSyncResponse
+ */
+export type CreateSyncResponse = Message<"myncer.CreateSyncResponse"> & {
+  /**
+   * The created sync.
+   *
+   * @generated from field: myncer.Sync sync = 1;
+   */
+  sync?: Sync;
+};
+
+/**
+ * Describes the message myncer.CreateSyncResponse.
+ * Use `create(CreateSyncResponseSchema)` to create a new message.
+ */
+export const CreateSyncResponseSchema: GenMessage<CreateSyncResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_sync, 3);
+
+/**
+ * @generated from message myncer.DeleteSyncRequest
+ */
+export type DeleteSyncRequest = Message<"myncer.DeleteSyncRequest"> & {
+  /**
+   * The ID of the sync to delete.
+   *
+   * @generated from field: string sync_id = 1;
+   */
+  syncId: string;
+};
+
+/**
+ * Describes the message myncer.DeleteSyncRequest.
+ * Use `create(DeleteSyncRequestSchema)` to create a new message.
+ */
+export const DeleteSyncRequestSchema: GenMessage<DeleteSyncRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_sync, 4);
+
+/**
+ * @generated from message myncer.DeleteSyncResponse
+ */
+export type DeleteSyncResponse = Message<"myncer.DeleteSyncResponse"> & {
+  /**
+   * The ID of the deleted sync.
+   *
+   * @generated from field: string sync_id = 1;
+   */
+  syncId: string;
+};
+
+/**
+ * Describes the message myncer.DeleteSyncResponse.
+ * Use `create(DeleteSyncResponseSchema)` to create a new message.
+ */
+export const DeleteSyncResponseSchema: GenMessage<DeleteSyncResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_sync, 5);
+
+/**
+ * @generated from message myncer.ListSyncsRequest
+ */
+export type ListSyncsRequest = Message<"myncer.ListSyncsRequest"> & {
+};
+
+/**
+ * Describes the message myncer.ListSyncsRequest.
+ * Use `create(ListSyncsRequestSchema)` to create a new message.
+ */
+export const ListSyncsRequestSchema: GenMessage<ListSyncsRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_sync, 6);
+
+/**
+ * @generated from message myncer.ListSyncsResponse
+ */
+export type ListSyncsResponse = Message<"myncer.ListSyncsResponse"> & {
+  /**
+   * List of syncs for the current user.
+   *
+   * @generated from field: myncer.Sync syncs = 1;
+   */
+  syncs?: Sync;
+};
+
+/**
+ * Describes the message myncer.ListSyncsResponse.
+ * Use `create(ListSyncsResponseSchema)` to create a new message.
+ */
+export const ListSyncsResponseSchema: GenMessage<ListSyncsResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_sync, 7);
+
+/**
+ * @generated from message myncer.RunSyncRequest
+ */
+export type RunSyncRequest = Message<"myncer.RunSyncRequest"> & {
+  /**
+   * The ID of the sync to run.
+   *
+   * @generated from field: string sync_id = 1;
+   */
+  syncId: string;
+};
+
+/**
+ * Describes the message myncer.RunSyncRequest.
+ * Use `create(RunSyncRequestSchema)` to create a new message.
+ */
+export const RunSyncRequestSchema: GenMessage<RunSyncRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_sync, 8);
+
+/**
+ * @generated from message myncer.RunSyncResponse
+ */
+export type RunSyncResponse = Message<"myncer.RunSyncResponse"> & {
+  /**
+   * The ID of the sync that was run.
+   *
+   * @generated from field: string sync_id = 1;
+   */
+  syncId: string;
+
+  /**
+   * @generated from field: myncer.SyncStatus status = 2;
+   */
+  status: SyncStatus;
+
+  /**
+   * If the sync failed, this will contain the error message.
+   *
+   * @generated from field: string error_message = 3;
+   */
+  errorMessage: string;
+};
+
+/**
+ * Describes the message myncer.RunSyncResponse.
+ * Use `create(RunSyncResponseSchema)` to create a new message.
+ */
+export const RunSyncResponseSchema: GenMessage<RunSyncResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_sync, 9);
+
+/**
+ * @generated from enum myncer.SyncStatus
+ */
+export enum SyncStatus {
+  /**
+   * @generated from enum value: SYNC_STATUS_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * The sync is pending and has not started yet.
+   *
+   * @generated from enum value: SYNC_STATUS_PENDING = 1;
+   */
+  PENDING = 1,
+
+  /**
+   * The sync is currently running.
+   *
+   * @generated from enum value: SYNC_STATUS_RUNNING = 2;
+   */
+  RUNNING = 2,
+
+  /**
+   * The sync has completed successfully.
+   *
+   * @generated from enum value: SYNC_STATUS_COMPLETED = 3;
+   */
+  COMPLETED = 3,
+
+  /**
+   * The sync has failed.
+   *
+   * @generated from enum value: SYNC_STATUS_FAILED = 4;
+   */
+  FAILED = 4,
+
+  /**
+   * The sync was cancelled.
+   *
+   * @generated from enum value: SYNC_STATUS_CANCELLED = 5;
+   */
+  CANCELLED = 5,
+}
+
+/**
+ * Describes the enum myncer.SyncStatus.
+ */
+export const SyncStatusSchema: GenEnum<SyncStatus> = /*@__PURE__*/
+  enumDesc(file_myncer_sync, 0);
+
+/**
+ * @generated from service myncer.SyncService
+ */
+export const SyncService: GenService<{
+  /**
+   * @generated from rpc myncer.SyncService.CreateSync
+   */
+  createSync: {
+    methodKind: "unary";
+    input: typeof CreateSyncRequestSchema;
+    output: typeof CreateSyncResponseSchema;
+  },
+  /**
+   * @generated from rpc myncer.SyncService.DeleteSync
+   */
+  deleteSync: {
+    methodKind: "unary";
+    input: typeof DeleteSyncRequestSchema;
+    output: typeof DeleteSyncResponseSchema;
+  },
+  /**
+   * @generated from rpc myncer.SyncService.ListSyncs
+   */
+  listSyncs: {
+    methodKind: "unary";
+    input: typeof ListSyncsRequestSchema;
+    output: typeof ListSyncsResponseSchema;
+  },
+  /**
+   * @generated from rpc myncer.SyncService.RunSync
+   */
+  runSync: {
+    methodKind: "unary";
+    input: typeof RunSyncRequestSchema;
+    output: typeof RunSyncResponseSchema;
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_myncer_sync, 0);
 

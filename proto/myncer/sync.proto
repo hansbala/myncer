@@ -7,6 +7,13 @@ import "myncer/datasource.proto";
 
 option go_package = "github.com/hansbala/myncer/proto/myncer;myncer_pb";
 
+service SyncService {
+  rpc CreateSync(CreateSyncRequest) returns (CreateSyncResponse);
+  rpc DeleteSync(DeleteSyncRequest) returns (DeleteSyncResponse);
+  rpc ListSyncs(ListSyncsRequest) returns (ListSyncsResponse);
+  rpc RunSync(RunSyncRequest) returns (RunSyncResponse);
+}
+
 message Sync {
   // google/uuid generated UUID.
   string id = 1;
@@ -32,3 +39,58 @@ message OneWaySync {
   // next: 4
 }
 
+message CreateSyncRequest {
+  // The sync to create.
+  oneof sync_variant {
+    OneWaySync one_way_sync = 1;
+  }
+}
+
+message CreateSyncResponse {
+  // The created sync.
+  Sync sync = 1;
+}
+
+message DeleteSyncRequest {
+  // The ID of the sync to delete.
+  string sync_id = 1;
+}
+
+message DeleteSyncResponse {
+  // The ID of the deleted sync.
+  string sync_id = 1;
+}
+
+message ListSyncsRequest {}
+
+message ListSyncsResponse {
+  // List of syncs for the current user.
+  Sync syncs = 1;
+}
+
+message RunSyncRequest {
+  // The ID of the sync to run.
+  string sync_id = 1;
+}
+
+enum SyncStatus {
+  SYNC_STATUS_UNSPECIFIED = 0;
+  // The sync is pending and has not started yet.
+  SYNC_STATUS_PENDING = 1;
+  // The sync is currently running.
+  SYNC_STATUS_RUNNING = 2;
+  // The sync has completed successfully.
+  SYNC_STATUS_COMPLETED = 3;
+  // The sync has failed.
+  SYNC_STATUS_FAILED = 4;
+  // The sync was cancelled.
+  SYNC_STATUS_CANCELLED = 5;
+}
+
+message RunSyncResponse {
+  // The ID of the sync that was run.
+  string sync_id = 1;
+  SyncStatus status = 2;
+  // If the sync failed, this will contain the error message.
+  string error_message = 3;
+}
