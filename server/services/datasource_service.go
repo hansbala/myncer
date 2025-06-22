@@ -1,0 +1,46 @@
+package services
+
+import (
+	"context"
+
+	"connectrpc.com/connect"
+	"github.com/hansbala/myncer/core"
+	myncer_pb "github.com/hansbala/myncer/proto/myncer"
+	myncer_pb_connect "github.com/hansbala/myncer/proto/myncer/myncer_pbconnect"
+)
+
+func NewDatasourceService() *DatasourceService {
+	return &DatasourceService{}
+}
+
+type DatasourceService struct{}
+
+var _ myncer_pb_connect.DatasourceServiceHandler = (*DatasourceService)(nil)
+
+func (d *DatasourceService) ExchangeOAuthCode(
+	ctx context.Context,
+	req *connect.Request[myncer_pb.ExchangeOAuthCodeRequest],
+) (*connect.Response[myncer_pb.ExchangeOAuthCodeResponse], error) {
+	return nil, core.NewError("not implemented")
+}
+
+func (d *DatasourceService) ListDatasources(
+	ctx context.Context,
+	req *connect.Request[myncer_pb.ListDatasourcesRequest],
+) (*connect.Response[myncer_pb.ListDatasourcesResponse], error) {
+	return nil, core.NewError("not implemented")
+}
+
+func (d *DatasourceService) ListPlaylists(
+	context.Context,
+	*connect.Request[myncer_pb.ListPlaylistsRequest],
+) (*connect.Response[myncer_pb.ListPlaylistsResponse], error) {
+	return nil, core.NewError("not implemented")
+}
+
+func (d *DatasourceService) GetPlaylistDetails(
+	context.Context,
+	*connect.Request[myncer_pb.GetPlaylistDetailsRequest],
+) (*connect.Response[myncer_pb.GetPlaylistDetailsResponse], error) {
+	return nil, core.NewError("not implemented")
+}
