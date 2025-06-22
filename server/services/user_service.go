@@ -6,18 +6,18 @@ import (
 	"connectrpc.com/connect"
 
 	"github.com/hansbala/myncer/core"
-	"github.com/hansbala/myncer/grpc_handlers"
+	"github.com/hansbala/myncer/rpc_handlers"
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 	myncer_pb_connect "github.com/hansbala/myncer/proto/myncer/myncer_pbconnect"
 )
 
 func NewUserService() *UserService {
 	return &UserService{
-		createUserHandler:  grpc_handlers.NewCreateUserHandler(),
-		loginUserHandler:   grpc_handlers.NewLoginUserHandler(),
-		currentUserHandler: grpc_handlers.NewCurrentUserHandler(),
-		logoutUserHandler:  grpc_handlers.NewLogoutUserHandler(),
-		editUserHandler:    grpc_handlers.NewEditUserHandler(),
+		createUserHandler:  rpc_handlers.NewCreateUserHandler(),
+		loginUserHandler:   rpc_handlers.NewLoginUserHandler(),
+		currentUserHandler: rpc_handlers.NewCurrentUserHandler(),
+		logoutUserHandler:  rpc_handlers.NewLogoutUserHandler(),
+		editUserHandler:    rpc_handlers.NewEditUserHandler(),
 	}
 }
 
