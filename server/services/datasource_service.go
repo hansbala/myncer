@@ -65,5 +65,5 @@ func (d *DatasourceService) GetPlaylistDetails(
 	ctx context.Context,
 	req *connect.Request[myncer_pb.GetPlaylistDetailsRequest],
 ) (*connect.Response[myncer_pb.GetPlaylistDetailsResponse], error) {
-	return OrchestrateHandler(ctx, d.getPlaylistDetailsHandler, nil)
+	return OrchestrateHandler(ctx, d.getPlaylistDetailsHandler, req.Msg)
 }
