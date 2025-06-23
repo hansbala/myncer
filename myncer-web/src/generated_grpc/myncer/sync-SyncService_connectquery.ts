@@ -20,6 +20,11 @@ export const deleteSync = SyncService.method.deleteSync;
 export const listSyncs = SyncService.method.listSyncs;
 
 /**
+ * @generated from rpc myncer.SyncService.GetSync
+ */
+export const getSync = SyncService.method.getSync;
+
+/**
  * @generated from rpc myncer.SyncService.RunSync
  */
 export const runSync = SyncService.method.runSync;

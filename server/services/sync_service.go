@@ -16,6 +16,7 @@ func NewSyncService() *SyncService {
 		createSyncHandler:   rpc_handlers.NewCreateSyncHandler(),
 		deleteSyncHandler:   rpc_handlers.NewDeleteSyncHandler(),
 		listSyncsHandler:    rpc_handlers.NewListSyncsHandler(),
+		getSyncHandler:      rpc_handlers.NewGetSyncHandler(),
 		runSyncHandler:      rpc_handlers.NewRunSyncHandler(sync_engine.NewSyncEngine()),
 		listSyncRunsHandler: rpc_handlers.NewListSyncRunsHandler(),
 	}
@@ -25,6 +26,7 @@ type SyncService struct {
 	createSyncHandler   core.GrpcHandler[*myncer_pb.CreateSyncRequest, *myncer_pb.CreateSyncResponse]
 	deleteSyncHandler   core.GrpcHandler[*myncer_pb.DeleteSyncRequest, *myncer_pb.DeleteSyncResponse]
 	listSyncsHandler    core.GrpcHandler[*myncer_pb.ListSyncsRequest, *myncer_pb.ListSyncsResponse]
+	getSyncHandler      core.GrpcHandler[*myncer_pb.GetSyncRequest, *myncer_pb.GetSyncResponse]
 	runSyncHandler      core.GrpcHandler[*myncer_pb.RunSyncRequest, *myncer_pb.RunSyncResponse]
 	listSyncRunsHandler core.GrpcHandler[
 		*myncer_pb.ListSyncRunsRequest,
@@ -53,6 +55,13 @@ func (d *SyncService) ListSyncs(
 	req *connect.Request[myncer_pb.ListSyncsRequest], /*const*/
 ) (*connect.Response[myncer_pb.ListSyncsResponse], error) {
 	return OrchestrateHandler(ctx, d.listSyncsHandler, req.Msg)
+}
+
+func (d *SyncService) GetSync(
+	ctx context.Context,
+	req *connect.Request[myncer_pb.GetSyncRequest], /*const*/
+) (*connect.Response[myncer_pb.GetSyncResponse], error) {
+	return OrchestrateHandler(ctx, d.getSyncHandler, req.Msg)
 }
 
 func (d *SyncService) RunSync(

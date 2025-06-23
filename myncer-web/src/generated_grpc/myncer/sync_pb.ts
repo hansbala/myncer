@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file myncer/sync.proto.
  */
 export const file_myncer_sync: GenFile = /*@__PURE__*/
-  fileDesc("ChFteW5jZXIvc3luYy5wcm90bxIGbXluY2VyIr8BCgRTeW5jEgoKAmlkGAEgASgJEg8KB3VzZXJfaWQYAiABKAkSLgoKY3JlYXRlZF9hdBgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASKgoMb25lX3dheV9zeW5jGAUgASgLMhIubXluY2VyLk9uZVdheVN5bmNIAEIOCgxzeW5jX3ZhcmlhbnQiswEKB1N5bmNSdW4SDwoHc3luY19pZBgBIAEoCRIOCgZydW5faWQYAiABKAkSJwoLc3luY19zdGF0dXMYAyABKA4yEi5teW5jZXIuU3luY1N0YXR1cxIuCgpjcmVhdGVkX2F0GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp1cGRhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCJ3CgpPbmVXYXlTeW5jEiMKBnNvdXJjZRgBIAEoCzITLm15bmNlci5NdXNpY1NvdXJjZRIoCgtkZXN0aW5hdGlvbhgCIAEoCzITLm15bmNlci5NdXNpY1NvdXJjZRIaChJvdmVyd3JpdGVfZXhpc3RpbmcYAyABKAgiTwoRQ3JlYXRlU3luY1JlcXVlc3QSKgoMb25lX3dheV9zeW5jGAEgASgLMhIubXluY2VyLk9uZVdheVN5bmNIAEIOCgxzeW5jX3ZhcmlhbnQiMAoSQ3JlYXRlU3luY1Jlc3BvbnNlEhoKBHN5bmMYASABKAsyDC5teW5jZXIuU3luYyIkChFEZWxldGVTeW5jUmVxdWVzdBIPCgdzeW5jX2lkGAEgASgJIiUKEkRlbGV0ZVN5bmNSZXNwb25zZRIPCgdzeW5jX2lkGAEgASgJIhIKEExpc3RTeW5jc1JlcXVlc3QiMAoRTGlzdFN5bmNzUmVzcG9uc2USGwoFc3luY3MYASADKAsyDC5teW5jZXIuU3luYyIhCg5SdW5TeW5jUmVxdWVzdBIPCgdzeW5jX2lkGAEgASgJIl0KD1J1blN5bmNSZXNwb25zZRIPCgdzeW5jX2lkGAEgASgJEiIKBnN0YXR1cxgCIAEoDjISLm15bmNlci5TeW5jU3RhdHVzEhUKDWVycm9yX21lc3NhZ2UYAyABKAkiFQoTTGlzdFN5bmNSdW5zUmVxdWVzdCI6ChRMaXN0U3luY1J1bnNSZXNwb25zZRIiCglzeW5jX3J1bnMYASADKAsyDy5teW5jZXIuU3luY1J1biqpAQoKU3luY1N0YXR1cxIbChdTWU5DX1NUQVRVU19VTlNQRUNJRklFRBAAEhcKE1NZTkNfU1RBVFVTX1BFTkRJTkcQARIXChNTWU5DX1NUQVRVU19SVU5OSU5HEAISGQoVU1lOQ19TVEFUVVNfQ09NUExFVEVEEAMSFgoSU1lOQ19TVEFUVVNfRkFJTEVEEAQSGQoVU1lOQ19TVEFUVVNfQ0FOQ0VMTEVEEAUy4AIKC1N5bmNTZXJ2aWNlEkMKCkNyZWF0ZVN5bmMSGS5teW5jZXIuQ3JlYXRlU3luY1JlcXVlc3QaGi5teW5jZXIuQ3JlYXRlU3luY1Jlc3BvbnNlEkMKCkRlbGV0ZVN5bmMSGS5teW5jZXIuRGVsZXRlU3luY1JlcXVlc3QaGi5teW5jZXIuRGVsZXRlU3luY1Jlc3BvbnNlEkAKCUxpc3RTeW5jcxIYLm15bmNlci5MaXN0U3luY3NSZXF1ZXN0GhkubXluY2VyLkxpc3RTeW5jc1Jlc3BvbnNlEjoKB1J1blN5bmMSFi5teW5jZXIuUnVuU3luY1JlcXVlc3QaFy5teW5jZXIuUnVuU3luY1Jlc3BvbnNlEkkKDExpc3RTeW5jUnVucxIbLm15bmNlci5MaXN0U3luY1J1bnNSZXF1ZXN0GhwubXluY2VyLkxpc3RTeW5jUnVuc1Jlc3BvbnNlQjNaMWdpdGh1Yi5jb20vaGFuc2JhbGEvbXluY2VyL3Byb3RvL215bmNlcjtteW5jZXJfcGJiBnByb3RvMw", [file_google_protobuf_timestamp, file_myncer_datasource]);
+  fileDesc("ChFteW5jZXIvc3luYy5wcm90bxIGbXluY2VyIr8BCgRTeW5jEgoKAmlkGAEgASgJEg8KB3VzZXJfaWQYAiABKAkSLgoKY3JlYXRlZF9hdBgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASKgoMb25lX3dheV9zeW5jGAUgASgLMhIubXluY2VyLk9uZVdheVN5bmNIAEIOCgxzeW5jX3ZhcmlhbnQiswEKB1N5bmNSdW4SDwoHc3luY19pZBgBIAEoCRIOCgZydW5faWQYAiABKAkSJwoLc3luY19zdGF0dXMYAyABKA4yEi5teW5jZXIuU3luY1N0YXR1cxIuCgpjcmVhdGVkX2F0GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp1cGRhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCJ3CgpPbmVXYXlTeW5jEiMKBnNvdXJjZRgBIAEoCzITLm15bmNlci5NdXNpY1NvdXJjZRIoCgtkZXN0aW5hdGlvbhgCIAEoCzITLm15bmNlci5NdXNpY1NvdXJjZRIaChJvdmVyd3JpdGVfZXhpc3RpbmcYAyABKAgiTwoRQ3JlYXRlU3luY1JlcXVlc3QSKgoMb25lX3dheV9zeW5jGAEgASgLMhIubXluY2VyLk9uZVdheVN5bmNIAEIOCgxzeW5jX3ZhcmlhbnQiMAoSQ3JlYXRlU3luY1Jlc3BvbnNlEhoKBHN5bmMYASABKAsyDC5teW5jZXIuU3luYyIkChFEZWxldGVTeW5jUmVxdWVzdBIPCgdzeW5jX2lkGAEgASgJIiUKEkRlbGV0ZVN5bmNSZXNwb25zZRIPCgdzeW5jX2lkGAEgASgJIhIKEExpc3RTeW5jc1JlcXVlc3QiMAoRTGlzdFN5bmNzUmVzcG9uc2USGwoFc3luY3MYASADKAsyDC5teW5jZXIuU3luYyIhCg5HZXRTeW5jUmVxdWVzdBIPCgdzeW5jX2lkGAEgASgJIi0KD0dldFN5bmNSZXNwb25zZRIaCgRzeW5jGAEgASgLMgwubXluY2VyLlN5bmMiIQoOUnVuU3luY1JlcXVlc3QSDwoHc3luY19pZBgBIAEoCSJdCg9SdW5TeW5jUmVzcG9uc2USDwoHc3luY19pZBgBIAEoCRIiCgZzdGF0dXMYAiABKA4yEi5teW5jZXIuU3luY1N0YXR1cxIVCg1lcnJvcl9tZXNzYWdlGAMgASgJIhUKE0xpc3RTeW5jUnVuc1JlcXVlc3QiOgoUTGlzdFN5bmNSdW5zUmVzcG9uc2USIgoJc3luY19ydW5zGAEgAygLMg8ubXluY2VyLlN5bmNSdW4qqQEKClN5bmNTdGF0dXMSGwoXU1lOQ19TVEFUVVNfVU5TUEVDSUZJRUQQABIXChNTWU5DX1NUQVRVU19QRU5ESU5HEAESFwoTU1lOQ19TVEFUVVNfUlVOTklORxACEhkKFVNZTkNfU1RBVFVTX0NPTVBMRVRFRBADEhYKElNZTkNfU1RBVFVTX0ZBSUxFRBAEEhkKFVNZTkNfU1RBVFVTX0NBTkNFTExFRBAFMpwDCgtTeW5jU2VydmljZRJDCgpDcmVhdGVTeW5jEhkubXluY2VyLkNyZWF0ZVN5bmNSZXF1ZXN0GhoubXluY2VyLkNyZWF0ZVN5bmNSZXNwb25zZRJDCgpEZWxldGVTeW5jEhkubXluY2VyLkRlbGV0ZVN5bmNSZXF1ZXN0GhoubXluY2VyLkRlbGV0ZVN5bmNSZXNwb25zZRJACglMaXN0U3luY3MSGC5teW5jZXIuTGlzdFN5bmNzUmVxdWVzdBoZLm15bmNlci5MaXN0U3luY3NSZXNwb25zZRI6CgdHZXRTeW5jEhYubXluY2VyLkdldFN5bmNSZXF1ZXN0GhcubXluY2VyLkdldFN5bmNSZXNwb25zZRI6CgdSdW5TeW5jEhYubXluY2VyLlJ1blN5bmNSZXF1ZXN0GhcubXluY2VyLlJ1blN5bmNSZXNwb25zZRJJCgxMaXN0U3luY1J1bnMSGy5teW5jZXIuTGlzdFN5bmNSdW5zUmVxdWVzdBocLm15bmNlci5MaXN0U3luY1J1bnNSZXNwb25zZUIzWjFnaXRodWIuY29tL2hhbnNiYWxhL215bmNlci9wcm90by9teW5jZXI7bXluY2VyX3BiYgZwcm90bzM", [file_google_protobuf_timestamp, file_myncer_datasource]);
 
 /**
  * @generated from message myncer.Sync
@@ -262,6 +262,44 @@ export const ListSyncsResponseSchema: GenMessage<ListSyncsResponse> = /*@__PURE_
   messageDesc(file_myncer_sync, 8);
 
 /**
+ * @generated from message myncer.GetSyncRequest
+ */
+export type GetSyncRequest = Message<"myncer.GetSyncRequest"> & {
+  /**
+   * The ID of the sync to get.
+   *
+   * @generated from field: string sync_id = 1;
+   */
+  syncId: string;
+};
+
+/**
+ * Describes the message myncer.GetSyncRequest.
+ * Use `create(GetSyncRequestSchema)` to create a new message.
+ */
+export const GetSyncRequestSchema: GenMessage<GetSyncRequest> = /*@__PURE__*/
+  messageDesc(file_myncer_sync, 9);
+
+/**
+ * @generated from message myncer.GetSyncResponse
+ */
+export type GetSyncResponse = Message<"myncer.GetSyncResponse"> & {
+  /**
+   * The requested sync.
+   *
+   * @generated from field: myncer.Sync sync = 1;
+   */
+  sync?: Sync;
+};
+
+/**
+ * Describes the message myncer.GetSyncResponse.
+ * Use `create(GetSyncResponseSchema)` to create a new message.
+ */
+export const GetSyncResponseSchema: GenMessage<GetSyncResponse> = /*@__PURE__*/
+  messageDesc(file_myncer_sync, 10);
+
+/**
  * @generated from message myncer.RunSyncRequest
  */
 export type RunSyncRequest = Message<"myncer.RunSyncRequest"> & {
@@ -278,7 +316,7 @@ export type RunSyncRequest = Message<"myncer.RunSyncRequest"> & {
  * Use `create(RunSyncRequestSchema)` to create a new message.
  */
 export const RunSyncRequestSchema: GenMessage<RunSyncRequest> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 9);
+  messageDesc(file_myncer_sync, 11);
 
 /**
  * @generated from message myncer.RunSyncResponse
@@ -309,7 +347,7 @@ export type RunSyncResponse = Message<"myncer.RunSyncResponse"> & {
  * Use `create(RunSyncResponseSchema)` to create a new message.
  */
 export const RunSyncResponseSchema: GenMessage<RunSyncResponse> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 10);
+  messageDesc(file_myncer_sync, 12);
 
 /**
  * @generated from message myncer.ListSyncRunsRequest
@@ -322,7 +360,7 @@ export type ListSyncRunsRequest = Message<"myncer.ListSyncRunsRequest"> & {
  * Use `create(ListSyncRunsRequestSchema)` to create a new message.
  */
 export const ListSyncRunsRequestSchema: GenMessage<ListSyncRunsRequest> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 11);
+  messageDesc(file_myncer_sync, 13);
 
 /**
  * @generated from message myncer.ListSyncRunsResponse
@@ -341,7 +379,7 @@ export type ListSyncRunsResponse = Message<"myncer.ListSyncRunsResponse"> & {
  * Use `create(ListSyncRunsResponseSchema)` to create a new message.
  */
 export const ListSyncRunsResponseSchema: GenMessage<ListSyncRunsResponse> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 12);
+  messageDesc(file_myncer_sync, 14);
 
 /**
  * @generated from enum myncer.SyncStatus
@@ -421,6 +459,14 @@ export const SyncService: GenService<{
     methodKind: "unary";
     input: typeof ListSyncsRequestSchema;
     output: typeof ListSyncsResponseSchema;
+  },
+  /**
+   * @generated from rpc myncer.SyncService.GetSync
+   */
+  getSync: {
+    methodKind: "unary";
+    input: typeof GetSyncRequestSchema;
+    output: typeof GetSyncResponseSchema;
   },
   /**
    * @generated from rpc myncer.SyncService.RunSync

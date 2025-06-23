@@ -11,6 +11,7 @@ service SyncService {
   rpc CreateSync(CreateSyncRequest) returns (CreateSyncResponse);
   rpc DeleteSync(DeleteSyncRequest) returns (DeleteSyncResponse);
   rpc ListSyncs(ListSyncsRequest) returns (ListSyncsResponse);
+  rpc GetSync(GetSyncRequest) returns (GetSyncResponse);
   rpc RunSync(RunSyncRequest) returns (RunSyncResponse);
   rpc ListSyncRuns(ListSyncRunsRequest) returns (ListSyncRunsResponse);
 }
@@ -80,6 +81,16 @@ message ListSyncsRequest {}
 message ListSyncsResponse {
   // List of syncs for the current user.
   repeated Sync syncs = 1;
+}
+
+message GetSyncRequest {
+  // The ID of the sync to get.
+  string sync_id = 1;
+}
+
+message GetSyncResponse {
+  // The requested sync.
+  Sync sync = 1;
 }
 
 message RunSyncRequest {
