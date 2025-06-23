@@ -17,23 +17,23 @@ type DatasourceClient interface {
 	GetPlaylist(
 		ctx context.Context,
 		userInfo *myncer_pb.User, /*const*/
-		id string, /*const*/
+		id string,
 	) (*myncer_pb.Playlist, error)
 	GetPlaylistSongs(
 		ctx context.Context,
 		userInfo *myncer_pb.User, /*const*/
-		playlistId string, /*const*/
+		playlistId string,
 	) ([]Song, error)
 	AddToPlaylist(
 		ctx context.Context,
 		userInfo *myncer_pb.User, /*const*/
-		playlistId string, /*const*/
+		playlistId string,
 		songs []Song, /*const*/
 	) error
 	ClearPlaylist(
 		ctx context.Context,
 		userInfo *myncer_pb.User, /*const*/
-		playlistId string, /*const*/
+		playlistId string,
 	) error
 	Search(
 		ctx context.Context,
