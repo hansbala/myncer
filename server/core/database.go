@@ -18,6 +18,7 @@ type Database struct {
 	DatasourceTokenStore DatasourceTokenStore
 	UserStore            UserStore
 	SyncStore            SyncStore
+	SyncRunStore         SyncRunStore
 	DB                   *sql.DB
 }
 
@@ -39,6 +40,7 @@ func MustGetDatabase(ctx context.Context, config *myncer_pb.Config /*const*/) *D
 		DB:                   db,
 		UserStore:            NewUserStore(db),
 		SyncStore:            NewSyncStore(db),
+		SyncRunStore:         NewSyncRunStore(db),
 		DatasourceTokenStore: NewDatasourceTokenStore(db),
 	}
 }
