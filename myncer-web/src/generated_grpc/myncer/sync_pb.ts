@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file myncer/sync.proto.
  */
 export const file_myncer_sync: GenFile = /*@__PURE__*/
-  fileDesc("ChFteW5jZXIvc3luYy5wcm90bxIGbXluY2VyIr8BCgRTeW5jEgoKAmlkGAEgASgJEg8KB3VzZXJfaWQYAiABKAkSLgoKY3JlYXRlZF9hdBgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASKgoMb25lX3dheV9zeW5jGAUgASgLMhIubXluY2VyLk9uZVdheVN5bmNIAEIOCgxzeW5jX3ZhcmlhbnQidwoKT25lV2F5U3luYxIjCgZzb3VyY2UYASABKAsyEy5teW5jZXIuTXVzaWNTb3VyY2USKAoLZGVzdGluYXRpb24YAiABKAsyEy5teW5jZXIuTXVzaWNTb3VyY2USGgoSb3ZlcndyaXRlX2V4aXN0aW5nGAMgASgIIk8KEUNyZWF0ZVN5bmNSZXF1ZXN0EioKDG9uZV93YXlfc3luYxgBIAEoCzISLm15bmNlci5PbmVXYXlTeW5jSABCDgoMc3luY192YXJpYW50IjAKEkNyZWF0ZVN5bmNSZXNwb25zZRIaCgRzeW5jGAEgASgLMgwubXluY2VyLlN5bmMiJAoRRGVsZXRlU3luY1JlcXVlc3QSDwoHc3luY19pZBgBIAEoCSIlChJEZWxldGVTeW5jUmVzcG9uc2USDwoHc3luY19pZBgBIAEoCSISChBMaXN0U3luY3NSZXF1ZXN0IjAKEUxpc3RTeW5jc1Jlc3BvbnNlEhsKBXN5bmNzGAEgAygLMgwubXluY2VyLlN5bmMiIQoOUnVuU3luY1JlcXVlc3QSDwoHc3luY19pZBgBIAEoCSJdCg9SdW5TeW5jUmVzcG9uc2USDwoHc3luY19pZBgBIAEoCRIiCgZzdGF0dXMYAiABKA4yEi5teW5jZXIuU3luY1N0YXR1cxIVCg1lcnJvcl9tZXNzYWdlGAMgASgJKqkBCgpTeW5jU3RhdHVzEhsKF1NZTkNfU1RBVFVTX1VOU1BFQ0lGSUVEEAASFwoTU1lOQ19TVEFUVVNfUEVORElORxABEhcKE1NZTkNfU1RBVFVTX1JVTk5JTkcQAhIZChVTWU5DX1NUQVRVU19DT01QTEVURUQQAxIWChJTWU5DX1NUQVRVU19GQUlMRUQQBBIZChVTWU5DX1NUQVRVU19DQU5DRUxMRUQQBTKVAgoLU3luY1NlcnZpY2USQwoKQ3JlYXRlU3luYxIZLm15bmNlci5DcmVhdGVTeW5jUmVxdWVzdBoaLm15bmNlci5DcmVhdGVTeW5jUmVzcG9uc2USQwoKRGVsZXRlU3luYxIZLm15bmNlci5EZWxldGVTeW5jUmVxdWVzdBoaLm15bmNlci5EZWxldGVTeW5jUmVzcG9uc2USQAoJTGlzdFN5bmNzEhgubXluY2VyLkxpc3RTeW5jc1JlcXVlc3QaGS5teW5jZXIuTGlzdFN5bmNzUmVzcG9uc2USOgoHUnVuU3luYxIWLm15bmNlci5SdW5TeW5jUmVxdWVzdBoXLm15bmNlci5SdW5TeW5jUmVzcG9uc2VCM1oxZ2l0aHViLmNvbS9oYW5zYmFsYS9teW5jZXIvcHJvdG8vbXluY2VyO215bmNlcl9wYmIGcHJvdG8z", [file_google_protobuf_timestamp, file_myncer_datasource]);
+  fileDesc("ChFteW5jZXIvc3luYy5wcm90bxIGbXluY2VyIr8BCgRTeW5jEgoKAmlkGAEgASgJEg8KB3VzZXJfaWQYAiABKAkSLgoKY3JlYXRlZF9hdBgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASKgoMb25lX3dheV9zeW5jGAUgASgLMhIubXluY2VyLk9uZVdheVN5bmNIAEIOCgxzeW5jX3ZhcmlhbnQiUwoHU3luY1J1bhIPCgdzeW5jX2lkGAEgASgJEg4KBnJ1bl9pZBgCIAEoCRInCgtzeW5jX3N0YXR1cxgDIAEoDjISLm15bmNlci5TeW5jU3RhdHVzIncKCk9uZVdheVN5bmMSIwoGc291cmNlGAEgASgLMhMubXluY2VyLk11c2ljU291cmNlEigKC2Rlc3RpbmF0aW9uGAIgASgLMhMubXluY2VyLk11c2ljU291cmNlEhoKEm92ZXJ3cml0ZV9leGlzdGluZxgDIAEoCCJPChFDcmVhdGVTeW5jUmVxdWVzdBIqCgxvbmVfd2F5X3N5bmMYASABKAsyEi5teW5jZXIuT25lV2F5U3luY0gAQg4KDHN5bmNfdmFyaWFudCIwChJDcmVhdGVTeW5jUmVzcG9uc2USGgoEc3luYxgBIAEoCzIMLm15bmNlci5TeW5jIiQKEURlbGV0ZVN5bmNSZXF1ZXN0Eg8KB3N5bmNfaWQYASABKAkiJQoSRGVsZXRlU3luY1Jlc3BvbnNlEg8KB3N5bmNfaWQYASABKAkiEgoQTGlzdFN5bmNzUmVxdWVzdCIwChFMaXN0U3luY3NSZXNwb25zZRIbCgVzeW5jcxgBIAMoCzIMLm15bmNlci5TeW5jIiEKDlJ1blN5bmNSZXF1ZXN0Eg8KB3N5bmNfaWQYASABKAkiXQoPUnVuU3luY1Jlc3BvbnNlEg8KB3N5bmNfaWQYASABKAkSIgoGc3RhdHVzGAIgASgOMhIubXluY2VyLlN5bmNTdGF0dXMSFQoNZXJyb3JfbWVzc2FnZRgDIAEoCSqpAQoKU3luY1N0YXR1cxIbChdTWU5DX1NUQVRVU19VTlNQRUNJRklFRBAAEhcKE1NZTkNfU1RBVFVTX1BFTkRJTkcQARIXChNTWU5DX1NUQVRVU19SVU5OSU5HEAISGQoVU1lOQ19TVEFUVVNfQ09NUExFVEVEEAMSFgoSU1lOQ19TVEFUVVNfRkFJTEVEEAQSGQoVU1lOQ19TVEFUVVNfQ0FOQ0VMTEVEEAUylQIKC1N5bmNTZXJ2aWNlEkMKCkNyZWF0ZVN5bmMSGS5teW5jZXIuQ3JlYXRlU3luY1JlcXVlc3QaGi5teW5jZXIuQ3JlYXRlU3luY1Jlc3BvbnNlEkMKCkRlbGV0ZVN5bmMSGS5teW5jZXIuRGVsZXRlU3luY1JlcXVlc3QaGi5teW5jZXIuRGVsZXRlU3luY1Jlc3BvbnNlEkAKCUxpc3RTeW5jcxIYLm15bmNlci5MaXN0U3luY3NSZXF1ZXN0GhkubXluY2VyLkxpc3RTeW5jc1Jlc3BvbnNlEjoKB1J1blN5bmMSFi5teW5jZXIuUnVuU3luY1JlcXVlc3QaFy5teW5jZXIuUnVuU3luY1Jlc3BvbnNlQjNaMWdpdGh1Yi5jb20vaGFuc2JhbGEvbXluY2VyL3Byb3RvL215bmNlcjtteW5jZXJfcGJiBnByb3RvMw", [file_google_protobuf_timestamp, file_myncer_datasource]);
 
 /**
  * @generated from message myncer.Sync
@@ -68,6 +68,40 @@ export const SyncSchema: GenMessage<Sync> = /*@__PURE__*/
   messageDesc(file_myncer_sync, 0);
 
 /**
+ * @generated from message myncer.SyncRun
+ */
+export type SyncRun = Message<"myncer.SyncRun"> & {
+  /**
+   * The ID of the sync that was run.
+   *
+   * @generated from field: string sync_id = 1;
+   */
+  syncId: string;
+
+  /**
+   * The run id of this sync.
+   * This is expected to be randomly generated for each sync run.
+   *
+   * @generated from field: string run_id = 2;
+   */
+  runId: string;
+
+  /**
+   * The status of this sync run.
+   *
+   * @generated from field: myncer.SyncStatus sync_status = 3;
+   */
+  syncStatus: SyncStatus;
+};
+
+/**
+ * Describes the message myncer.SyncRun.
+ * Use `create(SyncRunSchema)` to create a new message.
+ */
+export const SyncRunSchema: GenMessage<SyncRun> = /*@__PURE__*/
+  messageDesc(file_myncer_sync, 1);
+
+/**
  * Representative of source -> destination.
  *
  * @generated from message myncer.OneWaySync
@@ -99,7 +133,7 @@ export type OneWaySync = Message<"myncer.OneWaySync"> & {
  * Use `create(OneWaySyncSchema)` to create a new message.
  */
 export const OneWaySyncSchema: GenMessage<OneWaySync> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 1);
+  messageDesc(file_myncer_sync, 2);
 
 /**
  * @generated from message myncer.CreateSyncRequest
@@ -124,7 +158,7 @@ export type CreateSyncRequest = Message<"myncer.CreateSyncRequest"> & {
  * Use `create(CreateSyncRequestSchema)` to create a new message.
  */
 export const CreateSyncRequestSchema: GenMessage<CreateSyncRequest> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 2);
+  messageDesc(file_myncer_sync, 3);
 
 /**
  * @generated from message myncer.CreateSyncResponse
@@ -143,7 +177,7 @@ export type CreateSyncResponse = Message<"myncer.CreateSyncResponse"> & {
  * Use `create(CreateSyncResponseSchema)` to create a new message.
  */
 export const CreateSyncResponseSchema: GenMessage<CreateSyncResponse> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 3);
+  messageDesc(file_myncer_sync, 4);
 
 /**
  * @generated from message myncer.DeleteSyncRequest
@@ -162,7 +196,7 @@ export type DeleteSyncRequest = Message<"myncer.DeleteSyncRequest"> & {
  * Use `create(DeleteSyncRequestSchema)` to create a new message.
  */
 export const DeleteSyncRequestSchema: GenMessage<DeleteSyncRequest> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 4);
+  messageDesc(file_myncer_sync, 5);
 
 /**
  * @generated from message myncer.DeleteSyncResponse
@@ -181,7 +215,7 @@ export type DeleteSyncResponse = Message<"myncer.DeleteSyncResponse"> & {
  * Use `create(DeleteSyncResponseSchema)` to create a new message.
  */
 export const DeleteSyncResponseSchema: GenMessage<DeleteSyncResponse> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 5);
+  messageDesc(file_myncer_sync, 6);
 
 /**
  * @generated from message myncer.ListSyncsRequest
@@ -194,7 +228,7 @@ export type ListSyncsRequest = Message<"myncer.ListSyncsRequest"> & {
  * Use `create(ListSyncsRequestSchema)` to create a new message.
  */
 export const ListSyncsRequestSchema: GenMessage<ListSyncsRequest> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 6);
+  messageDesc(file_myncer_sync, 7);
 
 /**
  * @generated from message myncer.ListSyncsResponse
@@ -213,7 +247,7 @@ export type ListSyncsResponse = Message<"myncer.ListSyncsResponse"> & {
  * Use `create(ListSyncsResponseSchema)` to create a new message.
  */
 export const ListSyncsResponseSchema: GenMessage<ListSyncsResponse> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 7);
+  messageDesc(file_myncer_sync, 8);
 
 /**
  * @generated from message myncer.RunSyncRequest
@@ -232,7 +266,7 @@ export type RunSyncRequest = Message<"myncer.RunSyncRequest"> & {
  * Use `create(RunSyncRequestSchema)` to create a new message.
  */
 export const RunSyncRequestSchema: GenMessage<RunSyncRequest> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 8);
+  messageDesc(file_myncer_sync, 9);
 
 /**
  * @generated from message myncer.RunSyncResponse
@@ -263,7 +297,7 @@ export type RunSyncResponse = Message<"myncer.RunSyncResponse"> & {
  * Use `create(RunSyncResponseSchema)` to create a new message.
  */
 export const RunSyncResponseSchema: GenMessage<RunSyncResponse> = /*@__PURE__*/
-  messageDesc(file_myncer_sync, 9);
+  messageDesc(file_myncer_sync, 10);
 
 /**
  * @generated from enum myncer.SyncStatus
