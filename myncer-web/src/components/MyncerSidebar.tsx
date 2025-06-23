@@ -1,4 +1,4 @@
-import { User, LogOut, Database, FolderSync } from "lucide-react"
+import { User, LogOut, Database, FolderSync, Play } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -15,6 +15,11 @@ const menuItems = [
     title: "Syncs",
     url: "/syncs",
     icon: FolderSync,
+  },
+  {
+    title: "Sync Runs",
+    url: "/syncruns",
+    icon: Play,
   },
   {
     title: "Datasources",

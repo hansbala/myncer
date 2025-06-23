@@ -8,6 +8,8 @@ import { Datasources } from './pages/Datasources';
 import { DatasourceAuthPage } from './pages/DatasourceAuthPage';
 import { Syncs } from './pages/Syncs';
 import { Datasource } from './generated_grpc/myncer/datasource_pb';
+import { SyncRuns } from './pages/SyncRuns';
+import { SyncDetails } from './pages/SyncDetails';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +38,22 @@ const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <Syncs />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "syncs/:syncId",
+        element: (
+          <RequireAuth>
+            <SyncDetails />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "syncruns",
+        element: (
+          <RequireAuth>
+            <SyncRuns />
           </RequireAuth>
         ),
       },
