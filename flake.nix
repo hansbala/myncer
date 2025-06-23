@@ -1,21 +1,25 @@
 {
   description = "Myncer Dev environment";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
-  inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs = {
+    nixpkgs = { url = "github:NixOS/nixpkgs/nixos-24.05"; };
+    nixpkgs-unstable = { url = "github:NixOS/nixpkgs/nixpkgs-unstable"; };
+    flake-utils = { url = "github:numtide/flake-utils"; };
+  };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        stable = import nixpkgs { inherit system; };
+        unstable = import nixpkgs-unstable { inherit system; };
       in {
-        devShells.default = pkgs.mkShell {
+        devShells.default = stable.mkShell {
           buildInputs = [
-            pkgs.go_1_22
-            pkgs.nodejs_20
-            pkgs.pnpm
-            pkgs.protobuf
-            pkgs.docker
+            stable.go_1_22
+            stable.nodejs_20
+            stable.pnpm
+            stable.docker
+            unstable.buf
           ];
 
           shellHook = ''
