@@ -37,6 +37,9 @@ message SyncRun {
   string run_id = 2;
   // The status of this sync run.
   SyncStatus sync_status = 3;
+  // Metadata which is fetched from SQL (for it's ACID compliance).
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
 }
 
 // Representative of source -> destination.
