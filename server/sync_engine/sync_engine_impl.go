@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/hansbala/myncer/core"
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
@@ -21,15 +22,75 @@ func (s *syncEngineImpl) RunSync(
 	userInfo *myncer_pb.User, /*const*/
 	sync *myncer_pb.Sync, /*const*/
 ) error {
+	// Validates the sync is valid and implemented.
+	if err := s.validateSync(sync); err != nil {
+		return core.WrappedError(err, "failed to validate sync")
+	}
+
+	// Store the sync run run state in the database.
+	syncRun := s.getSyncRun(sync)
+	if err := s.storeSyncRun(ctx, syncRun, true /*create*/); err != nil {
+		return core.WrappedError(err, "failed to store sync run")
+	}
+
+	// Run the sync.
+	var err error = nil
 	switch sync.GetSyncVariant().(type) {
 	case *myncer_pb.Sync_OneWaySync:
-		if err := s.runOneWaySync(
+		if err = s.runOneWaySync(
 			ctx,
 			userInfo,
 			sync.GetOneWaySync(),
 		); err != nil {
-			return core.WrappedError(err, "failed to run one-way sync")
+			err = core.WrappedError(err, "failed to run one-way sync")
 		}
+	default:
+		// We should never reach here if the sync was validated correctly.
+		err = core.NewError(fmt.Sprintf("unreachble: unknown sync variant: %T", sync.GetSyncVariant()))
+	}
+
+	// Update the status of the sync run in the database.
+	if err != nil {
+		syncRun.SyncStatus = myncer_pb.SyncStatus_SYNC_STATUS_FAILED
+	} else {
+		syncRun.SyncStatus = myncer_pb.SyncStatus_SYNC_STATUS_COMPLETED
+	}
+	if err := s.storeSyncRun(ctx, syncRun, false /*create*/); err != nil {
+		return core.WrappedError(err, "failed to update sync run in database")
+	}
+
+	return nil
+}
+
+func (s *syncEngineImpl) getSyncRun(sync *myncer_pb.Sync /*const*/) *myncer_pb.SyncRun {
+	return &myncer_pb.SyncRun{
+		SyncId:     sync.GetId(),
+		RunId:      uuid.NewString(),
+		SyncStatus: myncer_pb.SyncStatus_SYNC_STATUS_RUNNING,
+	}
+}
+
+func (s *syncEngineImpl) storeSyncRun(
+	ctx context.Context,
+	syncRun *myncer_pb.SyncRun, /*const*/
+	create bool, // if true, create a new sync run, otherwise update an existing one.
+) error {
+	syncRunStore := core.ToMyncerCtx(ctx).DB.SyncRunStore
+	if create {
+		if err := syncRunStore.CreateSyncRun(ctx, syncRun); err != nil {
+			return core.WrappedError(err, "failed to create sync run in database")
+		}
+	} else {
+		if err := syncRunStore.UpdateSyncRun(ctx, syncRun); err != nil {
+			return core.WrappedError(err, "failed to update sync run in database")
+		}
+	}
+	return nil
+}
+
+func (s *syncEngineImpl) validateSync(sync *myncer_pb.Sync /*const*/) error {
+	switch sync.GetSyncVariant().(type) {
+	case *myncer_pb.Sync_OneWaySync:
 		return nil
 	default:
 		return core.NewError(fmt.Sprintf("unknown sync variant: %T", sync.GetOneWaySync()))
@@ -107,7 +168,9 @@ func (s *syncEngineImpl) getSearchedSongs(
 		newDatasourceSongId, err := song.GetIdByDatasource(ctx, userInfo, datasource)
 		if err != nil {
 			// Just log the error and continue with the next song.
-			core.Errorf(fmt.Sprintf("failed to get datasource ID for song %s: %s", song.GetName()), err.Error())
+			core.Errorf(
+				core.NewError("failed to get datasource ID for song %s: %s", song.GetName(), err.Error()),
+			)
 			continue
 		}
 		r = append(
