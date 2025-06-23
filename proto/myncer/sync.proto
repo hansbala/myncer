@@ -29,6 +29,16 @@ message Sync {
   // next: 6
 }
 
+message SyncRun {
+  // The ID of the sync that was run.
+  string sync_id = 1;
+  // The run id of this sync.
+  // This is expected to be randomly generated for each sync run.
+  string run_id = 2;
+  // The status of this sync run.
+  SyncStatus sync_status = 3;
+}
+
 // Representative of source -> destination.
 message OneWaySync {
   MusicSource source = 1;

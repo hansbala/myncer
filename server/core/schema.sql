@@ -27,3 +27,12 @@ CREATE TABLE IF NOT EXISTS syncs (
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS sync_runs (
+  run_id UUID PRIMARY KEY,
+  sync_id UUID NOT NULL REFERENCES syncs(id) ON DELETE CASCADE,
+  -- Source of truth: Serialized SyncRun proto.
+  data BYTEA NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
