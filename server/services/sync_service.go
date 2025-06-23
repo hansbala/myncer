@@ -13,18 +13,23 @@ import (
 
 func NewSyncService() *SyncService {
 	return &SyncService{
-		createSyncHandler: rpc_handlers.NewCreateSyncHandler(),
-		deleteSyncHandler: rpc_handlers.NewDeleteSyncHandler(),
-		listSyncsHandler:  rpc_handlers.NewListSyncsHandler(),
-		runSyncHandler:    rpc_handlers.NewRunSyncHandler(sync_engine.NewSyncEngine()),
+		createSyncHandler:   rpc_handlers.NewCreateSyncHandler(),
+		deleteSyncHandler:   rpc_handlers.NewDeleteSyncHandler(),
+		listSyncsHandler:    rpc_handlers.NewListSyncsHandler(),
+		runSyncHandler:      rpc_handlers.NewRunSyncHandler(sync_engine.NewSyncEngine()),
+		listSyncRunsHandler: rpc_handlers.NewListSyncRunsHandler(),
 	}
 }
 
 type SyncService struct {
-	createSyncHandler core.GrpcHandler[*myncer_pb.CreateSyncRequest, *myncer_pb.CreateSyncResponse]
-	deleteSyncHandler core.GrpcHandler[*myncer_pb.DeleteSyncRequest, *myncer_pb.DeleteSyncResponse]
-	listSyncsHandler  core.GrpcHandler[*myncer_pb.ListSyncsRequest, *myncer_pb.ListSyncsResponse]
-	runSyncHandler    core.GrpcHandler[*myncer_pb.RunSyncRequest, *myncer_pb.RunSyncResponse]
+	createSyncHandler   core.GrpcHandler[*myncer_pb.CreateSyncRequest, *myncer_pb.CreateSyncResponse]
+	deleteSyncHandler   core.GrpcHandler[*myncer_pb.DeleteSyncRequest, *myncer_pb.DeleteSyncResponse]
+	listSyncsHandler    core.GrpcHandler[*myncer_pb.ListSyncsRequest, *myncer_pb.ListSyncsResponse]
+	runSyncHandler      core.GrpcHandler[*myncer_pb.RunSyncRequest, *myncer_pb.RunSyncResponse]
+	listSyncRunsHandler core.GrpcHandler[
+		*myncer_pb.ListSyncRunsRequest,
+		*myncer_pb.ListSyncRunsResponse,
+	]
 }
 
 var _ myncer_pb_connect.SyncServiceHandler = (*SyncService)(nil)
@@ -55,4 +60,11 @@ func (d *SyncService) RunSync(
 	req *connect.Request[myncer_pb.RunSyncRequest], /*const*/
 ) (*connect.Response[myncer_pb.RunSyncResponse], error) {
 	return OrchestrateHandler(ctx, d.runSyncHandler, req.Msg)
+}
+
+func (d *SyncService) ListSyncRuns(
+	ctx context.Context,
+	req *connect.Request[myncer_pb.ListSyncRunsRequest], /*const*/
+) (*connect.Response[myncer_pb.ListSyncRunsResponse], error) {
+	return OrchestrateHandler(ctx, d.listSyncRunsHandler, req.Msg)
 }

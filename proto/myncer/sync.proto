@@ -12,6 +12,7 @@ service SyncService {
   rpc DeleteSync(DeleteSyncRequest) returns (DeleteSyncResponse);
   rpc ListSyncs(ListSyncsRequest) returns (ListSyncsResponse);
   rpc RunSync(RunSyncRequest) returns (RunSyncResponse);
+  rpc ListSyncRuns(ListSyncRunsRequest) returns (ListSyncRunsResponse);
 }
 
 message Sync {
@@ -106,4 +107,11 @@ message RunSyncResponse {
   SyncStatus status = 2;
   // If the sync failed, this will contain the error message.
   string error_message = 3;
+}
+
+message ListSyncRunsRequest {}
+
+message ListSyncRunsResponse {
+  // List of sync runs for the current user.
+  repeated SyncRun sync_runs = 1;
 }

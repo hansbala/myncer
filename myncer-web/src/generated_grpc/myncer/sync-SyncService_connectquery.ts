@@ -23,3 +23,8 @@ export const listSyncs = SyncService.method.listSyncs;
  * @generated from rpc myncer.SyncService.RunSync
  */
 export const runSync = SyncService.method.runSync;
+
+/**
+ * @generated from rpc myncer.SyncService.ListSyncRuns
+ */
+export const listSyncRuns = SyncService.method.listSyncRuns;

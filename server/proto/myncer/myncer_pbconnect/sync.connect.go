@@ -41,6 +41,9 @@ const (
 	SyncServiceListSyncsProcedure = "/myncer.SyncService/ListSyncs"
 	// SyncServiceRunSyncProcedure is the fully-qualified name of the SyncService's RunSync RPC.
 	SyncServiceRunSyncProcedure = "/myncer.SyncService/RunSync"
+	// SyncServiceListSyncRunsProcedure is the fully-qualified name of the SyncService's ListSyncRuns
+	// RPC.
+	SyncServiceListSyncRunsProcedure = "/myncer.SyncService/ListSyncRuns"
 )
 
 // SyncServiceClient is a client for the myncer.SyncService service.
@@ -49,6 +52,7 @@ type SyncServiceClient interface {
 	DeleteSync(context.Context, *connect.Request[myncer.DeleteSyncRequest]) (*connect.Response[myncer.DeleteSyncResponse], error)
 	ListSyncs(context.Context, *connect.Request[myncer.ListSyncsRequest]) (*connect.Response[myncer.ListSyncsResponse], error)
 	RunSync(context.Context, *connect.Request[myncer.RunSyncRequest]) (*connect.Response[myncer.RunSyncResponse], error)
+	ListSyncRuns(context.Context, *connect.Request[myncer.ListSyncRunsRequest]) (*connect.Response[myncer.ListSyncRunsResponse], error)
 }
 
 // NewSyncServiceClient constructs a client for the myncer.SyncService service. By default, it uses
@@ -86,15 +90,22 @@ func NewSyncServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(syncServiceMethods.ByName("RunSync")),
 			connect.WithClientOptions(opts...),
 		),
+		listSyncRuns: connect.NewClient[myncer.ListSyncRunsRequest, myncer.ListSyncRunsResponse](
+			httpClient,
+			baseURL+SyncServiceListSyncRunsProcedure,
+			connect.WithSchema(syncServiceMethods.ByName("ListSyncRuns")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // syncServiceClient implements SyncServiceClient.
 type syncServiceClient struct {
-	createSync *connect.Client[myncer.CreateSyncRequest, myncer.CreateSyncResponse]
-	deleteSync *connect.Client[myncer.DeleteSyncRequest, myncer.DeleteSyncResponse]
-	listSyncs  *connect.Client[myncer.ListSyncsRequest, myncer.ListSyncsResponse]
-	runSync    *connect.Client[myncer.RunSyncRequest, myncer.RunSyncResponse]
+	createSync   *connect.Client[myncer.CreateSyncRequest, myncer.CreateSyncResponse]
+	deleteSync   *connect.Client[myncer.DeleteSyncRequest, myncer.DeleteSyncResponse]
+	listSyncs    *connect.Client[myncer.ListSyncsRequest, myncer.ListSyncsResponse]
+	runSync      *connect.Client[myncer.RunSyncRequest, myncer.RunSyncResponse]
+	listSyncRuns *connect.Client[myncer.ListSyncRunsRequest, myncer.ListSyncRunsResponse]
 }
 
 // CreateSync calls myncer.SyncService.CreateSync.
@@ -117,12 +128,18 @@ func (c *syncServiceClient) RunSync(ctx context.Context, req *connect.Request[my
 	return c.runSync.CallUnary(ctx, req)
 }
 
+// ListSyncRuns calls myncer.SyncService.ListSyncRuns.
+func (c *syncServiceClient) ListSyncRuns(ctx context.Context, req *connect.Request[myncer.ListSyncRunsRequest]) (*connect.Response[myncer.ListSyncRunsResponse], error) {
+	return c.listSyncRuns.CallUnary(ctx, req)
+}
+
 // SyncServiceHandler is an implementation of the myncer.SyncService service.
 type SyncServiceHandler interface {
 	CreateSync(context.Context, *connect.Request[myncer.CreateSyncRequest]) (*connect.Response[myncer.CreateSyncResponse], error)
 	DeleteSync(context.Context, *connect.Request[myncer.DeleteSyncRequest]) (*connect.Response[myncer.DeleteSyncResponse], error)
 	ListSyncs(context.Context, *connect.Request[myncer.ListSyncsRequest]) (*connect.Response[myncer.ListSyncsResponse], error)
 	RunSync(context.Context, *connect.Request[myncer.RunSyncRequest]) (*connect.Response[myncer.RunSyncResponse], error)
+	ListSyncRuns(context.Context, *connect.Request[myncer.ListSyncRunsRequest]) (*connect.Response[myncer.ListSyncRunsResponse], error)
 }
 
 // NewSyncServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -156,6 +173,12 @@ func NewSyncServiceHandler(svc SyncServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(syncServiceMethods.ByName("RunSync")),
 		connect.WithHandlerOptions(opts...),
 	)
+	syncServiceListSyncRunsHandler := connect.NewUnaryHandler(
+		SyncServiceListSyncRunsProcedure,
+		svc.ListSyncRuns,
+		connect.WithSchema(syncServiceMethods.ByName("ListSyncRuns")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/myncer.SyncService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case SyncServiceCreateSyncProcedure:
@@ -166,6 +189,8 @@ func NewSyncServiceHandler(svc SyncServiceHandler, opts ...connect.HandlerOption
 			syncServiceListSyncsHandler.ServeHTTP(w, r)
 		case SyncServiceRunSyncProcedure:
 			syncServiceRunSyncHandler.ServeHTTP(w, r)
+		case SyncServiceListSyncRunsProcedure:
+			syncServiceListSyncRunsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -189,4 +214,8 @@ func (UnimplementedSyncServiceHandler) ListSyncs(context.Context, *connect.Reque
 
 func (UnimplementedSyncServiceHandler) RunSync(context.Context, *connect.Request[myncer.RunSyncRequest]) (*connect.Response[myncer.RunSyncResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("myncer.SyncService.RunSync is not implemented"))
+}
+
+func (UnimplementedSyncServiceHandler) ListSyncRuns(context.Context, *connect.Request[myncer.ListSyncRunsRequest]) (*connect.Response[myncer.ListSyncRunsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("myncer.SyncService.ListSyncRuns is not implemented"))
 }
