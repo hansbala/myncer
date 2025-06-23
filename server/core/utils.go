@@ -5,6 +5,8 @@ import (
 	"fmt"
 
 	"golang.org/x/oauth2"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
@@ -34,4 +36,17 @@ func DebugPrintJson(v any) {
 		Errorf("could not debug print json", err)
 	}
 	Printf(string(data))
+}
+
+func DebugPrintProto(v proto.Message) {
+	bytes, err := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		EmitUnpopulated: true,
+		Indent:          "  ",
+	}.Marshal(v)
+	if err != nil {
+		Errorf("could not debug print proto", err)
+		return
+	}
+	Printf("Proto: %s", string(bytes))
 }
