@@ -21,7 +21,10 @@ func (l *listSyncRunsImpl) CheckUserPermissions(
 	userInfo *myncer_pb.User, /*const*/
 	reqBody *myncer_pb.ListSyncRunsRequest, /*const*/
 ) error {
-	return core.NewError("not implemented: CheckUserPermissions for ListSyncRunsHandler")
+	if userInfo == nil {
+		return core.NewError("user is required for listing sync runs")
+	}
+	return nil
 }
 
 func (l *listSyncRunsImpl) ProcessRequest(
@@ -29,7 +32,12 @@ func (l *listSyncRunsImpl) ProcessRequest(
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.ListSyncRunsRequest, /*const*/
 ) *core.GrpcHandlerResponse[*myncer_pb.ListSyncRunsResponse] {
-	return core.NewGrpcHandlerResponse_InternalServerError[*myncer_pb.ListSyncRunsResponse](
-		core.NewError("not implemented: ProcessRequest for ListSyncRunsHandler"),
-	)
+	syncs, err := core.ToMyncerCtx(ctx).DB.SyncRunStore.GetSyncs(ctx, nil /*runIds*/, nil /*syncIds*/)
+	if err != nil {
+		return core.NewGrpcHandlerResponse_InternalServerError[*myncer_pb.ListSyncRunsResponse](
+			core.WrappedError(err, "failed to get sync runs from database"),
+		)
+	}
+
+	return core.NewGrpcHandlerResponse_OK(&myncer_pb.ListSyncRunsResponse{SyncRuns: syncs.ToArray()})
 }
