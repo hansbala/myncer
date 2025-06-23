@@ -11,36 +11,26 @@ up:
 down:
 	docker-compose down --volumes --remove-orphans
 
-# Proto constants.
-PROTO_DIR := server/proto
-
 ##############################################
 # Proto targets.
-# TODO: Migrate these to use `buf`.
 ##############################################
 .PHONY: proto
-proto: proto-go
+proto:
+	@buf generate
 
 .PHONY: proto-clean
-proto-clean: proto-go-clean
-
-.PHONY: proto-go
-proto-go:
-	protoc \
-	  --proto_path=$(PROTO_DIR) \
-	  --go_out=paths=source_relative:$(PROTO_DIR) \
-	  $(PROTO_DIR)/*.proto
-
-.PHONY: proto-go-clean
-proto-go-clean:
-	rm -rf $(PROTO_DIR)/*.pb.go
-	rm -rf server/proto
+proto-clean:
+	@rm -rf server/proto
+	@rm -rf myncer-web/src/generated_grpc
 
 ##############################################
 # Common.
 ##############################################
 .PHONY: build
 build: server-build web-build
+
+.PHONY: test
+test: server-test
 
 ##############################################
 # Server targets.
@@ -56,9 +46,6 @@ server-build:
 .PHONY: tidy
 tidy:
 	@cd server && go mod tidy
-
-.PHONY: test
-test: server-test
 
 .PHONY: server-test
 server-test:
