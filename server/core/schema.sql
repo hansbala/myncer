@@ -48,6 +48,6 @@ CREATE TABLE IF NOT EXISTS songs (
   -- The respective datasource's unique, stable id.
   datasource_song_id VARCHAR(256) NOT NULL,
   -- Metadata leveraging SQL for ACID compliance.
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
