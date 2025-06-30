@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS sync_runs (
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS song_store (
+CREATE TABLE IF NOT EXISTS songs (
   -- Unique myncer song id.
   id UUID PRIMARY KEY,
   -- Source of truth: Serialized Song proto.
