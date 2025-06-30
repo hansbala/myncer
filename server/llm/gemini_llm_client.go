@@ -27,7 +27,7 @@ func (g *geminiLlmClientImpl) GetResponse(
 	}
 	model, err := client.Models.GenerateContent(
 		ctx,
-		"gemini-2.0-flash",
+		"gemini-2.5-pro",
 		[]*genai.Content{
 			{
 				Parts: []*genai.Part{
