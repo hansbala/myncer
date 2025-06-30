@@ -21,7 +21,7 @@ type runSyncImpl struct{
 	syncEngine core.SyncEngine
 }
 
-func (rs *runSyncImpl) CheckUserPermissions(
+func (rs *runSyncImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.RunSyncRequest, /*const*/

@@ -17,7 +17,7 @@ func NewCreateUserHandler() core.GrpcHandler[
 
 type createUserImpl struct{}
 
-func (c *createUserImpl) CheckUserPermissions(
+func (c *createUserImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.CreateUserRequest, /*const*/

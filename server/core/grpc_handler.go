@@ -8,7 +8,7 @@ import (
 )
 
 type GrpcHandler[Req any, Resp any] interface {
-	CheckUserPermissions(
+	CheckPerms(
 		ctx context.Context,
 		userInfo *myncer_pb.User, /*const,@nullable*/
 		reqBody Req, /*const*/
@@ -20,7 +20,6 @@ type GrpcHandler[Req any, Resp any] interface {
 	) *GrpcHandlerResponse[Resp]
 }
 
-// TODO: Convert to builder pattern to make it more flexible and easier to use.
 type GrpcHandlerResponse[T any] struct {
 	// Error used for internal logging on server.
 	Err error /*@nullable*/
@@ -114,9 +113,9 @@ func (g *GrpcHandlerResponseBuilder[T]) WithResponse(
 
 func (g *GrpcHandlerResponseBuilder[T]) Build() *GrpcHandlerResponse[T] {
 	return &GrpcHandlerResponse[T]{
-		Err: g.Err,
-		Cookies: g.Cookies,
+		Err:        g.Err,
+		Cookies:    g.Cookies,
 		StatusCode: g.StatusCode,
-		Response: g.Response,
+		Response:   g.Response,
 	}
 }

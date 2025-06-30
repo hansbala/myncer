@@ -18,7 +18,7 @@ func NewLogoutUserHandler() core.GrpcHandler[
 
 type logoutUserHandlerImpl struct{}
 
-func (l *logoutUserHandlerImpl) CheckUserPermissions(
+func (l *logoutUserHandlerImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.LogoutUserRequest, /*const*/

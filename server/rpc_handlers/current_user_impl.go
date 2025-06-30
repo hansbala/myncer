@@ -16,7 +16,7 @@ func NewCurrentUserHandler() core.GrpcHandler[
 
 type currentUserHandlerImpl struct{}
 
-func (l *currentUserHandlerImpl) CheckUserPermissions(
+func (l *currentUserHandlerImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.CurrentUserRequest, /*const*/

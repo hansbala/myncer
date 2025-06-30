@@ -16,7 +16,7 @@ func NewListDatasourcesHandler() core.GrpcHandler[
 
 type listDatasourcesImpl struct{}
 
-func (l *listDatasourcesImpl) CheckUserPermissions(
+func (l *listDatasourcesImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.ListDatasourcesRequest, /*const*/

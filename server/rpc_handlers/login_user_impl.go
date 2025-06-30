@@ -21,7 +21,7 @@ func NewLoginUserHandler() core.GrpcHandler[
 
 type loginHandlerImpl struct{}
 
-func (l *loginHandlerImpl) CheckUserPermissions(
+func (l *loginHandlerImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.LoginUserRequest, /*const*/

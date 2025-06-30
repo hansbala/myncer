@@ -16,7 +16,7 @@ func NewTemplateHandler() core.GrpcHandler[
 
 type templateHandlerImpl struct{}
 
-func (l *templateHandlerImpl) CheckUserPermissions(
+func (l *templateHandlerImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.CreateUserRequest, /*const*/

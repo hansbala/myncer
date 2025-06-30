@@ -16,7 +16,7 @@ func NewDeleteSyncHandler() core.GrpcHandler[
 
 type deleteSyncImpl struct{}
 
-func (l *deleteSyncImpl) CheckUserPermissions(
+func (l *deleteSyncImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.DeleteSyncRequest, /*const*/

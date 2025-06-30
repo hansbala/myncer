@@ -16,7 +16,7 @@ func NewListSyncsHandler() core.GrpcHandler[
 
 type listSyncsImpl struct{}
 
-func (ls *listSyncsImpl) CheckUserPermissions(
+func (ls *listSyncsImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.ListSyncsRequest, /*const*/

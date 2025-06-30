@@ -51,7 +51,7 @@ func (lsn *llmSongsNormalizerImpl) NormalizeSongs(
 	// Parse LLM response.
 	normalizedSongs, err := lsn.parseLlmResponse(llmResponse)
 	if err != nil {
-		core.Errorf(fmt.Sprintf("failed to pase llm response: [%s]", llmResponse))
+		core.Errorf(fmt.Sprintf("failed to parse llm response: [%s]", llmResponse))
 		return nil, core.WrappedError(err, "failed to parse normalizer llm response")
 	}
 

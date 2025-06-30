@@ -16,7 +16,7 @@ func NewEditUserHandler() core.GrpcHandler[
 
 type editUserHandlerImpl struct{}
 
-func (eu *editUserHandlerImpl) CheckUserPermissions(
+func (eu *editUserHandlerImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.EditUserRequest, /*const*/

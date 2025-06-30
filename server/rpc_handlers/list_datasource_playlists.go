@@ -16,7 +16,7 @@ func NewListDatasourcePlaylistsHandler() core.GrpcHandler[
 
 type listDatasourcePlaylistsImpl struct{}
 
-func (l *listDatasourcePlaylistsImpl) CheckUserPermissions(
+func (l *listDatasourcePlaylistsImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.ListPlaylistsRequest, /*const*/

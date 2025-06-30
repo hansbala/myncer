@@ -17,7 +17,7 @@ func NewCreateSyncHandler() core.GrpcHandler[
 
 type createSyncImpl struct{}
 
-func (cs *createSyncImpl) CheckUserPermissions(
+func (cs *createSyncImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.CreateSyncRequest, /*const*/
@@ -64,10 +64,10 @@ func (cs *createSyncImpl) validateRequest(
 ) error {
 	syncVariant := req.GetSyncVariant()
 	switch syncVariant.(type) {
-		case *myncer_pb.CreateSyncRequest_OneWaySync:
-			return validateOneWaySync(ctx, userInfo, req.GetOneWaySync())
-		default:
-			return core.NewError("unknown sync type in validate request: %T", syncVariant)
+	case *myncer_pb.CreateSyncRequest_OneWaySync:
+		return validateOneWaySync(ctx, userInfo, req.GetOneWaySync())
+	default:
+		return core.NewError("unknown sync type in validate request: %T", syncVariant)
 	}
 }
 
@@ -77,10 +77,10 @@ func (cs *createSyncImpl) createSyncFromRequest(
 ) (*myncer_pb.Sync, error) {
 	syncVariant := req.GetSyncVariant()
 	switch syncVariant.(type) {
-		case *myncer_pb.CreateSyncRequest_OneWaySync:
-			return NewSync_OneWaySync(userInfo.GetId(), req.GetOneWaySync()), nil
-		default:
-			return nil, core.NewError("unknown sync type in create sync from request: %T", syncVariant)
+	case *myncer_pb.CreateSyncRequest_OneWaySync:
+		return NewSync_OneWaySync(userInfo.GetId(), req.GetOneWaySync()), nil
+	default:
+		return nil, core.NewError("unknown sync type in create sync from request: %T", syncVariant)
 	}
 }
 
@@ -125,7 +125,7 @@ func NewSync_OneWaySync(
 	oneWaySync *myncer_pb.OneWaySync, /*const*/
 ) *myncer_pb.Sync {
 	return &myncer_pb.Sync{
-		Id: uuid.NewString(),
+		Id:     uuid.NewString(),
 		UserId: userId,
 		SyncVariant: &myncer_pb.Sync_OneWaySync{
 			OneWaySync: oneWaySync,

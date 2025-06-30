@@ -16,7 +16,7 @@ func NewGetPlaylistDetailsHandler() core.GrpcHandler[
 
 type getPlaylistDetailsImpl struct{}
 
-func (l *getPlaylistDetailsImpl) CheckUserPermissions(
+func (l *getPlaylistDetailsImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.GetPlaylistDetailsRequest, /*const*/

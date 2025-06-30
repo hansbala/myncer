@@ -16,7 +16,7 @@ func NewGetSyncHandler() core.GrpcHandler[
 
 type getSyncImpl struct{}
 
-func (l *getSyncImpl) CheckUserPermissions(
+func (l *getSyncImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.GetSyncRequest, /*const*/

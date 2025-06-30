@@ -19,7 +19,7 @@ func NewDatasourceOAuthExchangeHandler() core.GrpcHandler[
 
 type datasourceOAuthExchangeImpl struct{}
 
-func (do *datasourceOAuthExchangeImpl) CheckUserPermissions(
+func (do *datasourceOAuthExchangeImpl) CheckPerms(
 	ctx context.Context,
 	userInfo *myncer_pb.User, /*const,@nullable*/
 	reqBody *myncer_pb.ExchangeOAuthCodeRequest, /*const*/
