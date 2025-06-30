@@ -27,7 +27,7 @@ func (s *songStoreImpl) AddSong(ctx context.Context, song *myncer_pb.Song /*cons
 	}
 	if _, err := s.db.ExecContext(
 		ctx,
-		`INSERT INTO songs (id, data, datasource, datasourceSongId) VALUES (?, ?, ?, ?)`,
+		`INSERT INTO songs (id, data, datasource, datasource_song_id) VALUES (?, ?, ?, ?)`,
 		song.GetId(),
 		protoBytes,
 		song.GetDatasource().String(),

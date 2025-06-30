@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS songs (
   -- Myncer datasource name.
   datasource VARCHAR(256) NOT NULL,
   -- The respective datasource's unique, stable id.
-  datasourceSongId VARCHAR(256) NOT NULL,
+  datasource_song_id VARCHAR(256) NOT NULL,
   -- Metadata leveraging SQL for ACID compliance.
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
