@@ -16,6 +16,12 @@ type SongStore interface {
 	GetSong(ctx context.Context, id string, datasource myncer_pb.Datasource) (*myncer_pb.Song, error)
 }
 
+func NewSongStore(db *sql.DB) SongStore {
+	return &songStoreImpl{
+		db: db,
+	}
+}
+
 type songStoreImpl struct{
 	db *sql.DB
 }
