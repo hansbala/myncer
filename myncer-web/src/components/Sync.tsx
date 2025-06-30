@@ -3,12 +3,17 @@ import { Loader2, Trash2 } from "lucide-react"
 import { OneWaySyncRender } from "./OneWaySyncRender"
 import { useDeleteSync } from "@/hooks/useDeleteSync"
 import { useRunSync } from "@/hooks/useRunSync"
-import type { Sync } from "@/generated_grpc/myncer/sync_pb"
+import { SyncStatus, type Sync } from "@/generated_grpc/myncer/sync_pb"
 import { protoTimestampToDate } from "@/lib/utils"
+import { useListSyncRuns } from "@/hooks/useListSyncRuns"
 
 export const SyncRender = ({ sync }: { sync: Sync }) => {
   const { runSync, isRunningSync } = useRunSync()
   const { deleteSync, isDeleting } = useDeleteSync()
+  const { syncRuns } = useListSyncRuns()
+  const isSyncRunning = syncRuns.some(
+    (run) => run.syncId === sync.id && run.syncStatus === SyncStatus.RUNNING,
+  )
   const { syncVariant, id, createdAt } = sync
 
   const renderVariantLabel = () => {
@@ -49,7 +54,7 @@ export const SyncRender = ({ sync }: { sync: Sync }) => {
             size="sm"
             variant="destructive"
             onClick={() => deleteSync({ syncId: id })}
-            disabled={isDeleting || isRunningSync}
+            disabled={isDeleting || isRunningSync || isSyncRunning}
           >
             {isDeleting ? (
               <>
@@ -67,9 +72,9 @@ export const SyncRender = ({ sync }: { sync: Sync }) => {
           <Button
             size="sm"
             onClick={() => runSync({ syncId: id })}
-            disabled={isRunningSync || isDeleting}
+            disabled={isRunningSync || isDeleting || isSyncRunning}
           >
-            {isRunningSync ? (
+            {(isRunningSync || isSyncRunning) ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
                 Running
