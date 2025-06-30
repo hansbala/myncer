@@ -3,6 +3,9 @@ package core
 import (
 	"context"
 	"encoding/json"
+	"strings"
+
+	"github.com/google/uuid"
 
 	myncer_pb "github.com/hansbala/myncer/proto/myncer"
 )
@@ -42,4 +45,18 @@ func (sl *SongList) GetLlmJson() ([]byte, error) {
 
 func (sl *SongList) GetSongs() []Song {
 	return sl.songs
+}
+
+// GetSongId returns a deterministic UUID hash of the song name, artist(s), and album name.
+func GetSongId(
+	songName string,
+	artistNames []string, /*const*/
+	albumName string,
+) string {
+	data := []byte(strings.ToLower(strings.TrimSpace(songName)) + "|" +
+		strings.ToLower(strings.Join(artistNames, ",")) + "|" +
+		strings.ToLower(strings.TrimSpace(albumName)))
+	// Generate deterministic UUID using SHA-1.
+	// Use a fixed namespace UUID (can be any UUID — here we use the URL namespace).
+	return uuid.NewSHA1(uuid.NameSpaceURL, data).String()
 }
