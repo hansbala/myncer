@@ -22,13 +22,16 @@ const (
 )
 
 type Song struct {
-	state      protoimpl.MessageState `protogen:"open.v1"`
-	Name       string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	ArtistName []string               `protobuf:"bytes,2,rep,name=artist_name,json=artistName,proto3" json:"artist_name,omitempty"`
-	AlbumName  string                 `protobuf:"bytes,3,opt,name=album_name,json=albumName,proto3" json:"album_name,omitempty"`
-	Datasource Datasource             `protobuf:"varint,4,opt,name=datasource,proto3,enum=myncer.Datasource" json:"datasource,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The deterministic, reproducible ID of a bunch of details about the song.
+	// In practical terms this is a hash of the song details. See `GetSongId` for impl details.`
+	Id         string     `protobuf:"bytes,6,opt,name=id,proto3" json:"id,omitempty"`
+	Name       string     `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	ArtistName []string   `protobuf:"bytes,2,rep,name=artist_name,json=artistName,proto3" json:"artist_name,omitempty"`
+	AlbumName  string     `protobuf:"bytes,3,opt,name=album_name,json=albumName,proto3" json:"album_name,omitempty"`
+	Datasource Datasource `protobuf:"varint,4,opt,name=datasource,proto3,enum=myncer.Datasource" json:"datasource,omitempty"`
 	// Unique, stable song identifier for the datasource.
-	DatasourceSongId string `protobuf:"bytes,5,opt,name=datasource_song_id,json=datasourceSongId,proto3" json:"datasource_song_id,omitempty"`
+	DatasourceSongId string `protobuf:"bytes,5,opt,name=datasource_song_id,json=datasourceSongId,proto3" json:"datasource_song_id,omitempty"` // next: 7
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -61,6 +64,13 @@ func (x *Song) ProtoReflect() protoreflect.Message {
 // Deprecated: Use Song.ProtoReflect.Descriptor instead.
 func (*Song) Descriptor() ([]byte, []int) {
 	return file_myncer_song_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Song) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
 }
 
 func (x *Song) GetName() string {
@@ -104,7 +114,8 @@ var file_myncer_song_proto_rawDesc = string([]byte{
 	0x0a, 0x11, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x2f, 0x73, 0x6f, 0x6e, 0x67, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x12, 0x06, 0x6d, 0x79, 0x6e, 0x63, 0x65, 0x72, 0x1a, 0x17, 0x6d, 0x79, 0x6e,
 	0x63, 0x65, 0x72, 0x2f, 0x64, 0x61, 0x74, 0x61, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x22, 0xbc, 0x01, 0x0a, 0x04, 0x53, 0x6f, 0x6e, 0x67, 0x12, 0x12, 0x0a,
+	0x72, 0x6f, 0x74, 0x6f, 0x22, 0xcc, 0x01, 0x0a, 0x04, 0x53, 0x6f, 0x6e, 0x67, 0x12, 0x0e, 0x0a,
+	0x02, 0x69, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a,
 	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d,
 	0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x61, 0x72, 0x74, 0x69, 0x73, 0x74, 0x5f, 0x6e, 0x61, 0x6d, 0x65,
 	0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x61, 0x72, 0x74, 0x69, 0x73, 0x74, 0x4e, 0x61,

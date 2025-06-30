@@ -12,12 +12,20 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file myncer/song.proto.
  */
 export const file_myncer_song: GenFile = /*@__PURE__*/
-  fileDesc("ChFteW5jZXIvc29uZy5wcm90bxIGbXluY2VyIoEBCgRTb25nEgwKBG5hbWUYASABKAkSEwoLYXJ0aXN0X25hbWUYAiADKAkSEgoKYWxidW1fbmFtZRgDIAEoCRImCgpkYXRhc291cmNlGAQgASgOMhIubXluY2VyLkRhdGFzb3VyY2USGgoSZGF0YXNvdXJjZV9zb25nX2lkGAUgASgJQjNaMWdpdGh1Yi5jb20vaGFuc2JhbGEvbXluY2VyL3Byb3RvL215bmNlcjtteW5jZXJfcGJiBnByb3RvMw", [file_myncer_datasource]);
+  fileDesc("ChFteW5jZXIvc29uZy5wcm90bxIGbXluY2VyIo0BCgRTb25nEgoKAmlkGAYgASgJEgwKBG5hbWUYASABKAkSEwoLYXJ0aXN0X25hbWUYAiADKAkSEgoKYWxidW1fbmFtZRgDIAEoCRImCgpkYXRhc291cmNlGAQgASgOMhIubXluY2VyLkRhdGFzb3VyY2USGgoSZGF0YXNvdXJjZV9zb25nX2lkGAUgASgJQjNaMWdpdGh1Yi5jb20vaGFuc2JhbGEvbXluY2VyL3Byb3RvL215bmNlcjtteW5jZXJfcGJiBnByb3RvMw", [file_myncer_datasource]);
 
 /**
  * @generated from message myncer.Song
  */
 export type Song = Message<"myncer.Song"> & {
+  /**
+   * The deterministic, reproducible ID of a bunch of details about the song.
+   * In practical terms this is a hash of the song details. See `GetSongId` for impl details.`
+   *
+   * @generated from field: string id = 6;
+   */
+  id: string;
+
   /**
    * @generated from field: string name = 1;
    */
@@ -40,6 +48,8 @@ export type Song = Message<"myncer.Song"> & {
 
   /**
    * Unique, stable song identifier for the datasource.
+   *
+   * next: 7
    *
    * @generated from field: string datasource_song_id = 5;
    */
