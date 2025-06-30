@@ -36,3 +36,18 @@ CREATE TABLE IF NOT EXISTS sync_runs (
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS song_store (
+  -- Unique myncer song id.
+  id UUID PRIMARY KEY,
+  -- Source of truth: Serialized Song proto.
+  data BYTEA NOT NULL,
+  -- Useful fields for faster queries.
+  -- Myncer datasource name.
+  datasource VARCHAR(256) NOT NULL,
+  -- The respective datasource's unique, stable id.
+  datasourceSongId VARCHAR(256) NOT NULL,
+  -- Metadata leveraging SQL for ACID compliance.
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
